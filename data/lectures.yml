@@ -5,9 +5,11 @@
       Label: Lecture
       Topics:
           - Introduction to Artificial Intelligence
-          - History of AI
-          - AI Applications and Impact
+          - Search Strategies (Breadth-First Search, Depth-First Search)
           - {"Slides": "slides/0.Intro_to_AI.pdf"}
+      Materials:
+        - Chapter 1–3, lecture slides
+        - Sample Python code for search algorithms
 
 -
   Title: Week 2
@@ -15,13 +17,12 @@
     2024-09-10:
       Label: Lecture
       Topics:
-        - Problem Solving and Search
-        - Uninformed Search Strategies
-        - Breadth-First Search
-        - Depth-First Search
-        - {"Slides": "slides/1.Searching_1.pdf"}
+        - Homework review and hands-on exercises on BFS and DFS
+        - Practice problems
+        - Python notebook for search visualization
       Materials:
-        - {"Russell & Norvig Chapter 3": "Artificial Intelligence: A Modern Approach"}
+        - Practice problems
+        - Python notebook for search visualization
 
 -
   Title: Week 3
@@ -30,12 +31,13 @@
       Label: Lecture
       Topics:
           - Informed Search Strategies
-          - Heuristic Functions
-          - A* Algorithm
           - Best-First Search
-          - {"Slides": "slides/2.Searching_2.pdf"}
+          - Hill Climbing
+          - Beam Search
+          - {"Slides": "slides/1.Searching_1.pdf"}
       Materials:
-        - {"Russell & Norvig Chapter 3": "Artificial Intelligence: A Modern Approach"}
+        - Chapter 4, lecture slides
+        - Search implementation examples
 
 -
   Title: Week 4
@@ -43,13 +45,12 @@
     2024-09-24:
       Label: Lecture
       Topics:
-          - Optimal Search Algorithms
-          - Uniform Cost Search
-          - Dijkstra's Algorithm
-          - Search Space Analysis
-          - {"Slides": "slides/3.Optimal_search.pdf"}
+          - Practical session on heuristic-based search algorithms
+          - Coding exercises
+          - Performance comparison notebooks
       Materials:
-        - {"Russell & Norvig Chapter 3": "Artificial Intelligence: A Modern Approach"}
+        - Coding exercises
+        - Performance comparison notebooks
 
 -
   Title: Week 5
@@ -57,13 +58,10 @@
     2024-10-01:
       Label: Lecture
       Topics:
-          - Adversarial Search
-          - Minimax Algorithm
-          - Alpha-Beta Pruning
-          - Game Theory in AI
-          - {"Slides": "slides/4.Adversarial_search.pdf"}
+          - Optimal Search (A*, Greedy Search)
+          - {"Slides": "slides/2.Searching_2.pdf"}
       Materials:
-        - {"Russell & Norvig Chapter 5": "Artificial Intelligence: A Modern Approach"}
+        - Chapter 4, slides on heuristic functions and optimality
 
 -
   Title: Week 6
@@ -71,12 +69,12 @@
     2024-10-08:
       Label: Lecture
       Topics:
-          - Knowledge Representation
-          - Propositional Logic
-          - First-Order Logic
-          - Inference Rules
+          - Implementation and evaluation of A* and Greedy Search
+          - Python code templates
+          - Problem sets
       Materials:
-        - {"Russell & Norvig Chapter 7-8": "Artificial Intelligence: A Modern Approach"}
+        - Python code templates
+        - Problem sets
 
 -
   Title: Week 7
@@ -84,22 +82,25 @@
     2024-10-15:
       Label: Lecture
       Topics:
-          - Machine Learning Introduction
-          - Supervised Learning
-          - Unsupervised Learning
-          - Reinforcement Learning
+          - Adversarial Search
+          - Minimax Algorithm
+          - Alpha-Beta Pruning
+          - {"Slides": "slides/3.Optimal_search.pdf"}
       Materials:
-        - {"Russell & Norvig Chapter 18": "Artificial Intelligence: A Modern Approach"}
+        - Chapter 5, lecture notes
+        - Game tree examples
 
 -
   Title: Week 8
   Events:
     2024-10-22:
-      Label: Midterm
+      Label: Lecture
       Topics:
-          - Midterm Examination
+          - Practice on game-playing agents using Minimax and Alpha-Beta Pruning
+          - Lab exercises with Tic-Tac-Toe or similar games
+          - {"Slides": "slides/4.Adversarial_search.pdf"}
       Materials:
-        - Review of Weeks 1-7
+        - Lab exercises with Tic-Tac-Toe or similar games
 
 -
   Title: Week 9
@@ -107,12 +108,12 @@
     2024-10-29:
       Label: Lecture
       Topics:
-          - Neural Networks
-          - Deep Learning Basics
-          - Backpropagation
-          - Applications of Deep Learning
+          - Propositional Logic – Syntax, Semantics, and Inference
+          - Chapter 7, lecture slides
+          - Reasoning examples
       Materials:
-        - {"Russell & Norvig Chapter 21": "Artificial Intelligence: A Modern Approach"}
+        - Chapter 7, lecture slides
+        - Reasoning examples
 
 -
   Title: Week 10
@@ -120,12 +121,12 @@
     2024-11-05:
       Label: Lecture
       Topics:
-          - Computer Vision
-          - Image Processing
-          - Object Recognition
-          - Convolutional Neural Networks
+          - Practical exercises on Propositional Logic
+          - Resolution, Inference rules
+          - Logic problem sets
       Materials:
-        - {"Russell & Norvig Chapter 24": "Artificial Intelligence: A Modern Approach"}
+        - Logic problem sets
+        - Python-based logic solvers
 
 -
   Title: Week 11
@@ -133,12 +134,12 @@
     2024-11-12:
       Label: Lecture
       Topics:
-          - Natural Language Processing
-          - Text Processing
-          - Language Models
-          - Sentiment Analysis
+          - First-Order Logic – Representation and Inference
+          - Chapter 8–9, lecture notes
+          - Ontology examples
       Materials:
-        - {"Russell & Norvig Chapter 22": "Artificial Intelligence: A Modern Approach"}
+        - Chapter 8–9, lecture notes
+        - Ontology examples
 
 -
   Title: Week 12
@@ -146,12 +147,10 @@
     2024-11-19:
       Label: Lecture
       Topics:
-          - Robotics
-          - Robot Perception
-          - Robot Control
-          - Autonomous Systems
+          - Practice on First-Order Logic reasoning and implementation
+          - Exercises using FOL solvers or Prolog
       Materials:
-        - {"Russell & Norvig Chapter 25": "Artificial Intelligence: A Modern Approach"}
+        - Exercises using FOL solvers or Prolog
 
 -
   Title: Week 13
@@ -159,12 +158,12 @@
     2024-11-26:
       Label: Lecture
       Topics:
-          - AI Ethics
-          - Bias in AI Systems
-          - Fairness and Transparency
-          - Future of AI
+          - Introduction to Neural Networks
+          - Perceptron, Single-layer Neural Models
+          - Chapter 18, lecture slides
       Materials:
-        - {"Russell & Norvig Chapter 27": "Artificial Intelligence: A Modern Approach"}
+        - Chapter 18, lecture slides
+        - TensorFlow/PyTorch notebooks
 
 -
   Title: Week 14
@@ -172,8 +171,22 @@
     2024-12-03:
       Label: Lecture
       Topics:
-        - Course Review
-        - Final Project Presentations
-        - AI Trends and Future Directions
+          - Hands-on training for single-layer neural networks
+          - Lab notebook on classification tasks using perceptron
       Materials:
-        - Course Summary and Review
+        - Lab notebook on classification tasks using perceptron
+
+-
+  Title: Week 15
+  Events:
+    2024-12-10:
+      Label: Lecture
+      Topics:
+          - Supplementary Topics
+          - Computer Vision, NLP, Clustering, Regression, Classification
+          - GPU Computing, and MLOps
+          - Overview of the AI Project Pipeline
+      Materials:
+        - Overview slides
+        - Project templates
+        - Demo notebooks

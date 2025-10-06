@@ -1,14 +1,15 @@
 Title: This Week
 Lecture/Lab: Week 1
-Assignment: Assignment 1
+Assignment: Homework 0
 Events:
   2024-09-03:
     Label: Lecture 1
     Topics:
       - Introduction to Artificial Intelligence
-      - Course Overview and Syllabus
-      - History of AI
-      - AI Applications and Impact
+      - Search Strategies (Breadth-First Search, Depth-First Search)
+      - Course Introduction and Setup
     Materials:
       - {"Slides": "slides/0.Intro_to_AI.pdf"}
       - {"Syllabus": "INTRO_AI_MANAGER/Syllabus Introduction to AI_Nghia_cNgan.pdf"}
+      - Chapter 1–3, lecture slides
+      - Sample Python code for search algorithms

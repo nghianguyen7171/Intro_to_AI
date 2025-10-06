@@ -1,44 +1,44 @@
-Due time: 11:59 PM
-Submit link: "https://gradescope.com"
+Due time: After each class
+Submit link: "LMS"
 ---
 -
-  Label: Assignment 1
-  Description: Introduction to AI and Search Algorithms
+  Label: Homework 0
+  Description: Course Introduction and Setup
+  Due: 2024-09-03
+  PDF: {homework0.pdf: "https://elearning.fda.edu.vn/mod/forum/discuss.php?d=14"}
+  ZIP: {homework0.zip: "https://elearning.fda.edu.vn/mod/forum/discuss.php?d=14"}
+
+-
+  Label: Homework 1
+  Description: Search Strategies (BFS and DFS)
+  Due: 2024-09-10
+  PDF: {homework1.pdf: "https://elearning.fda.edu.vn/mod/forum/discuss.php?d=16"}
+  ZIP: {homework1.zip: "https://elearning.fda.edu.vn/mod/forum/discuss.php?d=16"}
+
+-
+  Label: Homework 2
+  Description: Informed Search Strategies
   Due: 2024-09-17
-  PDF: {assignment1.pdf: "assignments/assignment1.pdf"}
-  ZIP: {assignment1.zip: "assignments/assignment1.zip"}
+  PDF: {homework2.pdf: "https://elearning.fda.edu.vn/mod/forum/discuss.php?d=17"}
+  ZIP: {homework2.zip: "https://elearning.fda.edu.vn/mod/forum/discuss.php?d=17"}
 
 -
-  Label: Assignment 2
-  Description: Informed Search and Heuristics
+  Label: Homework 3
+  Description: Optimal Search (A* and Greedy Search)
   Due: 2024-10-01
-  PDF: {assignment2.pdf: "assignments/assignment2.pdf"}
-  ZIP: {assignment2.zip: "assignments/assignment2.zip"}
+  PDF: {homework3.pdf: "https://elearning.fda.edu.vn/mod/forum/discuss.php?d=18"}
+  ZIP: {homework3.zip: "https://elearning.fda.edu.vn/mod/forum/discuss.php?d=18"}
 
 -
-  Label: Assignment 3
-  Description: Adversarial Search and Game Playing
+  Label: Homework 4
+  Description: Adversarial Search (Minimax and Alpha-Beta Pruning)
   Due: 2024-10-15
-  PDF: {assignment3.pdf: "assignments/assignment3.pdf"}
-  ZIP: {assignment3.zip: "assignments/assignment3.zip"}
+  PDF: {homework4.pdf: "https://elearning.fda.edu.vn/mod/forum/discuss.php?d=19"}
+  ZIP: {homework4.zip: "https://elearning.fda.edu.vn/mod/forum/discuss.php?d=19"}
 
 -
-  Label: Assignment 4
-  Description: Knowledge Representation and Logic
-  Due: 2024-11-05
-  PDF: {assignment4.pdf: "assignments/assignment4.pdf"}
-  ZIP: {assignment4.zip: "assignments/assignment4.zip"}
-
--
-  Label: Assignment 5
-  Description: Machine Learning and Neural Networks
-  Due: 2024-11-19
-  PDF: {assignment5.pdf: "assignments/assignment5.pdf"}
-  ZIP: {assignment5.zip: "assignments/assignment5.zip"}
-
--
-  Label: Final Project
-  Description: AI Application Development
-  Due: 2024-12-10
-  PDF: {final_project.pdf: "assignments/final_project.pdf"}
-  ZIP: {final_project.zip: "assignments/final_project.zip"}
+  Label: Homework 5
+  Description: Logic and Neural Networks
+  Due: 2024-11-12
+  PDF: {homework5.pdf: "https://elearning.fda.edu.vn/mod/forum/discuss.php?d=24"}
+  ZIP: {homework5.zip: "https://elearning.fda.edu.vn/mod/forum/discuss.php?d=24"}
