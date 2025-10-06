@@ -4,9 +4,10 @@
     2024-09-03:
       Label: Lecture
       Topics:
-          - Introduction
-          - {"Slides": "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/lectures/lec01/01-handout.pdf"}
-          - {"Scribble": "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/lectures/lec01/01-scribble.pdf"}
+          - Introduction to Artificial Intelligence
+          - History of AI
+          - AI Applications and Impact
+          - {"Slides": "slides/0.Intro_to_AI.pdf"}
 
 -
   Title: Week 2
@@ -14,15 +15,13 @@
     2024-09-10:
       Label: Lecture
       Topics:
-        - Gradient descent
-        - Stochastic gradient descent
-        - Loss functions
-        - {"Slides": "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/lectures/lec02/02-handout.pdf"}
-        - {"Scribble": "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/lectures/lec02/02-scribble.pdf"}
+        - Problem Solving and Search
+        - Uninformed Search Strategies
+        - Breadth-First Search
+        - Depth-First Search
+        - {"Slides": "slides/1.Searching_1.pdf"}
       Materials:
-        - {"Bottou's SGD Tricks": "http://leon.bottou.org/papers/bottou-tricks-2012"}
-        - {"Gradient Descent Convergence": "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/lectures/lec02/gradient_descent_converge.pdf"}
-        - {"SGD Convergence": "https://www.cs.ubc.ca/~schmidtm/Courses/540-W19/L11.pdf"}
+        - {"Russell & Norvig Chapter 3": "Artificial Intelligence: A Modern Approach"}
 
 -
   Title: Week 3
@@ -30,12 +29,13 @@
     2024-09-17:
       Label: Lecture
       Topics:
-          - Feature selection
-          - Regularization
-          - Lasso Optimization
-          - Max margin classifiers
-          - {"Slides": "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/lectures/lec03/03-handout.pdf"}
-          - {"Scribble": "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/lectures/lec03/03-scribble.pdf"}
+          - Informed Search Strategies
+          - Heuristic Functions
+          - A* Algorithm
+          - Best-First Search
+          - {"Slides": "slides/2.Searching_2.pdf"}
+      Materials:
+        - {"Russell & Norvig Chapter 3": "Artificial Intelligence: A Modern Approach"}
 
 -
   Title: Week 4
@@ -43,56 +43,63 @@
     2024-09-24:
       Label: Lecture
       Topics:
-          - Support Vector Machines
-          - Subgradient Descent
-          - SVM Dual
-          - {"Slides": "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/lectures/lec04/04-handout.pdf"}
-          - {"Scribble": "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/lectures/lec04/04-scribble.pdf"}
+          - Optimal Search Algorithms
+          - Uniform Cost Search
+          - Dijkstra's Algorithm
+          - Search Space Analysis
+          - {"Slides": "slides/3.Optimal_search.pdf"}
       Materials:
-       - {"Geometric Derivation of SVMs": "https://davidrosenberg.github.io/mlcourse/Archive/2019/Labs/3-SVM-Slides.pdf"}
-       - {"SVM Insights from Duality": "https://davidrosenberg.github.io/mlcourse/Archive/2019/Notes/SVM-main-points.pdf"}
-       - {"Rosenberg's notes on convex optimization": "https://davidrosenberg.github.io/mlcourse/Archive/2019/Notes/convex-optimization.pdf"}
-       # - {"Weak duality theorem": "https://inst.eecs.berkeley.edu/~ee227a/fa10/login/l_dual_weak.html"}
-       - {"Convergence proof of subgradient descent": "https://web.stanford.edu/class/ee392o/subgrad_method.pdf"} 
-       - {"Convex optimization and Lagrangian duality tutorial slides": "https://nyu-ds1003.github.io/mlcourse/2022/lectures/lec04/04.0.convex-optimization.pdf"}
+        - {"Russell & Norvig Chapter 3": "Artificial Intelligence: A Modern Approach"}
+
 -
   Title: Week 5
   Events:
     2024-10-01:
       Label: Lecture
       Topics:
-          - Kernels
-          - Probabilistic Methods
-          - {"Slides": "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/lectures/lec05/05-handout.pdf"}
-          - {"Scribble": "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/lectures/lec05/05-scribble.pdf"}
+          - Adversarial Search
+          - Minimax Algorithm
+          - Alpha-Beta Pruning
+          - Game Theory in AI
+          - {"Slides": "slides/4.Adversarial_search.pdf"}
       Materials:
-      References:
-        - SSBD Ch. 16
-        - {"A Survey of Kernels for Structured Data": "https://i2pc.es/coss/Docencia/SignalProcessingReviews/Gartner2003.pdf"}
+        - {"Russell & Norvig Chapter 5": "Artificial Intelligence: A Modern Approach"}
+
 -
   Title: Week 6
   Events:
     2024-10-08:
       Label: Lecture
       Topics:
-          - Maximum Likelihood Estimation
-          - Generative and Discriminative Models
-          - Bayes Rule
-          - {"Slides": "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/lectures/lec06/06-handout.pdf"}
-          - {"Scribble": "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/lectures/lec06/06-scribble.pdf"}
+          - Knowledge Representation
+          - Propositional Logic
+          - First-Order Logic
+          - Inference Rules
       Materials:
-        - {Maximum Likelihood: "https://davidrosenberg.github.io/mlcourse/Archive/2019/Lectures/05c.MLE.pdf"}
-        - {Conditional Probability Models: "https://davidrosenberg.github.io/mlcourse/Archive/2019/Lectures/06a.conditional-probability-models.pdf"}
+        - {"Russell & Norvig Chapter 7-8": "Artificial Intelligence: A Modern Approach"}
+
+-
+  Title: Week 7
+  Events:
+    2024-10-15:
+      Label: Lecture
+      Topics:
+          - Machine Learning Introduction
+          - Supervised Learning
+          - Unsupervised Learning
+          - Reinforcement Learning
+      Materials:
+        - {"Russell & Norvig Chapter 18": "Artificial Intelligence: A Modern Approach"}
+
 -
   Title: Week 8
   Events:
     2024-10-22:
       Label: Midterm
       Topics:
-          - Midterm
+          - Midterm Examination
       Materials:
-        - {Exam: "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/exams/fa24/midterm_fa2024.pdf"}
-        - {Solution: "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/exams/fa24/midterm_fa2024_answers.pdf"}
+        - Review of Weeks 1-7
 
 -
   Title: Week 9
@@ -100,18 +107,12 @@
     2024-10-29:
       Label: Lecture
       Topics:
-          - Baysian Methods
-          - Bayesian Regression
-          - Multi-class
-          - {"Slides": "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/lectures/lec07/07-handout.pdf"}
-          - {"Scribble": "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/lectures/lec07/07-scribble.pdf"}
+          - Neural Networks
+          - Deep Learning Basics
+          - Backpropagation
+          - Applications of Deep Learning
       Materials:
-        - {"Multiclass Questions": "https://davidrosenberg.github.io/mlcourse/Archive/2019/ConceptChecks/7-Lec-Check.pdf"}
-        - {"Multiclass Solutions": "https://davidrosenberg.github.io/mlcourse/Archive/2019/ConceptChecks/7-Lec-Check_sol.pdf"}
-      References:
-        - "SSBD Chapter 17"
-        - {In Defense of One-Vs-All Classification: "http://www.jmlr.org/papers/v5/rifkin04a.html"}
-        - {Reducing Multiclass to Binary: "http://www.jmlr.org/papers/volume1/allwein00a/allwein00a.pdf"}
+        - {"Russell & Norvig Chapter 21": "Artificial Intelligence: A Modern Approach"}
 
 -
   Title: Week 10
@@ -119,72 +120,60 @@
     2024-11-05:
       Label: Lecture
       Topics:
-          - Structured Prediction
-          - Decision Trees
-          - {"Slides": "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/lectures/lec08/08-handout.pdf"}
-          - {"Scribble": "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/lectures/lec08/08-scribble.pdf"}
+          - Computer Vision
+          - Image Processing
+          - Object Recognition
+          - Convolutional Neural Networks
       Materials:
-        - {"CRF Tutorial": "https://people.cs.umass.edu/~mccallum/papers/crf-tutorial.pdf"}
-        - {"Structured Prediction": "https://www.cs.toronto.edu/~aschwing/ICCV_2015_DeepStructured_II_AlexSchwing.pdf"}
-      References:
-        - "JWHT 8.1 (Trees)"
-        - "HTF 9.2 (Trees)"
+        - {"Russell & Norvig Chapter 24": "Artificial Intelligence: A Modern Approach"}
+
 -
   Title: Week 11
   Events:
     2024-11-12:
       Label: Lecture
       Topics:
-          - Bagging, Random Forest
-          - Boosting
-          - {"Slides": "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/lectures/lec09/09-handout.pdf"}
-          - {"Scribble": "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/lectures/lec09/09-scribble.pdf"}
+          - Natural Language Processing
+          - Text Processing
+          - Language Models
+          - Sentiment Analysis
       Materials:
-        - {"Intro to the Bootstrap": "https://davidrosenberg.github.io/mlcourse/Archive/2019/Lectures/11a.bootstrap.pdf"}
-        - {"Viola-Jones Face Detector": "https://www.cs.cmu.edu/~efros/courses/LBMV07/Papers/viola-cvpr-01.pdf"}
+        - {"Russell & Norvig Chapter 22": "Artificial Intelligence: A Modern Approach"}
+
 -
   Title: Week 12
   Events:
     2024-11-19:
       Label: Lecture
       Topics:
-          - Feature Learning
-          - Neural Networks I
-          - {"Slides": "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/lectures/lec10/10-handout.pdf"}
-          - {"Scribble": "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/lectures/lec10/10-scribble.pdf"}
+          - Robotics
+          - Robot Perception
+          - Robot Control
+          - Autonomous Systems
       Materials:
-        - {'Yes you should understand backprop (Karpathy)': "https://medium.com/@karpathy/yes-you-should-understand-backprop-e2f06eab496b"}
-        - {'Challenges with backprop (Karpathy Lecture)': "https://youtu.be/gYpoJMlgyXA?t=13m44s"}
-        - {'Automatic Differentiation': "https://www.cs.toronto.edu/~duvenaud/talks/Johnson-Automatic-Differentiation.pdf"}
-        - {'How Does Learning Rate Decay Help Modern Neural Networks?': "https://arxiv.org/pdf/1908.01878.pdf"}
+        - {"Russell & Norvig Chapter 25": "Artificial Intelligence: A Modern Approach"}
+
 -
   Title: Week 13
   Events:
     2024-11-26:
       Label: Lecture
       Topics:
-          - Neural Networks II
-          - Deep Learning
-          - {"Slides": "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/lectures/lec11/11-handout.pdf"}
-          - {"Scribble": "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/lectures/lec11/11-scribble.pdf"}
-      References:
-        - "GBC Ch. 8 (Optimization)"
-        - "GBC Ch. 9 (CNNs)"
-        - "GBC Ch. 10 (RNNs)"
+          - AI Ethics
+          - Bias in AI Systems
+          - Fairness and Transparency
+          - Future of AI
+      Materials:
+        - {"Russell & Norvig Chapter 27": "Artificial Intelligence: A Modern Approach"}
+
 -
   Title: Week 14
   Events:
-    2023-12-03:
+    2024-12-03:
       Label: Lecture
       Topics:
-        - k-Means, Gaussian Mixture Models
-        - EM, ELBO
-        - Variational Autoencoders
-        - {"Slides": "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/lectures/lec12/12-handout.pdf"}
-        - {"Scribble": "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/lectures/lec12/12-scribble.pdf"}
+        - Course Review
+        - Final Project Presentations
+        - AI Trends and Future Directions
       Materials:
-        #
-      References:
-        - "HTF, 13.2.1 (k-Means)"
-        - "Bishop 9.2,9.3 (GMM/EM)"
-        - {"An Alternative to EM for GMM [Optional]": "https://arxiv.org/pdf/1706.03267.pdf"}
+        - Course Summary and Review

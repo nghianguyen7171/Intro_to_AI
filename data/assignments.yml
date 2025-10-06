@@ -1,38 +1,44 @@
-Due time: 12:00 PM Eastern time (Noon)
+Due time: 11:59 PM
 Submit link: "https://gradescope.com"
 ---
 -
-  Label: Homework 0
-  Description: Typesetting your homework
-  Due: 2000-01-01
-  PDF: {hw0.pdf: "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/assignments/hw0_latex.pdf"}
-  ZIP: {hw0.zip: "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/assignments/hw0.zip"}
-
+  Label: Assignment 1
+  Description: Introduction to AI and Search Algorithms
+  Due: 2024-09-17
+  PDF: {assignment1.pdf: "assignments/assignment1.pdf"}
+  ZIP: {assignment1.zip: "assignments/assignment1.zip"}
 
 -
-  Label: Homework 1
-  Description: Linear Regression & Gradient Descent
+  Label: Assignment 2
+  Description: Informed Search and Heuristics
   Due: 2024-10-01
-  PDF: {hw1.pdf: "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/assignments/hw1.pdf"}
-  ZIP: {hw1.zip: "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/assignments/hw1.zip"}
+  PDF: {assignment2.pdf: "assignments/assignment2.pdf"}
+  ZIP: {assignment2.zip: "assignments/assignment2.zip"}
 
 -
-  Label: Homework 2
-  Description: SVMs, Kernels & Logistic Regression
+  Label: Assignment 3
+  Description: Adversarial Search and Game Playing
   Due: 2024-10-15
-  PDF: {hw2.pdf: "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/assignments/hw2.pdf"}
-  ZIP: {hw2.zip: "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/assignments/hw2.zip"}
+  PDF: {assignment3.pdf: "assignments/assignment3.pdf"}
+  ZIP: {assignment3.zip: "assignments/assignment3.zip"}
 
 -
-  Label: Homework 3
-  Description: Bayesian ML & Multiclass
-  Due: 2024-11-12
-  PDF: {hw3.pdf: "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/assignments/hw3.pdf"}
-  ZIP: {hw3.zip: "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/assignments/hw3.zip"}
+  Label: Assignment 4
+  Description: Knowledge Representation and Logic
+  Due: 2024-11-05
+  PDF: {assignment4.pdf: "assignments/assignment4.pdf"}
+  ZIP: {assignment4.zip: "assignments/assignment4.zip"}
 
 -
-  Label: Homework 4
-  Description: Decision Trees, Boosting, and Neural Networks
-  Due: 2024-12-03
-  PDF: {hw4.pdf: "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/assignments/hw4.pdf"}
-  ZIP: {hw4.zip: "https://nyu-cs2565.github.io/mlcourse-public/2024-fall/assignments/hw4.zip"}
+  Label: Assignment 5
+  Description: Machine Learning and Neural Networks
+  Due: 2024-11-19
+  PDF: {assignment5.pdf: "assignments/assignment5.pdf"}
+  ZIP: {assignment5.zip: "assignments/assignment5.zip"}
+
+-
+  Label: Final Project
+  Description: AI Application Development
+  Due: 2024-12-10
+  PDF: {final_project.pdf: "assignments/final_project.pdf"}
+  ZIP: {final_project.zip: "assignments/final_project.zip"}
