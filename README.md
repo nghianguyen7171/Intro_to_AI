@@ -1,33 +1,96 @@
-# CS-GA 2565 Website
+# Introduction to Artificial Intelligence Course Website
 
-## Editing, rebuilding, and deploying this page
+**Course Codes:** EP15.TOKT11121 (DS) & EP16.TOKT11121 (AI)  
+**Institution:** National Economics University  
+**Instructors:** Dr. Trong-Nghia Nguyen & Dr. Nguyen Thi Kim Ngan
 
-### Building locally: quickstart
+## Course Overview
 
-Be sure to have [Node.js](https://iojs.org/) 7.x+ installed.
+This course aims to deliver a comprehensive overview of Artificial Intelligence, its implications, applications, and the skills to leverage it. The course begins by describing what the latest generation of artificial intelligence techniques can do. After an introduction to some basic concepts and techniques, the course illustrates both the potential and current limitations of these techniques with examples from a variety of applications.
 
-Run `npm install` in the project root. This will install some build tools we use.
+### Key Topics Covered
+- Search Strategies (BFS, DFS, A*, Minimax)
+- Knowledge Representation and Logic
+- Neural Networks and Machine Learning
+- Computer Vision and Natural Language Processing
+- AI Ethics and Applications
 
-Run `npm run build-in-place` to do the templating and stylesheet compilation in-place. You can then view the site by simply opening `index.html`.
+### Prerequisites
+- EP16.TOKT11108 (Fundamental Programming Concepts in Python)
+- Basic programming experience in Python
+- Understanding of data structures and algorithms
 
-Run `./build.sh` to do a local build into the `out/` directory. You can then preview the site at `out/index.html`. This should usually be the same as just `index.html`, but it is good to check before committing, since this "local deploy" process is slightly more complicated than the in-place build process.
+## Website Information
 
-### How to edit content
-The file index.hbs is usually what you should edit, basically as though you were editing an HTML file. The final HTML is generated with some JavaScript processing that pulls in data from the YAML files in the data directory -- basically the information in the lectures and assignments tables. 
+🌐 **Live Website:** [https://nghianguyen7171.github.io/Intro_to_AI/](https://nghianguyen7171.github.io/Intro_to_AI/)
 
-### Deployment
-Run the script `./deploy.sh` from the root directory of the project to build and deploy the page to GitHub.  The script does the following: 1) Pulls down the gh-pages branch into a folder called "out" in the project root directory. (GitHub serves webpages from gh-pages branches.) Then it runs `npm run build` which compiles the page and puts the output into out. Then the revised out folder is committed and pushed back to the gh-pages branch, ready to be served.
+### Course Resources
+- **Textbooks:** Russell & Norvig's "Artificial Intelligence: A Modern Approach" (2020)
+- **Software:** Python, NumPy, scikit-learn, Kaggle
+- **Platforms:** LMS for assignments, Kaggle for code submissions
 
-### Technologies used
+### Grading Structure
+- **Participation (20%):** Attendance, homework checks, class participation
+- **Midterm Exam/Project (20%):** Project with presentation and report
+- **Final Exam (60%):** Comprehensive examination
 
-[Stylus](https://learnboost.github.io/stylus/) is used for styling.
+## Technical Information
 
-[Handlebars](http://handlebarsjs.com/) is used for templating. `index.hbs` is minimally templated, mostly delegating to the partials in `templates/`. Those pull their data from `data/`. The logic that ties them all together is in `build/templater.js`.
+### Building and Development
 
-The site is intended to be responsive, which we accomplish with per-device stylesheets and media queries in the HTML.
+This website is built using modern web technologies and can be developed locally.
 
-### Things to Keep in Mind
+#### Prerequisites
+- [Node.js](https://nodejs.org/) 7.x+ installed
 
-While editing you should be using an [EditorConfig](http://editorconfig.org/) plugin for your text editor to enforce a few basic stylistic things.
+#### Local Development
+```bash
+# Install dependencies
+npm install
 
-We are trying to maintain a reasonable HTML document outline (so, don't use `<section>` as if it were `<div>`). To preview the document outline, use the [HTML 5 Outliner tool](https://gsnedders.html5.org/outliner/).
+# Build and view locally
+npm run build-in-place
+
+# Or build to out directory
+./build.sh
+```
+
+#### Deployment
+```bash
+# Deploy to GitHub Pages
+./deploy.sh
+```
+
+### Technologies Used
+- **[Handlebars](http://handlebarsjs.com/)** - Templating engine
+- **[Stylus](https://learnboost.github.io/stylus/)** - CSS preprocessor
+- **YAML** - Data configuration for lectures and assignments
+- **Responsive Design** - Mobile-friendly layout
+
+### File Structure
+- `index.hbs` - Main template file
+- `data/` - YAML files containing course data
+- `templates/` - Handlebars partial templates
+- `styles/` - Stylus stylesheets
+- `slides/` - Course presentation slides
+- `images/` - Course images and instructor photos
+
+### Content Management
+- **Lectures:** Edit `data/lectures.yml`
+- **Assignments:** Edit `data/assignments.yml`
+- **Course Info:** Edit `index.hbs`
+- **This Week:** Edit `data/this-week.yml`
+
+## Contact Information
+
+**Dr. Trong-Nghia Nguyen**  
+📧 nghiant@neu.edu.vn  
+🌐 [Profile Page](https://nghianguyen7171.github.io/)
+
+**Dr. Nguyen Thi Kim Ngan**  
+📧 ngannguyen@neu.edu.vn  
+🌐 [Profile Page](https://fda.neu.edu.vn/fda-members/ts-nguyen-thi-kim-ngan/)
+
+## License
+
+This course website is for educational purposes at National Economics University.
