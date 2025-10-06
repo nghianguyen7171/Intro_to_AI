@@ -13,7 +13,7 @@ mkdir -p out/styles/
 cp index.html favicon.ico out/
 cp styles/*.css out/styles/
 
-cp -r images fonts scripts out/
+cp -r images fonts scripts slides out/
 
 echo ""
 find out/ -print
