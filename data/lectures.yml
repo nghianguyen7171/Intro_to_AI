@@ -7,6 +7,7 @@
           - Introduction to Artificial Intelligence
           - Search Strategies (Breadth-First Search, Depth-First Search)
           - {"Slides": "slides/0.Intro_to_AI.pdf"}
+          - {"Slides": "slides/1.Searching_1.pdf"}
       Materials:
         - Chapter 1–3, lecture slides
         - Sample Python code for search algorithms
@@ -34,7 +35,7 @@
           - Best-First Search
           - Hill Climbing
           - Beam Search
-          - {"Slides": "slides/1.Searching_1.pdf"}
+          - {"Slides": "slides/2.Searching_2.pdf"}
       Materials:
         - Chapter 4, lecture slides
         - Search implementation examples
@@ -59,7 +60,7 @@
       Label: Lecture
       Topics:
           - Optimal Search (A*, Greedy Search)
-          - {"Slides": "slides/2.Searching_2.pdf"}
+          - {"Slides": "slides/3.Optimal_search.pdf"}
       Materials:
         - Chapter 4, slides on heuristic functions and optimality
 
@@ -85,7 +86,7 @@
           - Adversarial Search
           - Minimax Algorithm
           - Alpha-Beta Pruning
-          - {"Slides": "slides/3.Optimal_search.pdf"}
+          - {"Slides": "slides/4.Adversarial_search.pdf"}
       Materials:
         - Chapter 5, lecture notes
         - Game tree examples
@@ -98,7 +99,6 @@
       Topics:
           - Practice on game-playing agents using Minimax and Alpha-Beta Pruning
           - Lab exercises with Tic-Tac-Toe or similar games
-          - {"Slides": "slides/4.Adversarial_search.pdf"}
       Materials:
         - Lab exercises with Tic-Tac-Toe or similar games
 
