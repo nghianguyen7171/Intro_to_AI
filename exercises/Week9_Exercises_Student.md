@@ -207,15 +207,17 @@ def truth_table(formula, variables):
 
 ---
 
-## 🎯 **Learning Objectives Check**
+## 📤 **Submission Instructions**
 
-After completing these exercises, you should be able to:
-- ✅ Identify propositions and translate English to logic
-- ✅ Construct truth tables for complex formulas
-- ✅ Apply logical equivalences and simplifications
-- ✅ Convert any formula to CNF systematically
-- ✅ Use resolution for automated theorem proving
-- ✅ Apply propositional logic to real-world problems
+**Submit your solutions via one of the following methods:**
+
+### 📄 **PDF Submission (Recommended)**
+Upload your completed exercises as a PDF file to:
+**https://drive.google.com/drive/folders/1y8nreGuCBV6XS27suh3Lx7vkWXud22-t?usp=sharing**
+
+### 💻 **Code Submission (Kaggle)**
+If you include any code or want to submit via Kaggle:
+**https://www.kaggle.com/groups/ai66a-intro-to-ai/pending-invite/CC839838-30DA-4B84-809E-390CBD73F302**
 
 ---
 
