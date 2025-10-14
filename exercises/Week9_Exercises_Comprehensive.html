@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 9: Propositional Logic - Comprehensive Exercises</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #3498db;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .exercise-section {
+            margin-bottom: 40px;
+            border-left: 5px solid #3498db;
+            padding-left: 20px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .exercise-section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .exercise-number {
+            background: #3498db;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .problem {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border: 2px solid #ecf0f1;
+        }
+
+        .problem h3 {
+            color: #e74c3c;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .problem p {
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .formula {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        .truth-table {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background: #34495e;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .interactive-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            transition: border-color 0.3s;
+        }
+
+        .interactive-input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .check-button {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 10px 5px 10px 0;
+        }
+
+        .check-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+        }
+
+        .result {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: 600;
+            display: none;
+        }
+
+        .result.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+
+        .result.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+
+        .result.show {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .submission-section {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .submission-section h2 {
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .submission-links {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .submission-link {
+            background: white;
+            color: #e67e22;
+            text-decoration: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .submission-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .resources-section {
+            background: #ecf0f1;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+
+        .resources-section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .resource-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.2s;
+        }
+
+        .resource-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .resource-item a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .resource-item a:hover {
+            text-decoration: underline;
+        }
+
+        .progress-bar {
+            background: #ecf0f1;
+            border-radius: 10px;
+            height: 20px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .exercise-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .submission-links {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .exercise-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧠 Week 9: Propositional Logic</h1>
+            <p>Comprehensive Interactive Exercises</p>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number">25+</div>
+                    <div class="stat-label">Exercises</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">6</div>
+                    <div class="stat-label">Topics</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">Learning</div>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- Section 1: Basic Syntax & Semantics -->
+            <div class="exercise-section">
+                <h2><span class="exercise-number">1</span>Basic Syntax & Semantics</h2>
+                
+                <div class="exercise-grid">
+                    <div class="problem">
+                        <h3>Problem 1.1: Propositions</h3>
+                        <p>Which of the following are propositions?</p>
+                        <p>a) "It is raining today"</p>
+                        <p>b) "What is 2+2?"</p>
+                        <p>c) "Close the door!"</p>
+                        <p>d) "All birds can fly"</p>
+                        <input type="text" class="interactive-input" id="prop1" placeholder="Enter: a,b,c,d (propositions only)">
+                        <button class="check-button" onclick="checkPropositions()">Check Answer</button>
+                        <div id="result1" class="result"></div>
+                    </div>
+
+                    <div class="problem">
+                        <h3>Problem 1.2: English to Logic</h3>
+                        <p>Let P = "It's sunny", Q = "It's warm", R = "We go swimming"</p>
+                        <p>Translate: "If it's sunny and warm, then we go swimming"</p>
+                        <input type="text" class="interactive-input" id="trans1" placeholder="Enter propositional formula">
+                        <button class="check-button" onclick="checkTranslation1()">Check Answer</button>
+                        <div id="result2" class="result"></div>
+                    </div>
+
+                    <div class="problem">
+                        <h3>Problem 1.3: Logic to English</h3>
+                        <p>Let P = "It's raining", Q = "I stay home"</p>
+                        <p>Translate: P → Q</p>
+                        <input type="text" class="interactive-input" id="trans2" placeholder="Enter English translation">
+                        <button class="check-button" onclick="checkTranslation2()">Check Answer</button>
+                        <div id="result3" class="result"></div>
+                    </div>
+
+                    <div class="problem">
+                        <h3>Problem 1.4: Complex Translation</h3>
+                        <p>Let A = "Alice is happy", B = "Bob is sad", C = "Carol is working"</p>
+                        <p>Translate: "Alice is happy if and only if Bob is not sad, and Carol is working"</p>
+                        <input type="text" class="interactive-input" id="trans3" placeholder="Enter propositional formula">
+                        <button class="check-button" onclick="checkTranslation3()">Check Answer</button>
+                        <div id="result4" class="result"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Truth Tables -->
+            <div class="exercise-section">
+                <h2><span class="exercise-number">2</span>Truth Tables</h2>
+                
+                <div class="exercise-grid">
+                    <div class="problem">
+                        <h3>Problem 2.1: Simple Truth Table</h3>
+                        <p>Construct truth table for: P ∧ Q</p>
+                        <div class="truth-table">
+                            <table>
+                                <thead>
+                                    <tr><th>P</th><th>Q</th><th>P ∧ Q</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>T</td><td>T</td><td><input type="text" class="interactive-input" id="tt1" placeholder="T/F"></td></tr>
+                                    <tr><td>T</td><td>F</td><td><input type="text" class="interactive-input" id="tt2" placeholder="T/F"></td></tr>
+                                    <tr><td>F</td><td>T</td><td><input type="text" class="interactive-input" id="tt3" placeholder="T/F"></td></tr>
+                                    <tr><td>F</td><td>F</td><td><input type="text" class="interactive-input" id="tt4" placeholder="T/F"></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <button class="check-button" onclick="checkTruthTable1()">Check Answer</button>
+                        <div id="result5" class="result"></div>
+                    </div>
+
+                    <div class="problem">
+                        <h3>Problem 2.2: Implication Truth Table</h3>
+                        <p>Construct truth table for: P → Q</p>
+                        <div class="truth-table">
+                            <table>
+                                <thead>
+                                    <tr><th>P</th><th>Q</th><th>P → Q</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>T</td><td>T</td><td><input type="text" class="interactive-input" id="tt5" placeholder="T/F"></td></tr>
+                                    <tr><td>T</td><td>F</td><td><input type="text" class="interactive-input" id="tt6" placeholder="T/F"></td></tr>
+                                    <tr><td>F</td><td>T</td><td><input type="text" class="interactive-input" id="tt7" placeholder="T/F"></td></tr>
+                                    <tr><td>F</td><td>F</td><td><input type="text" class="interactive-input" id="tt8" placeholder="T/F"></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <button class="check-button" onclick="checkTruthTable2()">Check Answer</button>
+                        <div id="result6" class="result"></div>
+                    </div>
+
+                    <div class="problem">
+                        <h3>Problem 2.3: Complex Truth Table</h3>
+                        <p>Construct truth table for: (P ∨ Q) ∧ (¬P ∨ R)</p>
+                        <div class="truth-table">
+                            <table>
+                                <thead>
+                                    <tr><th>P</th><th>Q</th><th>R</th><th>P ∨ Q</th><th>¬P</th><th>¬P ∨ R</th><th>(P ∨ Q) ∧ (¬P ∨ R)</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>T</td><td>T</td><td>T</td><td><input type="text" class="interactive-input" id="tt9" placeholder="T/F"></td><td><input type="text" class="interactive-input" id="tt10" placeholder="T/F"></td><td><input type="text" class="interactive-input" id="tt11" placeholder="T/F"></td><td><input type="text" class="interactive-input" id="tt12" placeholder="T/F"></td></tr>
+                                    <tr><td>T</td><td>T</td><td>F</td><td><input type="text" class="interactive-input" id="tt13" placeholder="T/F"></td><td><input type="text" class="interactive-input" id="tt14" placeholder="T/F"></td><td><input type="text" class="interactive-input" id="tt15" placeholder="T/F"></td><td><input type="text" class="interactive-input" id="tt16" placeholder="T/F"></td></tr>
+                                    <tr><td>T</td><td>F</td><td>T</td><td><input type="text" class="interactive-input" id="tt17" placeholder="T/F"></td><td><input type="text" class="interactive-input" id="tt18" placeholder="T/F"></td><td><input type="text" class="interactive-input" id="tt19" placeholder="T/F"></td><td><input type="text" class="interactive-input" id="tt20" placeholder="T/F"></td></tr>
+                                    <tr><td>T</td><td>F</td><td>F</td><td><input type="text" class="interactive-input" id="tt21" placeholder="T/F"></td><td><input type="text" class="interactive-input" id="tt22" placeholder="T/F"></td><td><input type="text" class="interactive-input" id="tt23" placeholder="T/F"></td><td><input type="text" class="interactive-input" id="tt24" placeholder="T/F"></td></tr>
+                                    <tr><td>F</td><td>T</td><td>T</td><td><input type="text" class="interactive-input" id="tt25" placeholder="T/F"></td><td><input type="text" class="interactive-input" id="tt26" placeholder="T/F"></td><td><input type="text" class="interactive-input" id="tt27" placeholder="T/F"></td><td><input type="text" class="interactive-input" id="tt28" placeholder="T/F"></td></tr>
+                                    <tr><td>F</td><td>T</td><td>F</td><td><input type="text" class="interactive-input" id="tt29" placeholder="T/F"></td><td><input type="text" class="interactive-input" id="tt30" placeholder="T/F"></td><td><input type="text" class="interactive-input" id="tt31" placeholder="T/F"></td><td><input type="text" class="interactive-input" id="tt32" placeholder="T/F"></td></tr>
+                                    <tr><td>F</td><td>F</td><td>T</td><td><input type="text" class="interactive-input" id="tt33" placeholder="T/F"></td><td><input type="text" class="interactive-input" id="tt34" placeholder="T/F"></td><td><input type="text" class="interactive-input" id="tt35" placeholder="T/F"></td><td><input type="text" class="interactive-input" id="tt36" placeholder="T/F"></td></tr>
+                                    <tr><td>F</td><td>F</td><td>F</td><td><input type="text" class="interactive-input" id="tt37" placeholder="T/F"></td><td><input type="text" class="interactive-input" id="tt38" placeholder="T/F"></td><td><input type="text" class="interactive-input" id="tt39" placeholder="T/F"></td><td><input type="text" class="interactive-input" id="tt40" placeholder="T/F"></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <button class="check-button" onclick="checkTruthTable3()">Check Answer</button>
+                        <div id="result7" class="result"></div>
+                    </div>
+
+                    <div class="problem">
+                        <h3>Problem 2.4: Tautology Check</h3>
+                        <p>Is (P → Q) ∨ (Q → P) a tautology?</p>
+                        <input type="text" class="interactive-input" id="taut1" placeholder="Yes/No">
+                        <button class="check-button" onclick="checkTautology()">Check Answer</button>
+                        <div id="result8" class="result"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Logical Equivalences -->
+            <div class="exercise-section">
+                <h2><span class="exercise-number">3</span>Logical Equivalences</h2>
+                
+                <div class="exercise-grid">
+                    <div class="problem">
+                        <h3>Problem 3.1: De Morgan's Laws</h3>
+                        <p>Apply De Morgan's law to: ¬(P ∧ Q)</p>
+                        <input type="text" class="interactive-input" id="demorg1" placeholder="Enter equivalent form">
+                        <button class="check-button" onclick="checkDeMorgan1()">Check Answer</button>
+                        <div id="result9" class="result"></div>
+                    </div>
+
+                    <div class="problem">
+                        <h3>Problem 3.2: Double Negation</h3>
+                        <p>Simplify: ¬¬P</p>
+                        <input type="text" class="interactive-input" id="double1" placeholder="Enter simplified form">
+                        <button class="check-button" onclick="checkDoubleNegation()">Check Answer</button>
+                        <div id="result10" class="result"></div>
+                    </div>
+
+                    <div class="problem">
+                        <h3>Problem 3.3: Distributive Law</h3>
+                        <p>Apply distributive law to: P ∧ (Q ∨ R)</p>
+                        <input type="text" class="interactive-input" id="dist1" placeholder="Enter distributed form">
+                        <button class="check-button" onclick="checkDistributive()">Check Answer</button>
+                        <div id="result11" class="result"></div>
+                    </div>
+
+                    <div class="problem">
+                        <h3>Problem 3.4: Absorption Law</h3>
+                        <p>Simplify: P ∨ (P ∧ Q)</p>
+                        <input type="text" class="interactive-input" id="abs1" placeholder="Enter simplified form">
+                        <button class="check-button" onclick="checkAbsorption()">Check Answer</button>
+                        <div id="result12" class="result"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4: CNF Conversion -->
+            <div class="exercise-section">
+                <h2><span class="exercise-number">4</span>CNF Conversion</h2>
+                
+                <div class="exercise-grid">
+                    <div class="problem">
+                        <h3>Problem 4.1: Basic CNF</h3>
+                        <p>Convert to CNF: P → Q</p>
+                        <input type="text" class="interactive-input" id="cnf1" placeholder="Enter CNF form">
+                        <button class="check-button" onclick="checkCNF1()">Check Answer</button>
+                        <div id="result13" class="result"></div>
+                    </div>
+
+                    <div class="problem">
+                        <h3>Problem 4.2: Complex CNF</h3>
+                        <p>Convert to CNF: (P ∨ Q) → R</p>
+                        <input type="text" class="interactive-input" id="cnf2" placeholder="Enter CNF form">
+                        <button class="check-button" onclick="checkCNF2()">Check Answer</button>
+                        <div id="result14" class="result"></div>
+                    </div>
+
+                    <div class="problem">
+                        <h3>Problem 4.3: Step-by-Step CNF</h3>
+                        <p>Convert to CNF: ¬(P ∧ Q) ∨ R</p>
+                        <textarea class="interactive-input" id="cnf3" rows="4" placeholder="Step 1: Apply De Morgan's...&#10;Step 2: Apply distributive...&#10;Final CNF: ..."></textarea>
+                        <button class="check-button" onclick="checkCNF3()">Check Answer</button>
+                        <div id="result15" class="result"></div>
+                    </div>
+
+                    <div class="problem">
+                        <h3>Problem 4.4: CNF Validation</h3>
+                        <p>Given CNF: (A ∨ B) ∧ (¬A ∨ C) ∧ (¬B ∨ D)</p>
+                        <p>Assignment: A=T, B=F, C=T, D=F</p>
+                        <p>Is this assignment satisfying?</p>
+                        <input type="text" class="interactive-input" id="cnf4" placeholder="Yes/No">
+                        <button class="check-button" onclick="checkCNF4()">Check Answer</button>
+                        <div id="result16" class="result"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 5: Resolution & Inference -->
+            <div class="exercise-section">
+                <h2><span class="exercise-number">5</span>Resolution & Inference</h2>
+                
+                <div class="exercise-grid">
+                    <div class="problem">
+                        <h3>Problem 5.1: Resolution Rule</h3>
+                        <p>Given clauses: {P ∨ Q, ¬P ∨ R}</p>
+                        <p>What can you resolve?</p>
+                        <input type="text" class="interactive-input" id="res1" placeholder="Enter resolved clause">
+                        <button class="check-button" onclick="checkResolution1()">Check Answer</button>
+                        <div id="result17" class="result"></div>
+                    </div>
+
+                    <div class="problem">
+                        <h3>Problem 5.2: Modus Ponens</h3>
+                        <p>Given: P → Q, P</p>
+                        <p>What can you conclude?</p>
+                        <input type="text" class="interactive-input" id="mp1" placeholder="Enter conclusion">
+                        <button class="check-button" onclick="checkModusPonens()">Check Answer</button>
+                        <div id="result18" class="result"></div>
+                    </div>
+
+                    <div class="problem">
+                        <h3>Problem 5.3: Chain Rule</h3>
+                        <p>Given: P → Q, Q → R, P</p>
+                        <p>Prove: R</p>
+                        <textarea class="interactive-input" id="chain1" rows="3" placeholder="Step 1: P → Q, P, therefore...&#10;Step 2: Q → R, Q, therefore...&#10;Conclusion: ..."></textarea>
+                        <button class="check-button" onclick="checkChainRule()">Check Answer</button>
+                        <div id="result19" class="result"></div>
+                    </div>
+
+                    <div class="problem">
+                        <h3>Problem 5.4: Contradiction</h3>
+                        <p>Given: P ∨ Q, ¬P, ¬Q</p>
+                        <p>What does this lead to?</p>
+                        <input type="text" class="interactive-input" id="contra1" placeholder="Enter result">
+                        <button class="check-button" onclick="checkContradiction()">Check Answer</button>
+                        <div id="result20" class="result"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 6: Real-World Applications -->
+            <div class="exercise-section">
+                <h2><span class="exercise-number">6</span>Real-World Applications</h2>
+                
+                <div class="exercise-grid">
+                    <div class="problem">
+                        <h3>Problem 6.1: Wumpus World</h3>
+                        <p>Let B = "Breeze", P = "Pit", S = "Stench", W = "Wumpus"</p>
+                        <p>Rule: "If there's a breeze, there's a pit nearby"</p>
+                        <input type="text" class="interactive-input" id="wumpus1" placeholder="Enter logical rule">
+                        <button class="check-button" onclick="checkWumpus1()">Check Answer</button>
+                        <div id="result21" class="result"></div>
+                    </div>
+
+                    <div class="problem">
+                        <h3>Problem 6.2: Medical Diagnosis</h3>
+                        <p>Let F = "Fever", C = "Cough", I = "Infection"</p>
+                        <p>Rule: "If fever and cough, then infection"</p>
+                        <input type="text" class="interactive-input" id="medical1" placeholder="Enter logical rule">
+                        <button class="check-button" onclick="checkMedical1()">Check Answer</button>
+                        <div id="result22" class="result"></div>
+                    </div>
+
+                    <div class="problem">
+                        <h3>Problem 6.3: Circuit Logic</h3>
+                        <p>Let A = "Switch A", B = "Switch B", L = "Light on"</p>
+                        <p>Rule: "Light is on if and only if both switches are on"</p>
+                        <input type="text" class="interactive-input" id="circuit1" placeholder="Enter logical rule">
+                        <button class="check-button" onclick="checkCircuit1()">Check Answer</button>
+                        <div id="result23" class="result"></div>
+                    </div>
+
+                    <div class="problem">
+                        <h3>Problem 6.4: Security System</h3>
+                        <p>Let M = "Motion detected", D = "Door open", A = "Alarm"</p>
+                        <p>Rule: "Alarm goes off if motion is detected or door is open"</p>
+                        <input type="text" class="interactive-input" id="security1" placeholder="Enter logical rule">
+                        <button class="check-button" onclick="checkSecurity1()">Check Answer</button>
+                        <div id="result24" class="result"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submission Section -->
+            <div class="submission-section">
+                <h2>📤 Submit Your Solutions</h2>
+                <p>Choose your preferred submission method:</p>
+                <div class="submission-links">
+                    <a href="https://drive.google.com/drive/folders/1y8nreGuCBV6XS27suh3Lx7vkWXud22-t?usp=sharing" target="_blank" class="submission-link">
+                        📄 Submit PDF
+                    </a>
+                    <a href="https://www.kaggle.com/groups/ai66a-intro-to-ai/pending-invite/CC839838-30DA-4B84-809E-390CBD73F302" target="_blank" class="submission-link">
+                        💻 Submit Code
+                    </a>
+                </div>
+            </div>
+
+            <!-- Resources Section -->
+            <div class="resources-section">
+                <h2>📚 Additional Resources</h2>
+                <div class="resource-grid">
+                    <div class="resource-item">
+                        <h3>📖 CNF Conversion Guide</h3>
+                        <a href="CNF_Conversion_Method_English.md" target="_blank">Download Method Guide</a>
+                    </div>
+                    <div class="resource-item">
+                        <h3>🎯 Lecture Slides</h3>
+                        <a href="../slides/5.Propositional_Logic.pdf" target="_blank">5.Propositional_Logic.pdf</a>
+                    </div>
+                    <div class="resource-item">
+                        <h3>📚 Main Textbook</h3>
+                        <a href="http://lib.ysu.am/disciplines_bk/efdd4d1d4c2087fe1cbe03d9ced67f34.pdf" target="_blank">AIMA Chapter 7</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let completedExercises = 0;
+        const totalExercises = 24;
+
+        function updateProgress() {
+            const progress = (completedExercises / totalExercises) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function markComplete() {
+            completedExercises++;
+            updateProgress();
+        }
+
+        function showResult(element, isCorrect, correctMessage, incorrectMessage) {
+            element.className = `result ${isCorrect ? 'correct' : 'incorrect'} show`;
+            element.innerHTML = isCorrect ? correctMessage : incorrectMessage;
+            if (isCorrect) markComplete();
+        }
+
+        // Section 1: Basic Syntax & Semantics
+        function checkPropositions() {
+            const answer = document.getElementById('prop1').value.trim().toLowerCase();
+            const result = document.getElementById('result1');
+            const isCorrect = answer === 'a,d' || answer === 'a, d';
+            showResult(result, isCorrect,
+                "✅ Correct! a) and d) are propositions (statements that can be true or false).",
+                "❌ Not quite. Propositions are statements that can be true or false. Answer: a, d");
+        }
+
+        function checkTranslation1() {
+            const answer = document.getElementById('trans1').value.trim().toLowerCase();
+            const result = document.getElementById('result2');
+            const validAnswers = ['(p∧q)→r', '(p and q)→r', '(p&q)→r'];
+            const isCorrect = validAnswers.some(valid => answer.includes(valid));
+            showResult(result, isCorrect,
+                "✅ Correct! (P ∧ Q) → R represents 'If it's sunny and warm, then we go swimming'.",
+                "❌ Not quite. The correct answer is: (P ∧ Q) → R");
+        }
+
+        function checkTranslation2() {
+            const answer = document.getElementById('trans2').value.trim().toLowerCase();
+            const result = document.getElementById('result3');
+            const isCorrect = answer.includes('if') && answer.includes('then');
+            showResult(result, isCorrect,
+                "✅ Correct! P → Q means 'If it's raining, then I stay home'.",
+                "❌ Not quite. P → Q means 'If P, then Q'. Answer: 'If it's raining, then I stay home'");
+        }
+
+        function checkTranslation3() {
+            const answer = document.getElementById('trans3').value.trim().toLowerCase();
+            const result = document.getElementById('result4');
+            const validAnswers = ['a↔¬b∧c', 'a↔(¬b∧c)', 'a⟷¬b∧c'];
+            const isCorrect = validAnswers.some(valid => answer.includes(valid));
+            showResult(result, isCorrect,
+                "✅ Correct! A ↔ (¬B ∧ C) represents the given statement.",
+                "❌ Not quite. The correct answer is: A ↔ (¬B ∧ C)");
+        }
+
+        // Section 2: Truth Tables
+        function checkTruthTable1() {
+            const answers = ['T', 'F', 'F', 'F'];
+            let correct = true;
+            for (let i = 1; i <= 4; i++) {
+                const value = document.getElementById(`tt${i}`).value.trim().toUpperCase();
+                if (value !== answers[i-1]) correct = false;
+            }
+            const result = document.getElementById('result5');
+            showResult(result, correct,
+                "✅ Perfect! P ∧ Q is only true when both P and Q are true.",
+                "❌ Some entries are incorrect. Correct answers: T, F, F, F");
+        }
+
+        function checkTruthTable2() {
+            const answers = ['T', 'F', 'T', 'T'];
+            let correct = true;
+            for (let i = 5; i <= 8; i++) {
+                const value = document.getElementById(`tt${i}`).value.trim().toUpperCase();
+                if (value !== answers[i-5]) correct = false;
+            }
+            const result = document.getElementById('result6');
+            showResult(result, correct,
+                "✅ Perfect! P → Q is only false when P is true and Q is false.",
+                "❌ Some entries are incorrect. Correct answers: T, F, T, T");
+        }
+
+        function checkTruthTable3() {
+            const answers = ['T', 'F', 'T', 'T', 'T', 'F', 'T', 'F', 'F', 'F', 'T', 'T', 'T', 'F', 'T', 'F', 'F', 'T', 'T', 'T', 'T', 'T', 'T', 'T', 'F', 'T', 'T', 'T'];
+            let correct = true;
+            for (let i = 9; i <= 40; i++) {
+                const value = document.getElementById(`tt${i}`).value.trim().toUpperCase();
+                if (value !== answers[i-9]) correct = false;
+            }
+            const result = document.getElementById('result7');
+            showResult(result, correct,
+                "✅ Perfect! Your truth table is completely correct.",
+                "❌ Some entries are incorrect. Check your work step by step.");
+        }
+
+        function checkTautology() {
+            const answer = document.getElementById('taut1').value.trim().toLowerCase();
+            const result = document.getElementById('result8');
+            const isCorrect = answer === 'yes';
+            showResult(result, isCorrect,
+                "✅ Correct! (P → Q) ∨ (Q → P) is always true (tautology).",
+                "❌ Not quite. (P → Q) ∨ (Q → P) is always true - it's a tautology.");
+        }
+
+        // Section 3: Logical Equivalences
+        function checkDeMorgan1() {
+            const answer = document.getElementById('demorg1').value.trim().toLowerCase();
+            const result = document.getElementById('result9');
+            const isCorrect = answer.includes('¬p∨¬q') || answer.includes('¬p or ¬q');
+            showResult(result, isCorrect,
+                "✅ Correct! ¬(P ∧ Q) ≡ ¬P ∨ ¬Q (De Morgan's law).",
+                "❌ Not quite. De Morgan's law: ¬(P ∧ Q) ≡ ¬P ∨ ¬Q");
+        }
+
+        function checkDoubleNegation() {
+            const answer = document.getElementById('double1').value.trim().toLowerCase();
+            const result = document.getElementById('result10');
+            const isCorrect = answer === 'p';
+            showResult(result, isCorrect,
+                "✅ Correct! ¬¬P ≡ P (double negation law).",
+                "❌ Not quite. Double negation: ¬¬P ≡ P");
+        }
+
+        function checkDistributive() {
+            const answer = document.getElementById('dist1').value.trim().toLowerCase();
+            const result = document.getElementById('result11');
+            const isCorrect = answer.includes('(p∧q)∨(p∧r)') || answer.includes('(p and q) or (p and r)');
+            showResult(result, isCorrect,
+                "✅ Correct! P ∧ (Q ∨ R) ≡ (P ∧ Q) ∨ (P ∧ R).",
+                "❌ Not quite. Distributive law: P ∧ (Q ∨ R) ≡ (P ∧ Q) ∨ (P ∧ R)");
+        }
+
+        function checkAbsorption() {
+            const answer = document.getElementById('abs1').value.trim().toLowerCase();
+            const result = document.getElementById('result12');
+            const isCorrect = answer === 'p';
+            showResult(result, isCorrect,
+                "✅ Correct! P ∨ (P ∧ Q) ≡ P (absorption law).",
+                "❌ Not quite. Absorption law: P ∨ (P ∧ Q) ≡ P");
+        }
+
+        // Section 4: CNF Conversion
+        function checkCNF1() {
+            const answer = document.getElementById('cnf1').value.trim().toLowerCase();
+            const result = document.getElementById('result13');
+            const isCorrect = answer.includes('¬p∨q') || answer.includes('¬p or q');
+            showResult(result, isCorrect,
+                "✅ Correct! P → Q ≡ ¬P ∨ Q.",
+                "❌ Not quite. P → Q ≡ ¬P ∨ Q");
+        }
+
+        function checkCNF2() {
+            const answer = document.getElementById('cnf2').value.trim().toLowerCase();
+            const result = document.getElementById('result14');
+            const isCorrect = answer.includes('(¬p∧¬q)∨r') || answer.includes('¬p∧¬q∨r');
+            showResult(result, isCorrect,
+                "✅ Correct! (P ∨ Q) → R ≡ ¬(P ∨ Q) ∨ R ≡ (¬P ∧ ¬Q) ∨ R.",
+                "❌ Not quite. (P ∨ Q) → R ≡ (¬P ∧ ¬Q) ∨ R");
+        }
+
+        function checkCNF3() {
+            const answer = document.getElementById('cnf3').value.trim().toLowerCase();
+            const result = document.getElementById('result15');
+            const hasSteps = answer.includes('step') || answer.includes('de morgan');
+            const hasFinal = answer.includes('(¬p∨¬q∨r)');
+            const isCorrect = hasSteps && hasFinal;
+            showResult(result, isCorrect,
+                "✅ Excellent! You correctly applied the CNF conversion steps.",
+                "❌ Here's the correct conversion:<br>Step 1: Apply De Morgan's: ¬P ∨ ¬Q ∨ R<br>Step 2: Already in CNF form<br>Final CNF: ¬P ∨ ¬Q ∨ R");
+        }
+
+        function checkCNF4() {
+            const answer = document.getElementById('cnf4').value.trim().toLowerCase();
+            const result = document.getElementById('result16');
+            const isCorrect = answer === 'yes';
+            showResult(result, isCorrect,
+                "✅ Correct! A=T makes (A ∨ B) true, C=T makes (¬A ∨ C) true, but D=F makes (¬B ∨ D) false. Wait, let me recalculate...",
+                "❌ Let's check: Clause 1: (T ∨ F) = T, Clause 2: (F ∨ T) = T, Clause 3: (T ∨ F) = T. All clauses are satisfied!");
+        }
+
+        // Section 5: Resolution & Inference
+        function checkResolution1() {
+            const answer = document.getElementById('res1').value.trim().toLowerCase();
+            const result = document.getElementById('result17');
+            const isCorrect = answer.includes('q∨r') || answer.includes('q or r');
+            showResult(result, isCorrect,
+                "✅ Correct! From P ∨ Q and ¬P ∨ R, we can resolve to Q ∨ R.",
+                "❌ Not quite. From P ∨ Q and ¬P ∨ R, we resolve to Q ∨ R.");
+        }
+
+        function checkModusPonens() {
+            const answer = document.getElementById('mp1').value.trim().toLowerCase();
+            const result = document.getElementById('result18');
+            const isCorrect = answer === 'q';
+            showResult(result, isCorrect,
+                "✅ Correct! From P → Q and P, we can conclude Q (Modus Ponens).",
+                "❌ Not quite. From P → Q and P, we conclude Q (Modus Ponens).");
+        }
+
+        function checkChainRule() {
+            const answer = document.getElementById('chain1').value.trim().toLowerCase();
+            const result = document.getElementById('result19');
+            const hasSteps = answer.includes('q') && answer.includes('r');
+            showResult(result, hasSteps,
+                "✅ Correct! Step 1: P → Q, P, therefore Q. Step 2: Q → R, Q, therefore R.",
+                "❌ Here's the correct proof:<br>Step 1: P → Q, P, therefore Q<br>Step 2: Q → R, Q, therefore R<br>Conclusion: R");
+        }
+
+        function checkContradiction() {
+            const answer = document.getElementById('contra1').value.trim().toLowerCase();
+            const result = document.getElementById('result20');
+            const isCorrect = answer.includes('contradiction') || answer.includes('false');
+            showResult(result, isCorrect,
+                "✅ Correct! P ∨ Q, ¬P, ¬Q leads to a contradiction (False).",
+                "❌ Not quite. P ∨ Q, ¬P, ¬Q leads to a contradiction (False).");
+        }
+
+        // Section 6: Real-World Applications
+        function checkWumpus1() {
+            const answer = document.getElementById('wumpus1').value.trim().toLowerCase();
+            const result = document.getElementById('result21');
+            const isCorrect = answer.includes('b→p') || answer.includes('b→(p∨p)');
+            showResult(result, isCorrect,
+                "✅ Correct! B → P represents 'If there's a breeze, there's a pit nearby'.",
+                "❌ Not quite. The correct answer is: B → P");
+        }
+
+        function checkMedical1() {
+            const answer = document.getElementById('medical1').value.trim().toLowerCase();
+            const result = document.getElementById('result22');
+            const isCorrect = answer.includes('(f∧c)→i') || answer.includes('f∧c→i');
+            showResult(result, isCorrect,
+                "✅ Correct! (F ∧ C) → I represents 'If fever and cough, then infection'.",
+                "❌ Not quite. The correct answer is: (F ∧ C) → I");
+        }
+
+        function checkCircuit1() {
+            const answer = document.getElementById('circuit1').value.trim().toLowerCase();
+            const result = document.getElementById('result23');
+            const isCorrect = answer.includes('a↔b') || answer.includes('a⟷b') || answer.includes('l↔(a∧b)');
+            showResult(result, isCorrect,
+                "✅ Correct! A ↔ B or L ↔ (A ∧ B) represents the circuit logic.",
+                "❌ Not quite. The correct answer is: L ↔ (A ∧ B)");
+        }
+
+        function checkSecurity1() {
+            const answer = document.getElementById('security1').value.trim().toLowerCase();
+            const result = document.getElementById('result24');
+            const isCorrect = answer.includes('(m∨d)→a') || answer.includes('m∨d→a');
+            showResult(result, isCorrect,
+                "✅ Correct! (M ∨ D) → A represents 'Alarm goes off if motion is detected or door is open'.",
+                "❌ Not quite. The correct answer is: (M ∨ D) → A");
+        }
+
+        // Add interactive features
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add enter key support for inputs
+            const inputs = document.querySelectorAll('.interactive-input');
+            inputs.forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        const button = this.parentElement.querySelector('.check-button');
+                        if (button) button.click();
+                    }
+                });
+            });
+
+            // Add auto-format for truth table inputs
+            const truthTableInputs = document.querySelectorAll('table input[type="text"]');
+            
+            truthTableInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    const value = this.value.trim().toUpperCase();
+                    if (value === 'TRUE' || value === 'T') {
+                        this.value = 'T';
+                    } else if (value === 'FALSE' || value === 'F') {
+                        this.value = 'F';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
