@@ -109,11 +109,15 @@
       Label: Lecture
       Topics:
           - Propositional Logic – Syntax, Semantics, and Inference
-          - Chapter 7, lecture slides
-          - Reasoning examples
+          - {"Slides": "slides/5.Propositional_Logic.pdf"}
+          - Logical Connectives (¬, ∧, ∨, →, ⟷)
+          - Truth Tables and Logical Equivalences
+          - CNF Conversion and Resolution
       Materials:
-        - Chapter 7, lecture slides
-        - Reasoning examples
+        - Chapter 7, AIMA (Russell & Norvig, 2020)
+        - {"Main Textbook": "http://lib.ysu.am/disciplines_bk/efdd4d1d4c2087fe1cbe03d9ced67f34.pdf"}
+        - Reasoning examples and exercises
+        - CNF conversion practice problems
 
 -
   Title: Week 10
