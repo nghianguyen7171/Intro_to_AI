@@ -166,6 +166,13 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 - Response to Reviewers section is mandatory
 - Teams encouraged to use visualizations, simulations, examples
 
+### Project Submission
+- **Google Drive Folder:** https://drive.google.com/drive/folders/1p14ShnfRMPj5UzJjS6VaJ4dAhvELUd_Y?usp=sharing
+- **File Format:** PDF files only (presentation slides and final report)
+- **Naming Convention:** TeamName_Presentation.pdf and TeamName_Report.pdf
+- **Deadline:** Report due one week after presentation date
+- **Access:** Students need to sign in with their account to upload files
+
 ## Textbooks & Resources
 
 ### Main Textbooks
@@ -242,6 +249,7 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 - Course information and schedule
 - Instructor profiles and photos
 - Assignment links and project guidelines
+- Project submission system with Google Drive integration
 - Slides integration and accessibility
 - Responsive design and styling
 - GitHub Pages deployment
@@ -281,3 +289,5 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 ---
 
 *This document serves as a comprehensive backup context for the Introduction to AI course website project. It contains all essential information needed to understand, maintain, and continue development of the project.*
+
+
