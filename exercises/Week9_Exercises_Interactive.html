@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 9: Propositional Logic Exercises</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .exercise-section {
+            margin-bottom: 40px;
+            border-left: 5px solid #3498db;
+            padding-left: 20px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .exercise-section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .exercise-number {
+            background: #3498db;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .problem {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border: 2px solid #ecf0f1;
+        }
+
+        .problem h3 {
+            color: #e74c3c;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .problem p {
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .formula {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        .truth-table {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background: #34495e;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .interactive-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            transition: border-color 0.3s;
+        }
+
+        .interactive-input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .check-button {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 10px 5px 10px 0;
+        }
+
+        .check-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+        }
+
+        .result {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: 600;
+            display: none;
+        }
+
+        .result.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+
+        .result.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+
+        .result.show {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .submission-section {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .submission-section h2 {
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .submission-links {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .submission-link {
+            background: white;
+            color: #e67e22;
+            text-decoration: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .submission-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .resources-section {
+            background: #ecf0f1;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+
+        .resources-section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .resource-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.2s;
+        }
+
+        .resource-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .resource-item a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .resource-item a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .submission-links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧠 Week 9: Propositional Logic</h1>
+            <p>Interactive Review Exercises</p>
+        </div>
+
+        <div class="content">
+            <div class="exercise-section">
+                <h2><span class="exercise-number">1</span>Syntax & Semantics</h2>
+                
+                <div class="problem">
+                    <h3>Problem 1.1: Propositional Logic Syntax</h3>
+                    <p>Given the English sentence: "If it's raining, then the ground is wet, and if the ground is wet, then the grass is slippery."</p>
+                    <p>Let: R = "It's raining", W = "Ground is wet", S = "Grass is slippery"</p>
+                    <p>Translate this to propositional logic:</p>
+                    <input type="text" class="interactive-input" id="syntax1" placeholder="Enter your propositional logic formula here...">
+                    <button class="check-button" onclick="checkSyntax1()">Check Answer</button>
+                    <div id="result1" class="result"></div>
+                </div>
+
+                <div class="problem">
+                    <h3>Problem 1.2: Truth Table Construction</h3>
+                    <p>Construct a truth table for the formula: (P ∨ Q) ∧ (¬P ∨ R)</p>
+                    <p>Fill in the truth table below:</p>
+                    
+                    <div class="truth-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>P</th>
+                                    <th>Q</th>
+                                    <th>R</th>
+                                    <th>P ∨ Q</th>
+                                    <th>¬P</th>
+                                    <th>¬P ∨ R</th>
+                                    <th>(P ∨ Q) ∧ (¬P ∨ R)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>T</td>
+                                    <td>T</td>
+                                    <td>T</td>
+                                    <td><input type="text" class="interactive-input" id="tt1" placeholder="T/F"></td>
+                                    <td><input type="text" class="interactive-input" id="tt2" placeholder="T/F"></td>
+                                    <td><input type="text" class="interactive-input" id="tt3" placeholder="T/F"></td>
+                                    <td><input type="text" class="interactive-input" id="tt4" placeholder="T/F"></td>
+                                </tr>
+                                <tr>
+                                    <td>T</td>
+                                    <td>T</td>
+                                    <td>F</td>
+                                    <td><input type="text" class="interactive-input" id="tt5" placeholder="T/F"></td>
+                                    <td><input type="text" class="interactive-input" id="tt6" placeholder="T/F"></td>
+                                    <td><input type="text" class="interactive-input" id="tt7" placeholder="T/F"></td>
+                                    <td><input type="text" class="interactive-input" id="tt8" placeholder="T/F"></td>
+                                </tr>
+                                <tr>
+                                    <td>T</td>
+                                    <td>F</td>
+                                    <td>T</td>
+                                    <td><input type="text" class="interactive-input" id="tt9" placeholder="T/F"></td>
+                                    <td><input type="text" class="interactive-input" id="tt10" placeholder="T/F"></td>
+                                    <td><input type="text" class="interactive-input" id="tt11" placeholder="T/F"></td>
+                                    <td><input type="text" class="interactive-input" id="tt12" placeholder="T/F"></td>
+                                </tr>
+                                <tr>
+                                    <td>T</td>
+                                    <td>F</td>
+                                    <td>F</td>
+                                    <td><input type="text" class="interactive-input" id="tt13" placeholder="T/F"></td>
+                                    <td><input type="text" class="interactive-input" id="tt14" placeholder="T/F"></td>
+                                    <td><input type="text" class="interactive-input" id="tt15" placeholder="T/F"></td>
+                                    <td><input type="text" class="interactive-input" id="tt16" placeholder="T/F"></td>
+                                </tr>
+                                <tr>
+                                    <td>F</td>
+                                    <td>T</td>
+                                    <td>T</td>
+                                    <td><input type="text" class="interactive-input" id="tt17" placeholder="T/F"></td>
+                                    <td><input type="text" class="interactive-input" id="tt18" placeholder="T/F"></td>
+                                    <td><input type="text" class="interactive-input" id="tt19" placeholder="T/F"></td>
+                                    <td><input type="text" class="interactive-input" id="tt20" placeholder="T/F"></td>
+                                </tr>
+                                <tr>
+                                    <td>F</td>
+                                    <td>T</td>
+                                    <td>F</td>
+                                    <td><input type="text" class="interactive-input" id="tt21" placeholder="T/F"></td>
+                                    <td><input type="text" class="interactive-input" id="tt22" placeholder="T/F"></td>
+                                    <td><input type="text" class="interactive-input" id="tt23" placeholder="T/F"></td>
+                                    <td><input type="text" class="interactive-input" id="tt24" placeholder="T/F"></td>
+                                </tr>
+                                <tr>
+                                    <td>F</td>
+                                    <td>F</td>
+                                    <td>T</td>
+                                    <td><input type="text" class="interactive-input" id="tt25" placeholder="T/F"></td>
+                                    <td><input type="text" class="interactive-input" id="tt26" placeholder="T/F"></td>
+                                    <td><input type="text" class="interactive-input" id="tt27" placeholder="T/F"></td>
+                                    <td><input type="text" class="interactive-input" id="tt28" placeholder="T/F"></td>
+                                </tr>
+                                <tr>
+                                    <td>F</td>
+                                    <td>F</td>
+                                    <td>F</td>
+                                    <td><input type="text" class="interactive-input" id="tt29" placeholder="T/F"></td>
+                                    <td><input type="text" class="interactive-input" id="tt30" placeholder="T/F"></td>
+                                    <td><input type="text" class="interactive-input" id="tt31" placeholder="T/F"></td>
+                                    <td><input type="text" class="interactive-input" id="tt32" placeholder="T/F"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <button class="check-button" onclick="checkTruthTable()">Check Truth Table</button>
+                    <div id="result2" class="result"></div>
+                </div>
+            </div>
+
+            <div class="exercise-section">
+                <h2><span class="exercise-number">2</span>CNF Conversion</h2>
+                
+                <div class="problem">
+                    <h3>Problem 2.1: Convert to CNF</h3>
+                    <p>Convert the following formula to Conjunctive Normal Form (CNF):</p>
+                    <div class="formula">¬(A → B) ∨ (C ∧ D)</div>
+                    <p>Show your step-by-step conversion:</p>
+                    <textarea class="interactive-input" id="cnf1" rows="6" placeholder="Step 1: Eliminate implications...
+Step 2: Apply De Morgan's laws...
+Step 3: Distribute ∨ over ∧...
+Final CNF: ..."></textarea>
+                    <button class="check-button" onclick="checkCNF1()">Check CNF Conversion</button>
+                    <div id="result3" class="result"></div>
+                </div>
+
+                <div class="problem">
+                    <h3>Problem 2.2: CNF Validation</h3>
+                    <p>Given the CNF formula: (A ∨ B ∨ ¬C) ∧ (¬A ∨ C) ∧ (B ∨ ¬D)</p>
+                    <p>For the assignment: A=T, B=F, C=T, D=T</p>
+                    <p>Evaluate each clause and determine if the entire formula is satisfied:</p>
+                    
+                    <div style="margin: 15px 0;">
+                        <p><strong>Clause 1:</strong> (A ∨ B ∨ ¬C) = </p>
+                        <input type="text" class="interactive-input" id="cnf2a" placeholder="T/F">
+                        <p><strong>Clause 2:</strong> (¬A ∨ C) = </p>
+                        <input type="text" class="interactive-input" id="cnf2b" placeholder="T/F">
+                        <p><strong>Clause 3:</strong> (B ∨ ¬D) = </p>
+                        <input type="text" class="interactive-input" id="cnf2c" placeholder="T/F">
+                        <p><strong>Overall CNF:</strong> Satisfied? </p>
+                        <input type="text" class="interactive-input" id="cnf2d" placeholder="Yes/No">
+                    </div>
+                    
+                    <button class="check-button" onclick="checkCNF2()">Check Evaluation</button>
+                    <div id="result4" class="result"></div>
+                </div>
+            </div>
+
+            <div class="exercise-section">
+                <h2><span class="exercise-number">3</span>Logical Equivalences</h2>
+                
+                <div class="problem">
+                    <h3>Problem 3.1: Apply Logical Laws</h3>
+                    <p>Simplify the following formula using logical equivalences:</p>
+                    <div class="formula">¬(A ∧ B) ∨ (¬A ∨ C)</div>
+                    <p>Show your simplification steps:</p>
+                    <textarea class="interactive-input" id="equiv1" rows="4" placeholder="Step 1: Apply De Morgan's law...
+Step 2: Apply distributive law...
+Step 3: Apply absorption law...
+Simplified form: ..."></textarea>
+                    <button class="check-button" onclick="checkEquivalence()">Check Simplification</button>
+                    <div id="result5" class="result"></div>
+                </div>
+            </div>
+
+            <div class="submission-section">
+                <h2>📤 Submit Your Solutions</h2>
+                <p>Choose your preferred submission method:</p>
+                <div class="submission-links">
+                    <a href="https://drive.google.com/drive/folders/1y8nreGuCBV6XS27suh3Lx7vkWXud22-t?usp=sharing" target="_blank" class="submission-link">
+                        📄 Submit PDF
+                    </a>
+                    <a href="https://www.kaggle.com/groups/ai66a-intro-to-ai/pending-invite/CC839838-30DA-4B84-809E-390CBD73F302" target="_blank" class="submission-link">
+                        💻 Submit Code
+                    </a>
+                </div>
+            </div>
+
+            <div class="resources-section">
+                <h2>📚 Additional Resources</h2>
+                <div class="resource-grid">
+                    <div class="resource-item">
+                        <h3>📖 CNF Conversion Guide</h3>
+                        <a href="CNF_Conversion_Method_English.md" target="_blank">Download Method Guide</a>
+                    </div>
+                    <div class="resource-item">
+                        <h3>🎯 Lecture Slides</h3>
+                        <a href="../slides/5.Propositional_Logic.pdf" target="_blank">5.Propositional_Logic.pdf</a>
+                    </div>
+                    <div class="resource-item">
+                        <h3>📚 Main Textbook</h3>
+                        <a href="http://lib.ysu.am/disciplines_bk/efdd4d1d4c2087fe1cbe03d9ced67f34.pdf" target="_blank">AIMA Chapter 7</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Problem 1.1: Syntax Translation
+        function checkSyntax1() {
+            const answer = document.getElementById('syntax1').value.trim();
+            const result = document.getElementById('result1');
+            
+            // Accept multiple valid forms
+            const validAnswers = [
+                '(R → W) ∧ (W → S)',
+                '(R -> W) ∧ (W -> S)',
+                '(¬R ∨ W) ∧ (¬W ∨ S)',
+                '(-R ∨ W) ∧ (-W ∨ S)',
+                '(R → W) & (W → S)',
+                '(R -> W) & (W -> S)'
+            ];
+            
+            const isCorrect = validAnswers.some(valid => 
+                answer.toLowerCase().replace(/\s+/g, '') === valid.toLowerCase().replace(/\s+/g, '')
+            );
+            
+            showResult(result, isCorrect, 
+                "✅ Correct! The formula (R → W) ∧ (W → S) correctly represents the given statement.",
+                "❌ Not quite right. The correct answer is: (R → W) ∧ (W → S)"
+            );
+        }
+
+        // Problem 1.2: Truth Table
+        function checkTruthTable() {
+            const answers = [
+                ['T', 'F', 'T', 'T'], // Row 1: T,T,T
+                ['T', 'F', 'F', 'F'], // Row 2: T,T,F
+                ['T', 'F', 'T', 'T'], // Row 3: T,F,T
+                ['T', 'F', 'F', 'F'], // Row 4: T,F,F
+                ['T', 'T', 'T', 'T'], // Row 5: F,T,T
+                ['F', 'F', 'F', 'F'], // Row 6: F,T,F
+                ['T', 'T', 'T', 'T'], // Row 7: F,F,T
+                ['F', 'F', 'F', 'F']  // Row 8: F,F,F
+            ];
+            
+            let correct = true;
+            let studentAnswers = [];
+            
+            for (let i = 0; i < 8; i++) {
+                const row = [];
+                for (let j = 0; j < 4; j++) {
+                    const inputId = `tt${i*4 + j + 1}`;
+                    const value = document.getElementById(inputId).value.trim().toUpperCase();
+                    row.push(value);
+                    if (value !== answers[i][j]) {
+                        correct = false;
+                    }
+                }
+                studentAnswers.push(row);
+            }
+            
+            const result = document.getElementById('result2');
+            if (correct) {
+                showResult(result, true, 
+                    "✅ Perfect! Your truth table is completely correct.",
+                    ""
+                );
+            } else {
+                showResult(result, false, 
+                    "❌ Some entries are incorrect. Here's the complete solution:",
+                    "Row 1: T,T,T → T,F,T,T | Row 2: T,T,F → T,F,F,F | Row 3: T,F,T → T,F,T,T | Row 4: T,F,F → T,F,F,F<br>Row 5: F,T,T → T,T,T,T | Row 6: F,T,F → F,F,F,F | Row 7: F,F,T → F,T,T,T | Row 8: F,F,F → F,F,F,F"
+                );
+            }
+        }
+
+        // Problem 2.1: CNF Conversion
+        function checkCNF1() {
+            const answer = document.getElementById('cnf1').value.trim().toLowerCase();
+            const result = document.getElementById('result3');
+            
+            const hasSteps = answer.includes('step') || answer.includes('eliminate') || answer.includes('de morgan');
+            const hasFinalCNF = answer.includes('(¬a ∨ ¬b ∨ c) ∧ (¬a ∨ ¬b ∨ d)') || 
+                               answer.includes('(-a ∨ -b ∨ c) ∧ (-a ∨ -b ∨ d)') ||
+                               answer.includes('cnf');
+            
+            const isCorrect = hasSteps && hasFinalCNF;
+            
+            showResult(result, isCorrect,
+                "✅ Excellent! You've correctly applied the CNF conversion steps.",
+                "❌ Here's the correct conversion:<br>Step 1: Eliminate → : ¬(¬A ∨ B) ∨ (C ∧ D)<br>Step 2: Apply De Morgan's: (A ∧ ¬B) ∨ (C ∧ D)<br>Step 3: Distribute: (A ∨ C) ∧ (A ∨ D) ∧ (¬B ∨ C) ∧ (¬B ∨ D)<br>Final CNF: (A ∨ C) ∧ (A ∨ D) ∧ (¬B ∨ C) ∧ (¬B ∨ D)"
+            );
+        }
+
+        // Problem 2.2: CNF Evaluation
+        function checkCNF2() {
+            const answers = [
+                document.getElementById('cnf2a').value.trim().toUpperCase(),
+                document.getElementById('cnf2b').value.trim().toUpperCase(),
+                document.getElementById('cnf2c').value.trim().toUpperCase(),
+                document.getElementById('cnf2d').value.trim().toLowerCase()
+            ];
+            
+            const correct = ['T', 'T', 'F', 'no'];
+            const isCorrect = answers.every((ans, i) => ans === correct[i]);
+            
+            const result = document.getElementById('result4');
+            showResult(result, isCorrect,
+                "✅ Perfect! You correctly identified that the formula is not satisfied.",
+                "❌ Here's the correct evaluation:<br>Clause 1: (T ∨ F ∨ F) = T<br>Clause 2: (F ∨ T) = T<br>Clause 3: (F ∨ F) = F<br>Overall CNF: No (not satisfied because Clause 3 is false)"
+            );
+        }
+
+        // Problem 3.1: Logical Equivalence
+        function checkEquivalence() {
+            const answer = document.getElementById('equiv1').value.trim().toLowerCase();
+            const result = document.getElementById('result5');
+            
+            const hasSteps = answer.includes('step') || answer.includes('de morgan') || answer.includes('distributive');
+            const hasFinal = answer.includes('¬a ∨ ¬b ∨ c') || answer.includes('-a ∨ -b ∨ c') || 
+                           answer.includes('simplified');
+            
+            const isCorrect = hasSteps && hasFinal;
+            
+            showResult(result, isCorrect,
+                "✅ Great work! You've correctly simplified the formula.",
+                "❌ Here's the correct simplification:<br>Step 1: Apply De Morgan's: ¬A ∨ ¬B ∨ (¬A ∨ C)<br>Step 2: Apply associative law: ¬A ∨ ¬B ∨ ¬A ∨ C<br>Step 3: Apply idempotent law: ¬A ∨ ¬B ∨ C<br>Simplified form: ¬A ∨ ¬B ∨ C"
+            );
+        }
+
+        // Helper function to show results
+        function showResult(element, isCorrect, correctMessage, incorrectMessage) {
+            element.className = `result ${isCorrect ? 'correct' : 'incorrect'} show`;
+            element.innerHTML = isCorrect ? correctMessage : incorrectMessage;
+        }
+
+        // Add some interactive features
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add enter key support for inputs
+            const inputs = document.querySelectorAll('.interactive-input');
+            inputs.forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        const button = this.parentElement.querySelector('.check-button');
+                        if (button) button.click();
+                    }
+                });
+            });
+
+            // Add auto-format for truth table inputs
+            const truthTableInputs = document.querySelectorAll('table input[type="text"]');
+            
+            truthTableInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    const value = this.value.trim().toUpperCase();
+                    if (value === 'TRUE' || value === 'T') {
+                        this.value = 'T';
+                    } else if (value === 'FALSE' || value === 'F') {
+                        this.value = 'F';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
