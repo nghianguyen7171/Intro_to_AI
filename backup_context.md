@@ -85,7 +85,9 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 
 ### Week 9: Propositional Logic
 - **Topics:** Propositional Logic – Syntax, Semantics, and Inference
-- **Materials:** Chapter 7, lecture slides, reasoning examples
+- **Slides:** slides/5.Propositional_Logic.pdf
+- **Materials:** Chapter 7, lecture slides, reasoning examples, CNF conversion practice problems
+- **Interactive Exercises:** exercises/Week9_Exercises_Interactive.html (25+ exercises across 6 topics)
 
 ### Week 10: Practical Exercises on Logic
 - **Topics:** Practical exercises on Propositional Logic (Resolution, Inference rules)
@@ -172,11 +174,14 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 - **Naming Convention:** TeamName_Presentation.pdf and TeamName_Report.pdf
 - **Deadline:** Report due one week after presentation date
 - **Access:** Students need to sign in with their account to upload files
+- **Website Integration:** Project submission section added to main website with direct Google Drive link
 
 ## Textbooks & Resources
 
 ### Main Textbooks
 1. **Russell, S. & Norvig, P (2020).** Artificial Intelligence: A Modern Approach, Pearson.
+   - **PDF Link:** http://lib.ysu.am/disciplines_bk/efdd4d1d4c2087fe1cbe03d9ced67f34.pdf
+   - **Prominently featured** on main website as primary textbook
 2. **I. Almeida.** Artificial Intelligence Fundamentals for Business Leaders: Up to Date With Generative AI (2024 Edition). Now next later AI.
 3. **Wolfgang Ertel (2017).** Introduction to Artificial Intelligence. Springer.
 
@@ -205,6 +210,16 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 ├── templates/               # Handlebars partials
 ├── styles/                 # Stylus stylesheets
 ├── slides/                 # Course presentation slides
+│   ├── 0.Intro_to_AI.pdf
+│   ├── 1.Searching_1.pdf
+│   ├── 2.Searching_2.pdf
+│   ├── 3.Optimal_search.pdf
+│   ├── 4.Adversarial_search.pdf
+│   └── 5.Propositional_Logic.pdf
+├── exercises/               # Student exercise materials
+│   ├── Week9_Exercises_Interactive.html    # Interactive exercises (25+ problems)
+│   ├── Week9_Exercises_Student.md          # PDF version exercises
+│   └── CNF_Conversion_Method_English.md    # CNF conversion guide
 ├── images/
 │   ├── people/             # Instructor photos
 │   └── *.jpg               # Book covers
@@ -214,6 +229,8 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 │   └── templater.js        # Build logic
 ├── build.sh                # Build script
 ├── deploy.sh               # Deployment script
+├── idea/                   # Private preparation materials
+│   └── Prositional logic/  # Week 9 lecture preparation
 └── package.json            # Dependencies
 ```
 
@@ -223,12 +240,15 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 - **Assignments:** data/assignments.yml
 - **This Week:** data/this-week.yml
 - **Styles:** styles/*.styl
+- **Exercises:** exercises/*.html, exercises/*.md
+- **Slides:** slides/*.pdf
 
 ### Build Process
 1. `npm install` - Install dependencies
 2. `npm run build-in-place` - Build locally
-3. `./build.sh` - Build to out directory
+3. `./build.sh` - Build to out directory (includes exercises folder)
 4. `./deploy.sh` - Deploy to GitHub Pages
+5. **Note:** exercises/ folder must be copied to out/ directory for deployment
 
 ## Important Fixes Applied
 
@@ -236,6 +256,21 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 - **Problem:** Slides folder not copied to deployment
 - **Solution:** Updated build.sh to include `slides` in copy command
 - **Result:** All PDF slides now accessible at correct URLs
+
+### Exercises Integration
+- **Problem:** Interactive exercises not accessible after deployment
+- **Solution:** Added exercises/ folder to build.sh and deploy.sh processes
+- **Result:** Interactive exercises accessible at https://nghianguyen7171.github.io/Intro_to_AI/exercises/Week9_Exercises_Interactive.html
+
+### Website Structure Optimization
+- **Problem:** Separate exercises section cluttered main page
+- **Solution:** Moved exercises link to Week 9 lecture materials
+- **Result:** Cleaner main page, exercises accessible from lectures section
+
+### GitHub Pages Caching Issues
+- **Problem:** Updated content not visible due to GitHub Pages caching
+- **Solution:** Force deployment and wait for cache propagation
+- **Result:** All updates now visible on live website
 
 ### Image Management
 - **Dr. Trong-Nghia Nguyen:** Dr.TrongNghiaNguyen.jpeg
@@ -251,16 +286,22 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 - Assignment links and project guidelines
 - Project submission system with Google Drive integration
 - Slides integration and accessibility
+- Interactive exercises system (25+ exercises for Week 9)
+- Main textbook prominently featured with PDF link
 - Responsive design and styling
 - GitHub Pages deployment
 - README.md documentation
+- Exercises integration into lecture materials
 
 ### 🔧 Technical Notes
 - Website is fully functional and deployed
 - All slides are accessible via direct links
+- Interactive exercises accessible at correct URLs
 - Images are properly referenced and displayed
-- Build process includes all necessary files
+- Build process includes all necessary files (slides, exercises, styles)
 - Responsive design works on all devices
+- GitHub Pages caching properly handled
+- Exercises integrated into lecture materials for easy access
 
 ## Future Maintenance
 
@@ -269,12 +310,46 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 - Update index.hbs for course information changes
 - Add new slides to slides/ folder
 - Update assignment links as needed
+- Add new exercises to exercises/ folder
+- Update lecture materials in data/lectures.yml
 
 ### Technical Maintenance
 - Keep Node.js dependencies updated
 - Monitor GitHub Pages deployment
 - Test build process after changes
 - Verify all links and images work
+
+## Interactive Exercises System
+
+### Week 9: Propositional Logic Exercises
+- **Location:** exercises/Week9_Exercises_Interactive.html
+- **Access:** https://nghianguyen7171.github.io/Intro_to_AI/exercises/Week9_Exercises_Interactive.html
+- **Integration:** Linked from Week 9 lecture materials as "Practice Exercises"
+
+### Exercise Features
+- **25+ exercises** across 6 major topics:
+  1. Basic Syntax & Semantics (4 exercises)
+  2. Truth Tables (4 exercises)
+  3. Logical Equivalences (4 exercises)
+  4. CNF Conversion (4 exercises)
+  5. Resolution & Inference (4 exercises)
+  6. Real-World Applications (4 exercises)
+- **Progress tracking** with visual progress bar
+- **Interactive grid layout** for better organization
+- **Real-time answer checking** with detailed feedback
+- **Responsive design** for all devices
+- **Statistics display** showing completion percentage
+
+### Supporting Materials
+- **CNF Conversion Guide:** exercises/CNF_Conversion_Method_English.md
+- **PDF Version:** exercises/Week9_Exercises_Student.md
+- **Answer Key:** idea/Prositional logic/Week9_Exercises_ANSWER_KEY.md (instructor only)
+
+### Technical Implementation
+- **HTML/CSS/JavaScript** for interactivity
+- **File Size:** 46,648 bytes (expanded version)
+- **Deployment:** Automatically included in build process
+- **Caching:** Handled through GitHub Pages deployment
 
 ## Contact Information
 
