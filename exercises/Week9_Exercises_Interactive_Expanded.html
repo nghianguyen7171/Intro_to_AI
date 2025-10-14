@@ -932,7 +932,7 @@
             const answer = document.getElementById('chain1').value.trim().toLowerCase();
             const result = document.getElementById('result19');
             const hasSteps = answer.includes('q') && answer.includes('r');
-            showResult(result, hasSteps,
+            showResult(result, isCorrect,
                 "✅ Correct! Step 1: P → Q, P, therefore Q. Step 2: Q → R, Q, therefore R.",
                 "❌ Here's the correct proof:<br>Step 1: P → Q, P, therefore Q<br>Step 2: Q → R, Q, therefore R<br>Conclusion: R");
         }
