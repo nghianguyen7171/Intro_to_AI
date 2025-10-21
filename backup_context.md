@@ -287,7 +287,7 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 - Project submission system with Google Drive integration
 - Slides integration and accessibility
 - Interactive exercises system (25+ exercises for Week 9)
-- Exercise solutions system (comprehensive solutions for all 35 exercises)
+- Exercise questions system (questions-only format with answer spaces)
 - Main textbook prominently featured with PDF link
 - Responsive design and styling
 - GitHub Pages deployment
@@ -350,7 +350,7 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 ### Technical Implementation
 - **HTML/CSS/JavaScript** for interactivity
 - **File Size:** 46,648 bytes (expanded version)
-- **Solutions File:** 447 lines of comprehensive step-by-step solutions
+- **Questions Format:** Student worksheet with answer spaces for all exercises
 - **Deployment:** Automatically included in build process
 - **Caching:** Handled through GitHub Pages deployment
 
@@ -368,10 +368,11 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 
 ### Latest Updates (October 21, 2025)
 
-#### New Exercise Solutions System Added
-- **File Added:** `exercises/Week9_Exercises_Solutions.html`
-- **Content:** Comprehensive step-by-step solutions for all 35 propositional logic exercises
-- **Size:** 447 lines of detailed solutions
+#### Exercise Questions System Updated
+- **File Updated:** `exercises/Week9_Exercises_Solutions.html`
+- **Content:** Questions-only format with answer spaces for all 35 propositional logic exercises
+- **Change:** Removed all answers/solutions, kept only questions with answer spaces
+- **Purpose:** Student exercise worksheet format
 - **Integration:** Added to Week 9 lecture materials in `data/lectures.yml`
 - **Access:** Available at https://nghianguyen7171.github.io/Intro_to_AI/exercises/Week9_Exercises_Solutions.html
 
