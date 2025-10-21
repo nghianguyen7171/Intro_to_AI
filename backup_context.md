@@ -375,6 +375,11 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 - **Integration:** Added to Week 9 lecture materials in `data/lectures.yml`
 - **Access:** Available at https://nghianguyen7171.github.io/Intro_to_AI/exercises/Week9_Exercises_Solutions.html
 
+#### Additional Exercise Materials
+- **File Added:** `idea/Prositional logic/Exercise_PL_1.pdf`
+- **Content:** Additional propositional logic exercise materials (39KB PDF)
+- **Location:** Private instructor materials folder
+
 #### Build System Enhancement
 - **Updated:** `build.sh` script
 - **Change:** Added exercises folder to build process to ensure solutions are deployed
@@ -384,6 +389,7 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 - **Updated:** Week 9 lecture materials in `data/lectures.yml`
 - **Added:** "Exercise Solutions" link to Week 9 materials
 - **Integration:** Solutions now accessible directly from lecture materials
+- **HTML Update:** `index.html` updated with Exercise Solutions link in generated website
 
 ### Previous Updates
 - Interactive exercises system (25+ exercises for Week 9)
