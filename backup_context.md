@@ -382,6 +382,12 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 - **Content:** Additional propositional logic exercise materials (39KB PDF)
 - **Location:** Private instructor materials folder
 
+#### New Slide Added to Week 10
+- **File Added:** `slides/6. (Cont) Propositional logic.pdf`
+- **Integration:** Added to Week 10 topics in `data/lectures.yml`
+- **Purpose:** Continue propositional logic coverage in practical exercises week
+- **Access:** Available at https://nghianguyen7171.github.io/Intro_to_AI/slides/6.%20(Cont)%20Propositional%20logic.pdf
+
 #### Build System Enhancement
 - **Updated:** `build.sh` script
 - **Change:** Added exercises folder to build process to ensure solutions are deployed
