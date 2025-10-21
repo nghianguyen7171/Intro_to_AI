@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Week 9: Propositional Logic - Exercise Solutions</title>
+    <title>Week 9: Propositional Logic - Exercises</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -55,19 +55,6 @@
             margin-bottom: 10px;
         }
         
-        .solution-step {
-            margin: 8px 0;
-            padding-left: 20px;
-        }
-        
-        .final-answer {
-            background-color: #e8f5e8;
-            padding: 10px;
-            border-radius: 4px;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-        
         .atoms {
             font-style: italic;
             color: #7f8c8d;
@@ -88,359 +75,254 @@
             font-family: 'Courier New', monospace;
         }
         
-        .proof-step {
-            margin: 5px 0;
-            padding-left: 20px;
-        }
-        
-        .proof-rule {
-            font-style: italic;
+        .answer-space {
+            background-color: #f8f9fa;
+            border: 2px dashed #3498db;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 4px;
+            text-align: center;
             color: #7f8c8d;
+            font-style: italic;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Week 9: Propositional Logic - Detailed Exercise Solutions</h1>
+        <h1>Week 9: Propositional Logic - Exercises</h1>
         
         <div class="note">
-            <strong>Note:</strong> This document provides comprehensive step-by-step solutions for all exercises in Week 9. These solutions are intended for instructor reference and can be shared with students as needed.
+            <strong>Instructions:</strong> Complete the following exercises. Show your work for each step.
         </div>
 
         <h2>Part I: Translation from English to Logic</h2>
 
         <div class="exercise">
-            <div class="exercise-title">Exercise 1: If it rains, the sky is cloudy.</div>
-            <div class="solution-step"><strong>Solution:</strong> This is a conditional statement (if-then).</div>
-            <div class="solution-step"><strong>Atoms:</strong> <span class="atoms">Rains = "It rains", SkyCloudy = "The sky is cloudy"</span></div>
-            <div class="final-answer"><strong>Answer:</strong> Rains ⇒ SkyCloudy</div>
+            <div class="exercise-title">Exercise 1:</div>
+            If it rains, the sky is cloudy.
+            <div class="answer-space">Your Answer: ________________</div>
         </div>
 
         <div class="exercise">
-            <div class="exercise-title">Exercise 2: If An had a lot of money, she would go shopping.</div>
-            <div class="solution-step"><strong>Solution:</strong> Conditional statement with proper nouns.</div>
-            <div class="solution-step"><strong>Atoms:</strong> <span class="atoms">AnHasALotOfMoney = "An had a lot of money", AnGoesShopping = "An would go shopping"</span></div>
-            <div class="final-answer"><strong>Answer:</strong> AnHasALotOfMoney ⇒ AnGoesShopping</div>
+            <div class="exercise-title">Exercise 2:</div>
+            If An had a lot of money, she would go shopping.
+            <div class="answer-space">Your Answer: ________________</div>
         </div>
 
         <div class="exercise">
-            <div class="exercise-title">Exercise 3: Monkeys are not literate.</div>
-            <div class="solution-step"><strong>Solution:</strong> Negation of a statement.</div>
-            <div class="solution-step"><strong>Atoms:</strong> <span class="atoms">MonkeysAreLiterate = "Monkeys are literate"</span></div>
-            <div class="final-answer"><strong>Answer:</strong> ¬MonkeysAreLiterate</div>
+            <div class="exercise-title">Exercise 3:</div>
+            Monkeys are not literate.
+            <div class="answer-space">Your Answer: ________________</div>
         </div>
 
         <div class="exercise">
-            <div class="exercise-title">Exercise 4: The server is online and the database is accessible.</div>
-            <div class="solution-step"><strong>Solution:</strong> Conjunction (and) of two statements.</div>
-            <div class="solution-step"><strong>Atoms:</strong> <span class="atoms">ServerOnline = "The server is online", DatabaseAccessible = "The database is accessible"</span></div>
-            <div class="final-answer"><strong>Answer:</strong> ServerOnline ∧ DatabaseAccessible</div>
+            <div class="exercise-title">Exercise 4:</div>
+            The server is online and the database is accessible.
+            <div class="answer-space">Your Answer: ________________</div>
         </div>
 
         <div class="exercise">
-            <div class="exercise-title">Exercise 5: Either the model overfits or the dataset is too small.</div>
-            <div class="solution-step"><strong>Solution:</strong> Disjunction (or) of two statements.</div>
-            <div class="solution-step"><strong>Atoms:</strong> <span class="atoms">ModelOverfits = "The model overfits", DatasetTooSmall = "The dataset is too small"</span></div>
-            <div class="final-answer"><strong>Answer:</strong> ModelOverfits ∨ DatasetTooSmall</div>
+            <div class="exercise-title">Exercise 5:</div>
+            Either the model overfits or the dataset is too small.
+            <div class="answer-space">Your Answer: ________________</div>
         </div>
 
         <div class="exercise">
-            <div class="exercise-title">Exercise 6: If the lecture starts late, the lab session will be shorter.</div>
-            <div class="solution-step"><strong>Solution:</strong> Conditional statement.</div>
-            <div class="solution-step"><strong>Atoms:</strong> <span class="atoms">LectureStartsLate = "The lecture starts late", LabSessionShorter = "The lab session will be shorter"</span></div>
-            <div class="final-answer"><strong>Answer:</strong> LectureStartsLate ⇒ LabSessionShorter</div>
+            <div class="exercise-title">Exercise 6:</div>
+            If the lecture starts late, the lab session will be shorter.
+            <div class="answer-space">Your Answer: ________________</div>
         </div>
 
         <div class="exercise">
-            <div class="exercise-title">Exercise 7: The patient has a fever if and only if the thermometer reads above 38°C.</div>
-            <div class="solution-step"><strong>Solution:</strong> Biconditional (if and only if).</div>
-            <div class="solution-step"><strong>Atoms:</strong> <span class="atoms">PatientHasFever = "The patient has a fever", ThermometerAbove38C = "The thermometer reads above 38°C"</span></div>
-            <div class="final-answer"><strong>Answer:</strong> PatientHasFever ⇔ ThermometerAbove38C</div>
+            <div class="exercise-title">Exercise 7:</div>
+            The patient has a fever if and only if the thermometer reads above 38°C.
+            <div class="answer-space">Your Answer: ________________</div>
         </div>
 
         <div class="exercise">
-            <div class="exercise-title">Exercise 8: It is not the case that both the code compiles and the tests fail.</div>
-            <div class="solution-step"><strong>Solution:</strong> Negation of a conjunction.</div>
-            <div class="solution-step"><strong>Atoms:</strong> <span class="atoms">CodeCompiles = "The code compiles", TestsFail = "The tests fail"</span></div>
-            <div class="final-answer"><strong>Answer:</strong> ¬(CodeCompiles ∧ TestsFail)</div>
+            <div class="exercise-title">Exercise 8:</div>
+            It is not the case that both the code compiles and the tests fail.
+            <div class="answer-space">Your Answer: ________________</div>
         </div>
 
         <div class="exercise">
-            <div class="exercise-title">Exercise 9: If the assignment is submitted, then the checker runs, and if it runs, a report is generated.</div>
-            <div class="solution-step"><strong>Solution:</strong> Conjunction of two conditional statements.</div>
-            <div class="solution-step"><strong>Atoms:</strong> <span class="atoms">AssignmentSubmitted = "The assignment is submitted", CheckerRuns = "The checker runs", ReportGenerated = "A report is generated"</span></div>
-            <div class="final-answer"><strong>Answer:</strong> (AssignmentSubmitted ⇒ CheckerRuns) ∧ (CheckerRuns ⇒ ReportGenerated)</div>
+            <div class="exercise-title">Exercise 9:</div>
+            If the assignment is submitted, then the checker runs, and if it runs, a report is generated.
+            <div class="answer-space">Your Answer: ________________</div>
         </div>
 
         <div class="exercise">
-            <div class="exercise-title">Exercise 10: Either the network is down or the credentials are incorrect, but not both.</div>
-            <div class="solution-step"><strong>Solution:</strong> Exclusive or (XOR) - can be expressed as (A ∨ B) ∧ ¬(A ∧ B).</div>
-            <div class="solution-step"><strong>Atoms:</strong> <span class="atoms">NetworkDown = "The network is down", CredentialsIncorrect = "The credentials are incorrect"</span></div>
-            <div class="final-answer"><strong>Answer:</strong> (NetworkDown ∨ CredentialsIncorrect) ∧ ¬(NetworkDown ∧ CredentialsIncorrect)</div>
+            <div class="exercise-title">Exercise 10:</div>
+            Either the network is down or the credentials are incorrect, but not both.
+            <div class="answer-space">Your Answer: ________________</div>
         </div>
 
         <h2>Part II: Convert to CNF</h2>
 
         <div class="exercise">
-            <div class="exercise-title">Exercise 11: (P ⇒ (Q ∧ R)) ∨ (S ⇒ Q)</div>
-            <div class="solution-step"><strong>Step-by-step solution:</strong></div>
-            <div class="solution-step">1. <strong>Eliminate implications:</strong> Replace α ⇒ β with ¬α ∨ β</div>
-            <div class="solution-step">   - P ⇒ (Q ∧ R) becomes ¬P ∨ (Q ∧ R)</div>
-            <div class="solution-step">   - S ⇒ Q becomes ¬S ∨ Q</div>
-            <div class="solution-step">   - Result: (¬P ∨ (Q ∧ R)) ∨ (¬S ∨ Q)</div>
-            <div class="solution-step">2. <strong>Distribute ∨ over ∧:</strong> Apply α ∨ (β ∧ γ) = (α ∨ β) ∧ (α ∨ γ)</div>
-            <div class="solution-step">   - (¬P ∨ (Q ∧ R)) ∨ (¬S ∨ Q) = (¬P ∨ Q ∧ R ∨ ¬S ∨ Q)</div>
-            <div class="solution-step">   - Distribute: (¬P ∨ Q ∨ ¬S ∨ Q) ∧ (¬P ∨ R ∨ ¬S ∨ Q)</div>
-            <div class="solution-step">3. <strong>Simplify:</strong> Remove duplicate literals</div>
-            <div class="solution-step">   - (¬P ∨ Q ∨ ¬S ∨ Q) = (¬P ∨ Q ∨ ¬S)</div>
-            <div class="solution-step">   - (¬P ∨ R ∨ ¬S ∨ Q) = (¬P ∨ Q ∨ R ∨ ¬S)</div>
-            <div class="final-answer"><strong>Final CNF:</strong> (¬P ∨ Q ∨ ¬S) ∧ (¬P ∨ Q ∨ R ∨ ¬S)</div>
+            <div class="exercise-title">Exercise 11:</div>
+            Convert to CNF: (P ⇒ (Q ∧ R)) ∨ (S ⇒ Q)
+            <div class="answer-space">Your Answer: ________________</div>
         </div>
 
         <div class="exercise">
-            <div class="exercise-title">Exercise 12: ((P ∨ Q) ⇒ (R ∧ S))</div>
-            <div class="solution-step"><strong>Step-by-step solution:</strong></div>
-            <div class="solution-step">1. <strong>Eliminate implication:</strong> ¬(P ∨ Q) ∨ (R ∧ S)</div>
-            <div class="solution-step">2. <strong>Move negation inward (De Morgan's):</strong> ¬(P ∨ Q) = ¬P ∧ ¬Q</div>
-            <div class="solution-step">   - Result: (¬P ∧ ¬Q) ∨ (R ∧ S)</div>
-            <div class="solution-step">3. <strong>Distribute ∨ over ∧:</strong></div>
-            <div class="solution-step">   - (¬P ∧ ¬Q) ∨ (R ∧ S) = (¬P ∨ R ∧ S) ∧ (¬Q ∨ R ∧ S)</div>
-            <div class="solution-step">   - Further distribute: (¬P ∨ R) ∧ (¬P ∨ S) ∧ (¬Q ∨ R) ∧ (¬Q ∨ S)</div>
-            <div class="final-answer"><strong>Final CNF:</strong> (¬P ∨ R) ∧ (¬P ∨ S) ∧ (¬Q ∨ R) ∧ (¬Q ∨ S)</div>
+            <div class="exercise-title">Exercise 12:</div>
+            Convert to CNF: ((P ∨ Q) ⇒ (R ∧ S))
+            <div class="answer-space">Your Answer: ________________</div>
         </div>
 
         <div class="exercise">
-            <div class="exercise-title">Exercise 13: (P ⇔ (Q ∨ R)) ∧ (¬R ∨ S)</div>
-            <div class="solution-step"><strong>Step-by-step solution:</strong></div>
-            <div class="solution-step">1. <strong>Eliminate biconditional:</strong> P ⇔ (Q ∨ R) becomes (P ⇒ (Q ∨ R)) ∧ ((Q ∨ R) ⇒ P)</div>
-            <div class="solution-step">   - Result: ((P ⇒ (Q ∨ R)) ∧ ((Q ∨ R) ⇒ P)) ∧ (¬R ∨ S)</div>
-            <div class="solution-step">2. <strong>Eliminate implications:</strong></div>
-            <div class="solution-step">   - P ⇒ (Q ∨ R) becomes ¬P ∨ Q ∨ R</div>
-            <div class="solution-step">   - (Q ∨ R) ⇒ P becomes ¬(Q ∨ R) ∨ P = (¬Q ∧ ¬R) ∨ P</div>
-            <div class="solution-step">   - Result: (¬P ∨ Q ∨ R) ∧ ((¬Q ∧ ¬R) ∨ P) ∧ (¬R ∨ S)</div>
-            <div class="solution-step">3. <strong>Distribute ∨ over ∧:</strong></div>
-            <div class="solution-step">   - ((¬Q ∧ ¬R) ∨ P) = (¬Q ∨ P) ∧ (¬R ∨ P)</div>
-            <div class="solution-step">   - Result: (¬P ∨ Q ∨ R) ∧ (¬Q ∨ P) ∧ (¬R ∨ P) ∧ (¬R ∨ S)</div>
-            <div class="final-answer"><strong>Final CNF:</strong> (¬P ∨ Q ∨ R) ∧ (¬Q ∨ P) ∧ (¬R ∨ P) ∧ (¬R ∨ S)</div>
+            <div class="exercise-title">Exercise 13:</div>
+            Convert to CNF: (P ⇔ (Q ∨ R)) ∧ (¬R ∨ S)
+            <div class="answer-space">Your Answer: ________________</div>
         </div>
 
         <div class="exercise">
-            <div class="exercise-title">Exercise 14: ¬(P ⇒ (Q ⇒ R)) ∨ S</div>
-            <div class="solution-step"><strong>Step-by-step solution:</strong></div>
-            <div class="solution-step">1. <strong>Eliminate inner implication:</strong> Q ⇒ R becomes ¬Q ∨ R</div>
-            <div class="solution-step">   - Result: ¬(P ⇒ (¬Q ∨ R)) ∨ S</div>
-            <div class="solution-step">2. <strong>Eliminate outer implication:</strong> P ⇒ (¬Q ∨ R) becomes ¬P ∨ ¬Q ∨ R</div>
-            <div class="solution-step">   - Result: ¬(¬P ∨ ¬Q ∨ R) ∨ S</div>
-            <div class="solution-step">3. <strong>Move negation inward (De Morgan's):</strong> ¬(¬P ∨ ¬Q ∨ R) = P ∧ Q ∧ ¬R</div>
-            <div class="solution-step">   - Result: (P ∧ Q ∧ ¬R) ∨ S</div>
-            <div class="solution-step">4. <strong>Distribute ∨ over ∧:</strong></div>
-            <div class="solution-step">   - (P ∧ Q ∧ ¬R) ∨ S = (P ∨ S) ∧ (Q ∨ S) ∧ (¬R ∨ S)</div>
-            <div class="final-answer"><strong>Final CNF:</strong> (P ∨ S) ∧ (Q ∨ S) ∧ (¬R ∨ S)</div>
+            <div class="exercise-title">Exercise 14:</div>
+            Convert to CNF: ¬(P ⇒ (Q ⇒ R)) ∨ S
+            <div class="answer-space">Your Answer: ________________</div>
         </div>
 
         <div class="exercise">
-            <div class="exercise-title">Exercise 15: (P ⇔ Q) ⇒ (R ∨ S)</div>
-            <div class="solution-step"><strong>Step-by-step solution:</strong></div>
-            <div class="solution-step">1. <strong>Eliminate biconditional:</strong> P ⇔ Q becomes (P ⇒ Q) ∧ (Q ⇒ P)</div>
-            <div class="solution-step">   - Result: ((P ⇒ Q) ∧ (Q ⇒ P)) ⇒ (R ∨ S)</div>
-            <div class="solution-step">2. <strong>Eliminate outer implication:</strong> ¬((P ⇒ Q) ∧ (Q ⇒ P)) ∨ (R ∨ S)</div>
-            <div class="solution-step">   - Eliminate inner implications: (¬P ∨ Q) ∧ (¬Q ∨ P)</div>
-            <div class="solution-step">   - Result: ¬((¬P ∨ Q) ∧ (¬Q ∨ P)) ∨ (R ∨ S)</div>
-            <div class="solution-step">3. <strong>Move negation inward (De Morgan's):</strong> ¬((¬P ∨ Q) ∧ (¬Q ∨ P)) = ¬(¬P ∨ Q) ∨ ¬(¬Q ∨ P)</div>
-            <div class="solution-step">   - ¬(¬P ∨ Q) = P ∧ ¬Q</div>
-            <div class="solution-step">   - ¬(¬Q ∨ P) = Q ∧ ¬P</div>
-            <div class="solution-step">   - Result: (P ∧ ¬Q) ∨ (Q ∧ ¬P) ∨ (R ∨ S)</div>
-            <div class="solution-step">4. <strong>Distribute ∨ over ∧:</strong></div>
-            <div class="solution-step">   - (P ∧ ¬Q) ∨ (Q ∧ ¬P) ∨ (R ∨ S) = (P ∨ Q ∨ R ∨ S) ∧ (¬Q ∨ Q ∨ R ∨ S) ∧ (P ∨ ¬P ∨ R ∨ S) ∧ (¬Q ∨ ¬P ∨ R ∨ S)</div>
-            <div class="solution-step">   - Simplify: (P ∨ Q ∨ R ∨ S) ∧ (R ∨ S) ∧ (R ∨ S) ∧ (¬Q ∨ ¬P ∨ R ∨ S)</div>
-            <div class="solution-step">   - Further simplify: (P ∨ Q ∨ R ∨ S) ∧ (R ∨ S) ∧ (¬P ∨ ¬Q ∨ R ∨ S)</div>
-            <div class="final-answer"><strong>Final CNF:</strong> (P ∨ Q ∨ R ∨ S) ∧ (R ∨ S) ∧ (¬P ∨ ¬Q ∨ R ∨ S)</div>
+            <div class="exercise-title">Exercise 15:</div>
+            Convert to CNF: (P ⇔ Q) ⇒ (R ∨ S)
+            <div class="answer-space">Your Answer: ________________</div>
         </div>
 
-        <h2>Part III: Inference Rule Proofs</h2>
+        <h2>Part III: Resolution and Inference</h2>
 
         <div class="exercise">
-            <div class="exercise-title">Exercise 21: Premises: P ⇒ Q; Q ⇒ R; P — Prove: R</div>
-            <div class="solution-step"><strong>Solution using Modus Ponens:</strong></div>
-            <div class="proof-step">1. P ⇒ Q (Premise 1)</div>
-            <div class="proof-step">2. Q ⇒ R (Premise 2)</div>
-            <div class="proof-step">3. P (Premise 3)</div>
-            <div class="proof-step">4. Q <span class="proof-rule">(From 1,3 by Modus Ponens)</span></div>
-            <div class="proof-step">5. R <span class="proof-rule">(From 2,4 by Modus Ponens)</span></div>
-            <div class="final-answer"><strong>Answer:</strong> R</div>
+            <div class="exercise-title">Exercise 16:</div>
+            Use resolution to prove: Given premises P ⇒ Q, Q ⇒ R, ¬R, prove ¬P
+            <div class="answer-space">Your Answer: ________________</div>
         </div>
 
         <div class="exercise">
-            <div class="exercise-title">Exercise 22: Premises: P ∧ Q; P ⇒ R; Q ⇒ S — Prove: R ∧ S</div>
-            <div class="solution-step"><strong>Solution:</strong></div>
-            <div class="proof-step">1. P ∧ Q (Premise 1)</div>
-            <div class="proof-step">2. P ⇒ R (Premise 2)</div>
-            <div class="proof-step">3. Q ⇒ S (Premise 3)</div>
-            <div class="proof-step">4. P <span class="proof-rule">(From 1 by And-Elimination)</span></div>
-            <div class="proof-step">5. Q <span class="proof-rule">(From 1 by And-Elimination)</span></div>
-            <div class="proof-step">6. R <span class="proof-rule">(From 2,4 by Modus Ponens)</span></div>
-            <div class="proof-step">7. S <span class="proof-rule">(From 3,5 by Modus Ponens)</span></div>
-            <div class="proof-step">8. R ∧ S <span class="proof-rule">(From 6,7 by And-Introduction)</span></div>
-            <div class="final-answer"><strong>Answer:</strong> R ∧ S</div>
+            <div class="exercise-title">Exercise 17:</div>
+            Use resolution to prove: Given premises P ∨ Q, ¬P ∨ R, ¬Q ∨ S, prove R ∨ S
+            <div class="answer-space">Your Answer: ________________</div>
         </div>
 
         <div class="exercise">
-            <div class="exercise-title">Exercise 23: Premises: P ⇔ Q; P — Prove: Q</div>
-            <div class="solution-step"><strong>Solution:</strong></div>
-            <div class="proof-step">1. P ⇔ Q (Premise 1)</div>
-            <div class="proof-step">2. P (Premise 2)</div>
-            <div class="proof-step">3. P ⇒ Q <span class="proof-rule">(From 1 by Biconditional-Elimination)</span></div>
-            <div class="proof-step">4. Q <span class="proof-rule">(From 2,3 by Modus Ponens)</span></div>
-            <div class="final-answer"><strong>Answer:</strong> Q</div>
+            <div class="exercise-title">Exercise 18:</div>
+            Use Modus Ponens: If P ⇒ Q and P, then what can we conclude?
+            <div class="answer-space">Your Answer: ________________</div>
         </div>
 
         <div class="exercise">
-            <div class="exercise-title">Exercise 24: Premises: P ∨ Q; ¬P ∨ R; ¬Q — Prove: R</div>
-            <div class="solution-step"><strong>Solution using Resolution:</strong></div>
-            <div class="proof-step">1. P ∨ Q (Premise 1)</div>
-            <div class="proof-step">2. ¬P ∨ R (Premise 2)</div>
-            <div class="proof-step">3. ¬Q (Premise 3)</div>
-            <div class="proof-step">4. Q ∨ R <span class="proof-rule">(From 1,2 by Resolution on P)</span></div>
-            <div class="proof-step">5. R <span class="proof-rule">(From 3,4 by Resolution on Q)</span></div>
-            <div class="final-answer"><strong>Answer:</strong> R</div>
+            <div class="exercise-title">Exercise 19:</div>
+            Use Modus Tollens: If P ⇒ Q and ¬Q, then what can we conclude?
+            <div class="answer-space">Your Answer: ________________</div>
         </div>
 
         <div class="exercise">
-            <div class="exercise-title">Exercise 25: Premises: P ⇒ (Q ∨ R); ¬Q; R ⇒ S; P — Prove: S</div>
-            <div class="solution-step"><strong>Solution:</strong></div>
-            <div class="proof-step">1. P ⇒ (Q ∨ R) (Premise 1)</div>
-            <div class="proof-step">2. ¬Q (Premise 2)</div>
-            <div class="proof-step">3. R ⇒ S (Premise 3)</div>
-            <div class="proof-step">4. P (Premise 4)</div>
-            <div class="proof-step">5. Q ∨ R <span class="proof-rule">(From 1,4 by Modus Ponens)</span></div>
-            <div class="proof-step">6. R <span class="proof-rule">(From 2,5 by Disjunctive Syllogism)</span></div>
-            <div class="proof-step">7. S <span class="proof-rule">(From 3,6 by Modus Ponens)</span></div>
-            <div class="final-answer"><strong>Answer:</strong> S</div>
+            <div class="exercise-title">Exercise 20:</div>
+            Use Resolution: From P ∨ Q and ¬P ∨ R, what can we derive?
+            <div class="answer-space">Your Answer: ________________</div>
         </div>
 
-        <h2>Part IV: Translation + CNF (Combined)</h2>
+        <h2>Part IV: Truth Tables</h2>
 
         <div class="exercise">
-            <div class="exercise-title">Exercise 26: If the sensor detects smoke, then the alarm sounds and the sprinklers activate.</div>
-            <div class="solution-step"><strong>Translation:</strong></div>
-            <div class="solution-step"><strong>Atoms:</strong> <span class="atoms">SensorDetectsSmoke = "The sensor detects smoke", AlarmSounds = "The alarm sounds", SprinklersActivate = "The sprinklers activate"</span></div>
-            <div class="solution-step"><strong>Logical form:</strong> SensorDetectsSmoke ⇒ (AlarmSounds ∧ SprinklersActivate)</div>
-            <div class="solution-step"><strong>CNF Conversion:</strong></div>
-            <div class="solution-step">1. Eliminate implication: ¬SensorDetectsSmoke ∨ (AlarmSounds ∧ SprinklersActivate)</div>
-            <div class="solution-step">2. Distribute ∨ over ∧: (¬SensorDetectsSmoke ∨ AlarmSounds) ∧ (¬SensorDetectsSmoke ∨ SprinklersActivate)</div>
-            <div class="final-answer"><strong>Final Answer:</strong> Translation: SensorDetectsSmoke ⇒ (AlarmSounds ∧ SprinklersActivate); CNF: (¬SensorDetectsSmoke ∨ AlarmSounds) ∧ (¬SensorDetectsSmoke ∨ SprinklersActivate)</div>
+            <div class="exercise-title">Exercise 21:</div>
+            Construct a truth table for: (P ⇒ Q) ∧ (Q ⇒ R) ⇒ (P ⇒ R)
+            <div class="answer-space">Your Answer: ________________</div>
         </div>
 
         <div class="exercise">
-            <div class="exercise-title">Exercise 27: The system is online if and only if the database is reachable or the cache is warm.</div>
-            <div class="solution-step"><strong>Translation:</strong></div>
-            <div class="solution-step"><strong>Atoms:</strong> <span class="atoms">SystemOnline = "The system is online", DatabaseReachable = "The database is reachable", CacheWarm = "The cache is warm"</span></div>
-            <div class="solution-step"><strong>Logical form:</strong> SystemOnline ⇔ (DatabaseReachable ∨ CacheWarm)</div>
-            <div class="solution-step"><strong>CNF Conversion:</strong></div>
-            <div class="solution-step">1. Eliminate biconditional: (SystemOnline ⇒ (DatabaseReachable ∨ CacheWarm)) ∧ ((DatabaseReachable ∨ CacheWarm) ⇒ SystemOnline)</div>
-            <div class="solution-step">2. Eliminate implications: (¬SystemOnline ∨ DatabaseReachable ∨ CacheWarm) ∧ (¬(DatabaseReachable ∨ CacheWarm) ∨ SystemOnline)</div>
-            <div class="solution-step">3. Move negation inward: (¬SystemOnline ∨ DatabaseReachable ∨ CacheWarm) ∧ ((¬DatabaseReachable ∧ ¬CacheWarm) ∨ SystemOnline)</div>
-            <div class="solution-step">4. Distribute ∨ over ∧: (¬SystemOnline ∨ DatabaseReachable ∨ CacheWarm) ∧ (¬DatabaseReachable ∨ SystemOnline) ∧ (¬CacheWarm ∨ SystemOnline)</div>
-            <div class="final-answer"><strong>Final Answer:</strong> Translation: SystemOnline ⇔ (DatabaseReachable ∨ CacheWarm); CNF: (¬SystemOnline ∨ DatabaseReachable ∨ CacheWarm) ∧ (¬DatabaseReachable ∨ SystemOnline) ∧ (¬CacheWarm ∨ SystemOnline)</div>
+            <div class="exercise-title">Exercise 22:</div>
+            Construct a truth table for: P ⇔ (Q ∧ ¬R)
+            <div class="answer-space">Your Answer: ________________</div>
         </div>
 
         <div class="exercise">
-            <div class="exercise-title">Exercise 28: It is not the case that both the model converges and the validation error increases.</div>
-            <div class="solution-step"><strong>Translation:</strong></div>
-            <div class="solution-step"><strong>Atoms:</strong> <span class="atoms">ModelConverges = "The model converges", ValidationErrorIncreases = "The validation error increases"</span></div>
-            <div class="solution-step"><strong>Logical form:</strong> ¬(ModelConverges ∧ ValidationErrorIncreases)</div>
-            <div class="solution-step"><strong>CNF Conversion:</strong></div>
-            <div class="solution-step">1. Apply De Morgan's law: ¬ModelConverges ∨ ¬ValidationErrorIncreases</div>
-            <div class="final-answer"><strong>Final Answer:</strong> Translation: ¬(ModelConverges ∧ ValidationErrorIncreases); CNF: (¬ModelConverges ∨ ¬ValidationErrorIncreases)</div>
+            <div class="exercise-title">Exercise 23:</div>
+            Construct a truth table for: (P ∨ Q) ∧ (¬P ∨ R) ∧ (¬Q ∨ S)
+            <div class="answer-space">Your Answer: ________________</div>
         </div>
 
         <div class="exercise">
-            <div class="exercise-title">Exercise 29: If the user is authenticated and not banned, then the action is permitted or audited.</div>
-            <div class="solution-step"><strong>Translation:</strong></div>
-            <div class="solution-step"><strong>Atoms:</strong> <span class="atoms">UserAuthenticated = "The user is authenticated", UserBanned = "The user is banned", ActionPermitted = "The action is permitted", ActionAudited = "The action is audited"</span></div>
-            <div class="solution-step"><strong>Logical form:</strong> (UserAuthenticated ∧ ¬UserBanned) ⇒ (ActionPermitted ∨ ActionAudited)</div>
-            <div class="solution-step"><strong>CNF Conversion:</strong></div>
-            <div class="solution-step">1. Eliminate implication: ¬(UserAuthenticated ∧ ¬UserBanned) ∨ (ActionPermitted ∨ ActionAudited)</div>
-            <div class="solution-step">2. Apply De Morgan's law: (¬UserAuthenticated ∨ ¬¬UserBanned) ∨ (ActionPermitted ∨ ActionAudited)</div>
-            <div class="solution-step">3. Remove double negation: (¬UserAuthenticated ∨ UserBanned) ∨ ActionPermitted ∨ ActionAudited</div>
-            <div class="solution-step">4. Rearrange: ¬UserAuthenticated ∨ UserBanned ∨ ActionPermitted ∨ ActionAudited</div>
-            <div class="final-answer"><strong>Final Answer:</strong> Translation: (UserAuthenticated ∧ ¬UserBanned) ⇒ (ActionPermitted ∨ ActionAudited); CNF: (¬UserAuthenticated ∨ UserBanned ∨ ActionPermitted ∨ ActionAudited)</div>
+            <div class="exercise-title">Exercise 24:</div>
+            Construct a truth table for: ¬(P ∧ Q) ∨ (P ⇒ Q)
+            <div class="answer-space">Your Answer: ________________</div>
+        </div>
+
+        <h2>Part V: Logical Equivalences</h2>
+
+        <div class="exercise">
+            <div class="exercise-title">Exercise 25:</div>
+            Show that P ⇒ Q is logically equivalent to ¬P ∨ Q
+            <div class="answer-space">Your Answer: ________________</div>
         </div>
 
         <div class="exercise">
-            <div class="exercise-title">Exercise 30: Either the API returns 200 or, if it returns 500, then alerts trigger.</div>
-            <div class="solution-step"><strong>Translation:</strong></div>
-            <div class="solution-step"><strong>Atoms:</strong> <span class="atoms">APIReturns200 = "The API returns 200", APIReturns500 = "The API returns 500", AlertsTrigger = "Alerts trigger"</span></div>
-            <div class="solution-step"><strong>Logical form:</strong> APIReturns200 ∨ (APIReturns500 ⇒ AlertsTrigger)</div>
-            <div class="solution-step"><strong>CNF Conversion:</strong></div>
-            <div class="solution-step">1. Eliminate implication: APIReturns200 ∨ (¬APIReturns500 ∨ AlertsTrigger)</div>
-            <div class="solution-step">2. Rearrange: APIReturns200 ∨ ¬APIReturns500 ∨ AlertsTrigger</div>
-            <div class="final-answer"><strong>Final Answer:</strong> Translation: APIReturns200 ∨ (APIReturns500 ⇒ AlertsTrigger); CNF: APIReturns200 ∨ ¬APIReturns500 ∨ AlertsTrigger</div>
+            <div class="exercise-title">Exercise 26:</div>
+            Show that ¬(P ∧ Q) is logically equivalent to ¬P ∨ ¬Q (De Morgan's Law)
+            <div class="answer-space">Your Answer: ________________</div>
         </div>
 
         <div class="exercise">
-            <div class="exercise-title">Exercise 31: If the build passes, then deployment proceeds if and only if approvals are granted.</div>
-            <div class="solution-step"><strong>Translation:</strong></div>
-            <div class="solution-step"><strong>Atoms:</strong> <span class="atoms">BuildPasses = "The build passes", DeploymentProceeds = "Deployment proceeds", ApprovalsGranted = "Approvals are granted"</span></div>
-            <div class="solution-step"><strong>Logical form:</strong> BuildPasses ⇒ (DeploymentProceeds ⇔ ApprovalsGranted)</div>
-            <div class="solution-step"><strong>CNF Conversion:</strong></div>
-            <div class="solution-step">1. Eliminate biconditional: BuildPasses ⇒ ((DeploymentProceeds ⇒ ApprovalsGranted) ∧ (ApprovalsGranted ⇒ DeploymentProceeds))</div>
-            <div class="solution-step">2. Eliminate implications: ¬BuildPasses ∨ ((¬DeploymentProceeds ∨ ApprovalsGranted) ∧ (¬ApprovalsGranted ∨ DeploymentProceeds))</div>
-            <div class="solution-step">3. Distribute ∨ over ∧: (¬BuildPasses ∨ ¬DeploymentProceeds ∨ ApprovalsGranted) ∧ (¬BuildPasses ∨ ¬ApprovalsGranted ∨ DeploymentProceeds)</div>
-            <div class="final-answer"><strong>Final Answer:</strong> Translation: BuildPasses ⇒ (DeploymentProceeds ⇔ ApprovalsGranted); CNF: (¬BuildPasses ∨ ¬DeploymentProceeds ∨ ApprovalsGranted) ∧ (¬BuildPasses ∨ ¬ApprovalsGranted ∨ DeploymentProceeds)</div>
+            <div class="exercise-title">Exercise 27:</div>
+            Show that P ⇔ Q is logically equivalent to (P ⇒ Q) ∧ (Q ⇒ P)
+            <div class="answer-space">Your Answer: ________________</div>
         </div>
 
         <div class="exercise">
-            <div class="exercise-title">Exercise 32: Unless the battery is charged, the device powers off.</div>
-            <div class="solution-step"><strong>Translation:</strong></div>
-            <div class="solution-step"><strong>Note:</strong> "Unless A, B" means "If not A, then B" or equivalently "A ∨ B"</div>
-            <div class="solution-step"><strong>Atoms:</strong> <span class="atoms">BatteryCharged = "The battery is charged", DevicePowersOff = "The device powers off"</span></div>
-            <div class="solution-step"><strong>Logical form:</strong> ¬BatteryCharged ⇒ DevicePowersOff (or equivalently BatteryCharged ∨ DevicePowersOff)</div>
-            <div class="solution-step"><strong>CNF Conversion:</strong></div>
-            <div class="solution-step">1. Using equivalence: BatteryCharged ∨ DevicePowersOff</div>
-            <div class="final-answer"><strong>Final Answer:</strong> Translation: ¬BatteryCharged ⇒ DevicePowersOff (equivalently BatteryCharged ∨ DevicePowersOff); CNF: BatteryCharged ∨ DevicePowersOff</div>
+            <div class="exercise-title">Exercise 28:</div>
+            Show that ¬(P ∨ Q) is logically equivalent to ¬P ∧ ¬Q (De Morgan's Law)
+            <div class="answer-space">Your Answer: ________________</div>
+        </div>
+
+        <h2>Part VI: Real-World Applications</h2>
+
+        <div class="exercise">
+            <div class="exercise-title">Exercise 29:</div>
+            Translate to logic and convert to CNF: "If a user is authenticated and not banned, then the action is permitted or the action is audited."
+            <div class="answer-space">Your Answer: ________________</div>
         </div>
 
         <div class="exercise">
-            <div class="exercise-title">Exercise 33: The dataset is large if and only if the sample size is above 10k and the features exceed 100.</div>
-            <div class="solution-step"><strong>Translation:</strong></div>
-            <div class="solution-step"><strong>Atoms:</strong> <span class="atoms">DatasetLarge = "The dataset is large", SampleAbove10k = "The sample size is above 10k", FeaturesExceed100 = "The features exceed 100"</span></div>
-            <div class="solution-step"><strong>Logical form:</strong> DatasetLarge ⇔ (SampleAbove10k ∧ FeaturesExceed100)</div>
-            <div class="solution-step"><strong>CNF Conversion:</strong></div>
-            <div class="solution-step">1. Eliminate biconditional: (DatasetLarge ⇒ (SampleAbove10k ∧ FeaturesExceed100)) ∧ ((SampleAbove10k ∧ FeaturesExceed100) ⇒ DatasetLarge)</div>
-            <div class="solution-step">2. Eliminate implications: (¬DatasetLarge ∨ (SampleAbove10k ∧ FeaturesExceed100)) ∧ (¬(SampleAbove10k ∧ FeaturesExceed100) ∨ DatasetLarge)</div>
-            <div class="solution-step">3. Apply De Morgan's law: (¬DatasetLarge ∨ SampleAbove10k ∧ FeaturesExceed100) ∧ ((¬SampleAbove10k ∨ ¬FeaturesExceed100) ∨ DatasetLarge)</div>
-            <div class="solution-step">4. Distribute ∨ over ∧: (¬DatasetLarge ∨ SampleAbove10k) ∧ (¬DatasetLarge ∨ FeaturesExceed100) ∧ (¬SampleAbove10k ∨ ¬FeaturesExceed100 ∨ DatasetLarge)</div>
-            <div class="final-answer"><strong>Final Answer:</strong> Translation: DatasetLarge ⇔ (SampleAbove10k ∧ FeaturesExceed100); CNF: (¬DatasetLarge ∨ SampleAbove10k) ∧ (¬DatasetLarge ∨ FeaturesExceed100) ∧ (¬SampleAbove10k ∨ ¬FeaturesExceed100 ∨ DatasetLarge)</div>
+            <div class="exercise-title">Exercise 30:</div>
+            Translate to logic and convert to CNF: "Either the API returns 200 or, if it returns 500, then alerts trigger."
+            <div class="answer-space">Your Answer: ________________</div>
         </div>
 
         <div class="exercise">
-            <div class="exercise-title">Exercise 34: The lab is open implies the TA is present or the sign shows remote support, and the TA being present implies the lab is open.</div>
-            <div class="solution-step"><strong>Translation:</strong></div>
-            <div class="solution-step"><strong>Atoms:</strong> <span class="atoms">LabOpen = "The lab is open", TAPresent = "The TA is present", SignShowsRemoteSupport = "The sign shows remote support"</span></div>
-            <div class="solution-step"><strong>Logical form:</strong> (LabOpen ⇒ (TAPresent ∨ SignShowsRemoteSupport)) ∧ (TAPresent ⇒ LabOpen)</div>
-            <div class="solution-step"><strong>CNF Conversion:</strong></div>
-            <div class="solution-step">1. Eliminate implications: (¬LabOpen ∨ TAPresent ∨ SignShowsRemoteSupport) ∧ (¬TAPresent ∨ LabOpen)</div>
-            <div class="final-answer"><strong>Final Answer:</strong> Translation: (LabOpen ⇒ (TAPresent ∨ SignShowsRemoteSupport)) ∧ (TAPresent ⇒ LabOpen); CNF: (¬LabOpen ∨ TAPresent ∨ SignShowsRemoteSupport) ∧ (¬TAPresent ∨ LabOpen)</div>
+            <div class="exercise-title">Exercise 31:</div>
+            Translate to logic and convert to CNF: "If the build passes, then deployment proceeds if and only if approvals are granted."
+            <div class="answer-space">Your Answer: ________________</div>
         </div>
 
         <div class="exercise">
-            <div class="exercise-title">Exercise 35: It is not the case that if the server is down or the firewall blocks traffic, then the website is reachable.</div>
-            <div class="solution-step"><strong>Translation:</strong></div>
-            <div class="solution-step"><strong>Atoms:</strong> <span class="atoms">ServerDown = "The server is down", FirewallBlocksTraffic = "The firewall blocks traffic", WebsiteReachable = "The website is reachable"</span></div>
-            <div class="solution-step"><strong>Logical form:</strong> ¬((ServerDown ∨ FirewallBlocksTraffic) ⇒ WebsiteReachable)</div>
-            <div class="solution-step"><strong>CNF Conversion:</strong></div>
-            <div class="solution-step">1. Eliminate implication: ¬(¬(ServerDown ∨ FirewallBlocksTraffic) ∨ WebsiteReachable)</div>
-            <div class="solution-step">2. Move negation inward: ¬¬(ServerDown ∨ FirewallBlocksTraffic) ∧ ¬WebsiteReachable</div>
-            <div class="solution-step">3. Remove double negation: (ServerDown ∨ FirewallBlocksTraffic) ∧ ¬WebsiteReachable</div>
-            <div class="final-answer"><strong>Final Answer:</strong> Translation: ¬((ServerDown ∨ FirewallBlocksTraffic) ⇒ WebsiteReachable); CNF: (ServerDown ∨ FirewallBlocksTraffic) ∧ (¬WebsiteReachable)</div>
+            <div class="exercise-title">Exercise 32:</div>
+            Translate to logic and convert to CNF: "Unless the battery is charged, the device powers off."
+            <div class="answer-space">Your Answer: ________________</div>
         </div>
 
-        <div class="note" style="margin-top: 40px;">
-            <strong>Course Information:</strong><br>
-            Introduction to Artificial Intelligence - EP15.TOKT11121 (DS) & EP16.TOKT11121 (AI)<br>
-            National Economics University<br>
-            Instructors: Dr. Trong-Nghia Nguyen & Dr. Nguyen Thi Kim Ngan
+        <div class="exercise">
+            <div class="exercise-title">Exercise 33:</div>
+            Translate to logic and convert to CNF: "The dataset is large if and only if the sample size is above 10k and the features exceed 100."
+            <div class="answer-space">Your Answer: ________________</div>
+        </div>
+
+        <div class="exercise">
+            <div class="exercise-title">Exercise 34:</div>
+            Translate to logic and convert to CNF: "The lab is open implies the TA is present or the sign shows remote support, and the TA being present implies the lab is open."
+            <div class="answer-space">Your Answer: ________________</div>
+        </div>
+
+        <div class="exercise">
+            <div class="exercise-title">Exercise 35:</div>
+            Translate to logic and convert to CNF: "It is not the case that if the server is down or the firewall blocks traffic, then the website is reachable."
+            <div class="answer-space">Your Answer: ________________</div>
+        </div>
+
+        <div style="margin-top: 40px; padding: 20px; background-color: #e8f5e8; border-radius: 8px; text-align: center;">
+            <h3>Course Information</h3>
+            <p><strong>Introduction to Artificial Intelligence</strong></p>
+            <p>EP15.TOKT11121 (DS) & EP16.TOKT11121 (AI)</p>
+            <p>National Economics University</p>
+            <p>Instructors: Dr. Trong-Nghia Nguyen & Dr. Nguyen Thi Kim Ngan</p>
         </div>
     </div>
 </body>
