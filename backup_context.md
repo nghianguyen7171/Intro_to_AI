@@ -368,12 +368,13 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 
 ### Latest Updates (October 21, 2025)
 
-#### Exercise Questions System Updated
+#### Exercise Questions System Updated and Reorganized
 - **File Updated:** `exercises/Week9_Exercises_Solutions.html`
 - **Content:** Questions-only format with answer spaces for all 35 propositional logic exercises
 - **Change:** Removed all answers/solutions, kept only questions with answer spaces
 - **Purpose:** Student exercise worksheet format
-- **Integration:** Added to Week 9 lecture materials in `data/lectures.yml`
+- **Integration:** Moved from Week 9 to Week 10 materials in `data/lectures.yml`
+- **Organization:** Week 9 focuses on theory, Week 10 on practical exercises
 - **Access:** Available at https://nghianguyen7171.github.io/Intro_to_AI/exercises/Week9_Exercises_Solutions.html
 
 #### Additional Exercise Materials
@@ -386,11 +387,13 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 - **Change:** Added exercises folder to build process to ensure solutions are deployed
 - **Impact:** Exercise solutions now automatically included in GitHub Pages deployment
 
-#### Course Materials Enhancement
-- **Updated:** Week 9 lecture materials in `data/lectures.yml`
-- **Added:** "Exercise Solutions" link to Week 9 materials
-- **Integration:** Solutions now accessible directly from lecture materials
-- **HTML Update:** `index.html` updated with Exercise Solutions link in generated website
+#### Course Materials Enhancement and Reorganization
+- **Updated:** Week 9 and Week 10 lecture materials in `data/lectures.yml`
+- **Reorganized:** Moved exercises from Week 9 to Week 10 for better curriculum flow
+- **Week 9:** Focuses on theory and interactive practice exercises
+- **Week 10:** Dedicated to practical exercises and problem sets
+- **Integration:** Exercises now accessible from Week 10 materials
+- **HTML Update:** `index.html` updated with proper exercise links in generated website
 
 ### Previous Updates
 - Interactive exercises system (25+ exercises for Week 9)
