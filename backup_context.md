@@ -287,6 +287,7 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 - Project submission system with Google Drive integration
 - Slides integration and accessibility
 - Interactive exercises system (25+ exercises for Week 9)
+- Exercise solutions system (comprehensive solutions for all 35 exercises)
 - Main textbook prominently featured with PDF link
 - Responsive design and styling
 - GitHub Pages deployment
@@ -343,11 +344,13 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 ### Supporting Materials
 - **CNF Conversion Guide:** exercises/CNF_Conversion_Method_English.md
 - **PDF Version:** exercises/Week9_Exercises_Student.md
+- **Exercise Solutions:** exercises/Week9_Exercises_Solutions.html (comprehensive step-by-step solutions for all 35 exercises)
 - **Answer Key:** idea/Prositional logic/Week9_Exercises_ANSWER_KEY.md (instructor only)
 
 ### Technical Implementation
 - **HTML/CSS/JavaScript** for interactivity
 - **File Size:** 46,648 bytes (expanded version)
+- **Solutions File:** 447 lines of comprehensive step-by-step solutions
 - **Deployment:** Automatically included in build process
 - **Caching:** Handled through GitHub Pages deployment
 
@@ -360,6 +363,33 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 **Dr. Nguyen Thi Kim Ngan**
 - Email: ngannguyen@neu.edu.vn
 - Profile: https://fda.neu.edu.vn/fda-members/ts-nguyen-thi-kim-ngan/
+
+## Change Log
+
+### Latest Updates (October 21, 2025)
+
+#### New Exercise Solutions System Added
+- **File Added:** `exercises/Week9_Exercises_Solutions.html`
+- **Content:** Comprehensive step-by-step solutions for all 35 propositional logic exercises
+- **Size:** 447 lines of detailed solutions
+- **Integration:** Added to Week 9 lecture materials in `data/lectures.yml`
+- **Access:** Available at https://nghianguyen7171.github.io/Intro_to_AI/exercises/Week9_Exercises_Solutions.html
+
+#### Build System Enhancement
+- **Updated:** `build.sh` script
+- **Change:** Added exercises folder to build process to ensure solutions are deployed
+- **Impact:** Exercise solutions now automatically included in GitHub Pages deployment
+
+#### Course Materials Enhancement
+- **Updated:** Week 9 lecture materials in `data/lectures.yml`
+- **Added:** "Exercise Solutions" link to Week 9 materials
+- **Integration:** Solutions now accessible directly from lecture materials
+
+### Previous Updates
+- Interactive exercises system (25+ exercises for Week 9)
+- Project submission system with Google Drive integration
+- Main textbook prominently featured with PDF link
+- Comprehensive course documentation and backup context
 
 ---
 
