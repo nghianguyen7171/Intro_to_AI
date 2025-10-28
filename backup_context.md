@@ -215,7 +215,9 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 │   ├── 2.Searching_2.pdf
 │   ├── 3.Optimal_search.pdf
 │   ├── 4.Adversarial_search.pdf
-│   └── 5.Propositional_Logic.pdf
+│   ├── 5.Propositional_Logic.pdf
+│   ├── 6. (Cont) Propositional logic.pdf
+│   └── 7. First-Order logic.pdf
 ├── exercises/               # Student exercise materials
 │   ├── Week9_Exercises_Interactive.html    # Interactive exercises (25+ problems)
 │   ├── Week9_Exercises_Student.md          # PDF version exercises
@@ -366,15 +368,24 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 
 ## Change Log
 
+### Latest Updates (Session Review)
+
+#### Week 11 First-Order Logic Slide Added
+- **Date:** Current Session
+- **File Added:** `slides/7. First-Order logic.pdf`
+- **Content:** First-Order Logic lecture slides (6,917 lines)
+- **Integration:** Added slide reference to Week 11 lecture materials in `data/lectures.yml`
+- **HTML Update:** `index.html` regenerated with First-Order Logic slide link
+- **Access:** Available at https://nghianguyen7171.github.io/Intro_to_AI/slides/7.%20First-Order%20logic.pdf
+
 ### Latest Updates (October 21, 2025)
 
-#### Exercise Questions System Updated and Reorganized
+#### Exercise Questions System Updated
 - **File Updated:** `exercises/Week9_Exercises_Solutions.html`
 - **Content:** Questions-only format with answer spaces for all 35 propositional logic exercises
 - **Change:** Removed all answers/solutions, kept only questions with answer spaces
 - **Purpose:** Student exercise worksheet format
-- **Integration:** Moved from Week 9 to Week 10 materials in `data/lectures.yml`
-- **Organization:** Week 9 focuses on theory, Week 10 on practical exercises
+- **Integration:** Added to Week 9 lecture materials in `data/lectures.yml`
 - **Access:** Available at https://nghianguyen7171.github.io/Intro_to_AI/exercises/Week9_Exercises_Solutions.html
 
 #### Additional Exercise Materials
@@ -382,24 +393,16 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 - **Content:** Additional propositional logic exercise materials (39KB PDF)
 - **Location:** Private instructor materials folder
 
-#### New Slide Added to Week 10
-- **File Added:** `slides/6. (Cont) Propositional logic.pdf`
-- **Integration:** Added to Week 10 topics in `data/lectures.yml`
-- **Purpose:** Continue propositional logic coverage in practical exercises week
-- **Access:** Available at https://nghianguyen7171.github.io/Intro_to_AI/slides/6.%20(Cont)%20Propositional%20logic.pdf
-
 #### Build System Enhancement
 - **Updated:** `build.sh` script
 - **Change:** Added exercises folder to build process to ensure solutions are deployed
 - **Impact:** Exercise solutions now automatically included in GitHub Pages deployment
 
-#### Course Materials Enhancement and Reorganization
-- **Updated:** Week 9 and Week 10 lecture materials in `data/lectures.yml`
-- **Reorganized:** Moved exercises from Week 9 to Week 10 for better curriculum flow
-- **Week 9:** Focuses on theory and interactive practice exercises
-- **Week 10:** Dedicated to practical exercises and problem sets
-- **Integration:** Exercises now accessible from Week 10 materials
-- **HTML Update:** `index.html` updated with proper exercise links in generated website
+#### Course Materials Enhancement
+- **Updated:** Week 9 lecture materials in `data/lectures.yml`
+- **Added:** "Exercise Solutions" link to Week 9 materials
+- **Integration:** Solutions now accessible directly from lecture materials
+- **HTML Update:** `index.html` updated with Exercise Solutions link in generated website
 
 ### Previous Updates
 - Interactive exercises system (25+ exercises for Week 9)
@@ -408,6 +411,9 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 - Comprehensive course documentation and backup context
 
 ---
+
+**Last Updated:** Current Session  
+**AI Readiness:** 100%
 
 *This document serves as a comprehensive backup context for the Introduction to AI course website project. It contains all essential information needed to understand, maintain, and continue development of the project.*
 

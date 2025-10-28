@@ -117,6 +117,7 @@
         - Chapter 7, AIMA (Russell & Norvig, 2020)
         - {"Main Textbook": "http://lib.ysu.am/disciplines_bk/efdd4d1d4c2087fe1cbe03d9ced67f34.pdf"}
         - {"Practice Exercises": "exercises/Week9_Exercises_Interactive.html"}
+        - {"Exercise Solutions": "exercises/Week9_Exercises_Solutions.html"}
         - Reasoning examples and exercises
         - CNF conversion practice problems
 
@@ -129,9 +130,7 @@
           - Practical exercises on Propositional Logic
           - Resolution, Inference rules
           - Logic problem sets
-          - {"Slides": "slides/6. (Cont) Propositional logic.pdf"}
       Materials:
-        - {"Exercises": "exercises/Week9_Exercises_Solutions.html"}
         - Logic problem sets
         - Python-based logic solvers
 
@@ -142,6 +141,7 @@
       Label: Lecture
       Topics:
           - First-Order Logic – Representation and Inference
+          - {"Slides": "slides/7. First-Order logic.pdf"}
           - Chapter 8–9, lecture notes
           - Ontology examples
       Materials:
