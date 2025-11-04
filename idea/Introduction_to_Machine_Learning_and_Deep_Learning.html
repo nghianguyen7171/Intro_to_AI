@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to Machine Learning and Deep Learning</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .slide {
+            display: none;
+            width: 90%;
+            max-width: 1200px;
+            height: 90vh;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 60px;
+            overflow-y: auto;
+            position: relative;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        .slide h1 {
+            color: #667eea;
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 4px solid #764ba2;
+            padding-bottom: 20px;
+        }
+
+        .slide h2 {
+            color: #764ba2;
+            font-size: 2.2em;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+            padding-left: 15px;
+        }
+
+        .slide h3 {
+            color: #5a67d8;
+            font-size: 1.8em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .slide h4 {
+            color: #4c51bf;
+            font-size: 1.4em;
+            margin-top: 20px;
+            margin-bottom: 12px;
+        }
+
+        .slide p {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .slide ul, .slide ol {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        .slide li {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .slide strong {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .slide code {
+            background: #f7fafc;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #e53e3e;
+            font-size: 0.95em;
+        }
+
+        .slide pre {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-size: 1em;
+        }
+
+        .slide pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+
+        .slide blockquote {
+            border-left: 5px solid #667eea;
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #4a5568;
+            background: #f7fafc;
+            padding: 15px 20px;
+            border-radius: 5px;
+        }
+
+        .slide .title-slide {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .slide .title-slide h1 {
+            border: none;
+            font-size: 3.5em;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .slide .title-slide .subtitle {
+            font-size: 1.8em;
+            color: #718096;
+            margin-bottom: 50px;
+        }
+
+        .slide .title-slide .review-section {
+            text-align: left;
+            max-width: 800px;
+            margin: 0 auto;
+            background: #f7fafc;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 40px;
+        }
+
+        .slide .title-slide .review-section h3 {
+            text-align: center;
+            border: none;
+            margin-bottom: 20px;
+        }
+
+        .slide .attempt-box {
+            background: #fff5f5;
+            border-left: 4px solid #fc8181;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .slide .attempt-box.success {
+            background: #f0fff4;
+            border-left-color: #68d391;
+        }
+
+        .slide .comparison-box {
+            background: #f7fafc;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 2px solid #e2e8f0;
+        }
+
+        .slide .paradigm-box {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 2px solid #667eea30;
+        }
+
+        .slide .application-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .slide .application-card {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 10px;
+            border-top: 4px solid #667eea;
+        }
+
+        .slide .checkmark {
+            color: #48bb78;
+            font-weight: bold;
+        }
+
+        .slide .cross {
+            color: #f56565;
+            font-weight: bold;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #667eea;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .nav-btn:active {
+            transform: translateY(0);
+        }
+
+        .slide-indicator {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .indicator-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .indicator-dot.active {
+            background: white;
+            width: 30px;
+            border-radius: 6px;
+        }
+
+        .slide-number {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            color: #667eea;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Scrollbar styling */
+        .slide::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .slide::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .slide::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+
+        .slide::-webkit-scrollbar-thumb:hover {
+            background: #764ba2;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .slide {
+                width: 95%;
+                padding: 30px;
+            }
+
+            .slide h1 {
+                font-size: 2em;
+            }
+
+            .slide h2 {
+                font-size: 1.6em;
+            }
+
+            .slide .title-slide h1 {
+                font-size: 2.5em;
+            }
+
+            .nav-btn {
+                padding: 12px 20px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-number">
+        <span id="current-slide">1</span> / <span id="total-slides">10</span>
+    </div>
+
+    <div class="slide-container">
+        <!-- Slide 1: Title Slide -->
+        <div class="slide active">
+            <div class="title-slide">
+                <h1>Introduction to Machine Learning and Deep Learning</h1>
+                <p class="subtitle">From Search Algorithms and Logic to Learning Systems</p>
+                <p style="font-size: 1.3em; color: #718096; margin-top: 20px;">Weeks 13-15</p>
+                
+                <div class="review-section">
+                    <h3>What We've Learned So Far</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 15px;">✅ <strong>Search Algorithms:</strong> BFS, DFS, A*, Greedy Search</li>
+                        <li style="margin-bottom: 15px;">✅ <strong>Propositional Logic:</strong> Knowledge representation, inference, resolution</li>
+                        <li style="margin-bottom: 15px;">✅ <strong>First-Order Logic:</strong> Predicates, quantifiers, CNF conversion, resolution refutation</li>
+                    </ul>
+                    
+                    <h3 style="margin-top: 30px;">What's Next</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 15px;">🎯 <strong>Machine Learning:</strong> Learning from data</li>
+                        <li style="margin-bottom: 15px;">🎯 <strong>Deep Learning:</strong> Neural networks for complex pattern recognition</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Motivation -->
+        <div class="slide">
+            <h2>Motivation: A Problem That Breaks Our Tools</h2>
+            
+            <h3>Review: What Have We Mastered?</h3>
+            
+            <div class="attempt-box success">
+                <h4>Search Algorithms (Weeks 1-4)</h4>
+                <ul>
+                    <li>✅ <strong>8-Puzzle:</strong> Solved with A* search using Manhattan distance heuristic</li>
+                    <li>✅ <strong>Missionaries and Cannibals:</strong> BFS found optimal path</li>
+                    <li>✅ <strong>Chess/Game Playing:</strong> Minimax with alpha-beta pruning</li>
+                </ul>
+                <p><strong>Key:</strong> Well-defined state spaces, clear goals, computable heuristics</p>
+            </div>
+
+            <div class="attempt-box success">
+                <h4>Logic Systems (Weeks 5-12)</h4>
+                <ul>
+                    <li>✅ <strong>Propositional Logic:</strong> "If it rains, then the ground is wet"</li>
+                    <li>✅ <strong>First-Order Logic:</strong> "All dogs bark" → "John's dog barks"</li>
+                </ul>
+                <p><strong>Key:</strong> Explicit rules, logical inference, resolution refutation</p>
+            </div>
+
+            <h3>New Problem: Image Recognition - "What is in this picture?"</h3>
+            
+            <div class="comparison-box">
+                <p><strong>Task:</strong> Identify whether an image contains a cat or a dog</p>
+                <p><strong>Input:</strong> Digital image (e.g., 256×256 pixels, RGB color)</p>
+                <p><strong>Output:</strong> Classification label: "cat" or "dog"</p>
+            </div>
+        </div>
+
+        <!-- Slide 3: Why Search Algorithms Fail -->
+        <div class="slide">
+            <h2>Why Can't We Use Search Algorithms?</h2>
+
+            <div class="attempt-box">
+                <h3>Attempt 1: State Space Search</h3>
+                <ul>
+                    <li><strong>State:</strong> Each possible image configuration</li>
+                    <li><strong>Problem:</strong> 256 × 256 × 3 = 196,608 pixels</li>
+                    <li><strong>Each pixel:</strong> 256³ possible color values</li>
+                    <li><strong>Total states:</strong> (256³)^196,608 ≈ 10^1,420,000 states</li>
+                    <li><strong>Our experience:</strong> Even 8-puzzle has only 9! = 362,880 states</li>
+                </ul>
+                <p class="cross">❌ Result: State space explosion makes exhaustive search impossible</p>
+            </div>
+
+            <div class="attempt-box">
+                <h3>Attempt 2: Heuristic Search (A*)</h3>
+                <ul>
+                    <li><strong>Question:</strong> What's the heuristic function h(n)?</li>
+                    <li><strong>Need:</strong> Distance estimate from current image to "cat" or "dog"</li>
+                    <li><strong>Problem:</strong> How do we measure "distance to cat"?</li>
+                    <li><strong>Our experience:</strong> Manhattan distance worked perfectly for 8-puzzle</li>
+                </ul>
+                <p class="cross">❌ Result: No meaningful heuristic function exists</p>
+            </div>
+
+            <div class="attempt-box">
+                <h3>Attempt 3: Greedy Search</h3>
+                <ul>
+                    <li><strong>Need:</strong> Clear evaluation function</li>
+                    <li><strong>Problem:</strong> What makes an image "more cat-like"?</li>
+                </ul>
+                <p class="cross">❌ Result: Cannot define evaluation function</p>
+            </div>
+        </div>
+
+        <!-- Slide 4: Why Logic Fails -->
+        <div class="slide">
+            <h2>Why Can't We Use Logic?</h2>
+
+            <div class="attempt-box">
+                <h3>Attempt 1: Propositional Logic</h3>
+                <ul>
+                    <li><strong>Try:</strong> "If pixel (100,100) is brown, then it's a dog"</li>
+                    <li><strong>Problem:</strong> Millions of pixels, billions of combinations</li>
+                </ul>
+                <p class="cross">❌ Result: Too many rules, many exceptions</p>
+            </div>
+
+            <div class="attempt-box">
+                <h3>Attempt 2: First-Order Logic</h3>
+                <ul>
+                    <li><strong>Try:</strong> "∀x (has_fur(x) ∧ has_tail(x) → cat(x))"</li>
+                    <li><strong>Problem:</strong> What is "has_fur"? How do we detect it?</li>
+                    <li><strong>Challenge:</strong> Cannot define predicates for visual features</li>
+                </ul>
+                <p class="cross">❌ Result: Visual features are not logically definable</p>
+            </div>
+
+            <div class="comparison-box">
+                <h3>Why Logic Fails:</h3>
+                <ul>
+                    <li class="cross">❌ <strong>No explicit rules:</strong> Cannot write "If pixels form ears, then cat"</li>
+                    <li class="cross">❌ <strong>Context-dependent:</strong> Same pixel pattern means different things</li>
+                    <li class="cross">❌ <strong>Pattern recognition:</strong> Requires learning from examples, not deduction</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 5: The Fundamental Challenge -->
+        <div class="slide">
+            <h2>The Fundamental Challenge</h2>
+
+            <div class="attempt-box success">
+                <h3>What We Need:</h3>
+                <ul>
+                    <li>Learn patterns from examples (not rules)</li>
+                    <li>Generalize to new, unseen images</li>
+                    <li>Handle high-dimensional, complex inputs</li>
+                    <li>Adapt and improve with experience</li>
+                </ul>
+            </div>
+
+            <div class="attempt-box">
+                <h3>What We Have:</h3>
+                <ul>
+                    <li class="checkmark">✅ Search algorithms: Great for structured problems</li>
+                    <li class="checkmark">✅ Logic systems: Great for rule-based reasoning</li>
+                    <li class="cross">❌ Neither works for pattern recognition!</li>
+                </ul>
+            </div>
+
+            <div class="comparison-box" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px;">
+                <h2 style="color: white; border: none; text-align: center;">Solution: We need <strong>Machine Learning</strong> — systems that learn from data!</h2>
+            </div>
+
+            <h3>Connecting to Our Journey</h3>
+            <div class="comparison-box">
+                <p><strong>Traditional AI (Weeks 1-12):</strong></p>
+                <pre><code>Problem → Define Rules → Apply Search/Logic → Solution</code></pre>
+                
+                <p><strong>Machine Learning (Weeks 13-15):</strong></p>
+                <pre><code>Problem → Provide Examples → Learn Patterns → Solution</code></pre>
+            </div>
+
+            <p><strong>The Image Recognition Example demonstrates:</strong></p>
+            <ul>
+                <li>Why we need a new paradigm</li>
+                <li>The limitations of rule-based approaches</li>
+                <li>The transition from "programming" to "learning"</li>
+            </ul>
+        </div>
+
+        <!-- Slide 6: Transition to Machine Learning -->
+        <div class="slide">
+            <h2>Transition to Machine Learning</h2>
+
+            <h3>The Necessity of Machine Learning:</h3>
+
+            <div class="attempt-box success">
+                <h4>What We've Learned Works Well:</h4>
+                <ul>
+                    <li><strong>Search Algorithms:</strong> 8-puzzle, pathfinding, game trees</li>
+                    <ul>
+                        <li>Well-defined problems with clear rules</li>
+                        <li>Problems with manageable state spaces</li>
+                        <li>Deterministic environments with clear goals</li>
+                    </ul>
+                    <li><strong>Logic Systems:</strong> Knowledge representation, inference</li>
+                    <ul>
+                        <li>Explicit rules and logical relationships</li>
+                        <li>Deductive reasoning from premises</li>
+                        <li>Structured knowledge bases</li>
+                    </ul>
+                </ul>
+            </div>
+
+            <div class="attempt-box">
+                <h4>But Real-World Problems Are Different:</h4>
+                <p>The <strong>image recognition example</strong> showed us that many problems require:</p>
+                <ul>
+                    <li class="cross">❌ <strong>Learning from experience:</strong> Not predefined rules</li>
+                    <li class="cross">❌ <strong>Pattern recognition:</strong> High-dimensional, noisy data</li>
+                    <li class="cross">❌ <strong>Handling uncertainty:</strong> No deterministic rules</li>
+                    <li class="cross">❌ <strong>Adapting to new situations:</strong> Generalizing from examples</li>
+                </ul>
+            </div>
+
+            <div class="comparison-box">
+                <p><strong>The Gap:</strong></p>
+                <pre><code>Traditional AI (Search + Logic) ≠ Pattern Recognition Problems</code></pre>
+            </div>
+
+            <p><strong>Machine Learning bridges this gap</strong> by enabling computers to:</p>
+            <ul>
+                <li>Learn patterns from data automatically</li>
+                <li>Generalize to new examples</li>
+                <li>Handle uncertainty and noise</li>
+                <li>Adapt without explicit reprogramming</li>
+            </ul>
+
+            <div class="attempt-box success" style="margin-top: 30px;">
+                <p><strong>Our Journey Continues:</strong></p>
+                <ul>
+                    <li><strong>Weeks 1-12:</strong> "How to solve problems with explicit rules"</li>
+                    <li><strong>Weeks 13-15:</strong> "How to learn from examples when rules don't exist"</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 7: AI and Machine Learning -->
+        <div class="slide">
+            <h2>AI and Machine Learning</h2>
+            <p style="color: #718096; font-style: italic;">Based on Slide 10 from "AI va Con nguoi - NEU.pdf"</p>
+
+            <h3>Definition of Machine Learning</h3>
+            <blockquote>
+                "Machine Learning is a method of data analysis that automates analytical model building. It is a branch of artificial intelligence based on the idea that systems can learn from data, identify patterns and make decisions with minimal human intervention."
+            </blockquote>
+
+            <h4>Key Characteristics:</h4>
+            <ul>
+                <li><strong>Learning from Experience:</strong> Improves performance on a task with experience</li>
+                <li><strong>Pattern Recognition:</strong> Discovers patterns in data automatically</li>
+                <li><strong>Generalization:</strong> Makes predictions on new, unseen data</li>
+                <li><strong>Adaptation:</strong> Adjusts behavior based on feedback</li>
+            </ul>
+
+            <h3>Machine Learning Paradigms</h3>
+
+            <div class="paradigm-box">
+                <h4>1. Supervised Learning</h4>
+                <ul>
+                    <li><strong>Definition:</strong> Learning with labeled examples</li>
+                    <li><strong>Input:</strong> Labeled training data {(x₁, y₁), (x₂, y₂), ..., (xₙ, yₙ)}</li>
+                    <li><strong>Goal:</strong> Learn a function f: X → Y that maps inputs to outputs</li>
+                    <li><strong>Examples:</strong></li>
+                    <ul>
+                        <li><strong>Classification:</strong> Spam detection (input: email, output: spam/not spam)</li>
+                        <li><strong>Regression:</strong> House price prediction (input: features, output: price)</li>
+                    </ul>
+                </ul>
+            </div>
+
+            <div class="paradigm-box">
+                <h4>2. Unsupervised Learning</h4>
+                <ul>
+                    <li><strong>Definition:</strong> Learning from unlabeled data</li>
+                    <li><strong>Input:</strong> Unlabeled data {x₁, x₂, ..., xₙ}</li>
+                    <li><strong>Goal:</strong> Discover hidden patterns or structures</li>
+                    <li><strong>Examples:</strong></li>
+                    <ul>
+                        <li><strong>Clustering:</strong> Customer segmentation</li>
+                        <li><strong>Dimensionality Reduction:</strong> Data visualization</li>
+                    </ul>
+                </ul>
+            </div>
+
+            <div class="paradigm-box">
+                <h4>3. Reinforcement Learning</h4>
+                <ul>
+                    <li><strong>Definition:</strong> Learning through interaction with environment</li>
+                    <li><strong>Components:</strong> Agent, Environment, Actions, Rewards</li>
+                    <li><strong>Goal:</strong> Learn optimal policy to maximize cumulative reward</li>
+                    <li><strong>Examples:</strong></li>
+                    <ul>
+                        <li>Game playing (Chess, Go)</li>
+                        <li>Autonomous vehicle control</li>
+                        <li>Robot navigation</li>
+                    </ul>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 8: ML Applications -->
+        <div class="slide">
+            <h2>Applications of Machine Learning</h2>
+
+            <div class="application-grid">
+                <div class="application-card">
+                    <h4>1. Computer Vision</h4>
+                    <ul>
+                        <li>Image classification</li>
+                        <li>Object detection</li>
+                        <li>Facial recognition</li>
+                    </ul>
+                </div>
+
+                <div class="application-card">
+                    <h4>2. Natural Language Processing</h4>
+                    <ul>
+                        <li>Machine translation</li>
+                        <li>Sentiment analysis</li>
+                        <li>Chatbots</li>
+                    </ul>
+                </div>
+
+                <div class="application-card">
+                    <h4>3. Healthcare</h4>
+                    <ul>
+                        <li>Medical diagnosis</li>
+                        <li>Drug discovery</li>
+                        <li>Personalized treatment</li>
+                    </ul>
+                </div>
+
+                <div class="application-card">
+                    <h4>4. Finance</h4>
+                    <ul>
+                        <li>Fraud detection</li>
+                        <li>Credit scoring</li>
+                        <li>Algorithmic trading</li>
+                    </ul>
+                </div>
+
+                <div class="application-card">
+                    <h4>5. Recommendation Systems</h4>
+                    <ul>
+                        <li>E-commerce (Amazon, eBay)</li>
+                        <li>Streaming services (Netflix, Spotify)</li>
+                        <li>Social media (Facebook, LinkedIn)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: From Machine Learning to Deep Learning -->
+        <div class="slide">
+            <h2>From Machine Learning to Deep Learning</h2>
+
+            <h3>The Relationship</h3>
+            <div class="comparison-box" style="background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); padding: 30px; text-align: center;">
+                <h2 style="border: none; color: #667eea; margin-bottom: 20px;">Deep Learning ⊂ Machine Learning ⊂ Artificial Intelligence</h2>
+                <p style="font-size: 1.3em; color: #4a5568;">
+                    Deep Learning is a <strong>subset</strong> of Machine Learning that uses neural networks with multiple layers
+                </p>
+            </div>
+
+            <h3>Why Deep Learning Emerged?</h3>
+            
+            <div class="attempt-box">
+                <h4>Limitations of Traditional Machine Learning:</h4>
+                <ul>
+                    <li class="cross">❌ <strong>Manual Feature Engineering:</strong> Experts must hand-craft features</li>
+                    <li class="cross">❌ <strong>Limited Complexity:</strong> Struggles with high-dimensional data (images, audio)</li>
+                    <li class="cross">❌ <strong>Shallow Representations:</strong> Cannot learn hierarchical features automatically</li>
+                    <li class="cross">❌ <strong>Performance Plateau:</strong> Hit accuracy limits on complex tasks</li>
+                </ul>
+                <p><strong>Example:</strong> Image recognition with traditional ML required experts to define features like "edges," "corners," "textures" manually</p>
+            </div>
+
+            <div class="attempt-box success">
+                <h4>What Deep Learning Offers:</h4>
+                <ul>
+                    <li class="checkmark">✅ <strong>Automatic Feature Learning:</strong> Discovers features from raw data</li>
+                    <li class="checkmark">✅ <strong>Hierarchical Representation:</strong> Learns features at multiple levels of abstraction</li>
+                    <li class="checkmark">✅ <strong>End-to-End Learning:</strong> Raw input → Final output (no manual steps)</li>
+                    <li class="checkmark">✅ <strong>Breakthrough Performance:</strong> Achieves state-of-the-art results</li>
+                </ul>
+                <p><strong>Example:</strong> Deep Learning automatically learns that edges → shapes → objects → scenes</p>
+            </div>
+
+            <h3>The Evolution</h3>
+            <div class="comparison-box">
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; text-align: center;">
+                    <div>
+                        <h4 style="color: #667eea;">Traditional ML</h4>
+                        <p>Hand-crafted features<br>+<br>Shallow models</p>
+                    </div>
+                    <div style="font-size: 2em; color: #764ba2; display: flex; align-items: center; justify-content: center;">→</div>
+                    <div>
+                        <h4 style="color: #667eea;">Deep Learning</h4>
+                        <p>Automatic features<br>+<br>Deep neural networks</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="attempt-box success" style="margin-top: 30px;">
+                <h4>Key Insight:</h4>
+                <p>Deep Learning addresses the <strong>feature engineering bottleneck</strong> by learning representations automatically from data, enabling breakthroughs in:</p>
+                <ul>
+                    <li>Computer Vision (ImageNet 2012 breakthrough)</li>
+                    <li>Natural Language Processing (GPT, BERT)</li>
+                    <li>Speech Recognition (Siri, Alexa)</li>
+                    <li>And many more domains...</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 10: Deep Learning -->
+        <div class="slide">
+            <h2>Deep Learning</h2>
+            <p style="color: #718096; font-style: italic;">Based on Slide 16 from "AI va Con nguoi - NEU.pdf"</p>
+
+            <h3>What is Deep Learning?</h3>
+            <blockquote>
+                "Deep Learning is a subset of machine learning that uses artificial neural networks with multiple layers (deep architectures) to learn representations of data with multiple levels of abstraction."
+            </blockquote>
+
+            <h4>Key Concept:</h4>
+            <ul>
+                <li><strong>Neural Networks:</strong> Inspired by biological neurons</li>
+                <li><strong>Deep Architecture:</strong> Multiple hidden layers (hence "deep")</li>
+                <li><strong>Feature Learning:</strong> Automatically learns hierarchical features</li>
+                <li><strong>End-to-End Learning:</strong> Learns from raw input to final output</li>
+            </ul>
+
+            <h3>Neural Network Architecture</h3>
+            <div class="comparison-box">
+                <p><strong>Basic Structure:</strong></p>
+                <pre><code>Input Layer → Hidden Layer 1 → Hidden Layer 2 → ... → Hidden Layer N → Output Layer</code></pre>
+                
+                <p><strong>Why "Deep"?</strong></p>
+                <ul>
+                    <li><strong>Shallow Networks:</strong> 1-2 hidden layers</li>
+                    <li><strong>Deep Networks:</strong> 3+ hidden layers (often 10-100+ layers)</li>
+                    <li><strong>Depth allows:</strong> Hierarchical feature extraction</li>
+                </ul>
+            </div>
+
+            <h3>How Deep Learning Works</h3>
+            <div class="paradigm-box">
+                <h4>1. Forward Propagation</h4>
+                <p>Data flows from input through hidden layers to output. Each layer transforms the input using weights and activation functions.</p>
+            </div>
+
+            <div class="paradigm-box">
+                <h4>2. Backpropagation</h4>
+                <p>Calculates errors at the output, propagates errors backward through layers, and updates weights to minimize error.</p>
+            </div>
+
+            <div class="paradigm-box">
+                <h4>3. Feature Hierarchy</h4>
+                <ul>
+                    <li><strong>Layer 1:</strong> Detects edges, lines, curves</li>
+                    <li><strong>Layer 2:</strong> Detects shapes, textures</li>
+                    <li><strong>Layer 3:</strong> Detects objects, parts</li>
+                    <li><strong>Layer 4+:</strong> Detects complex patterns, relationships</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 11: Deep Learning Applications -->
+        <div class="slide">
+            <h2>Applications of Deep Learning</h2>
+
+            <div class="application-grid">
+                <div class="application-card">
+                    <h4>1. Computer Vision</h4>
+                    <ul>
+                        <li><strong>Image Recognition:</strong> ImageNet classification (ResNet, VGG)</li>
+                        <li><strong>Object Detection:</strong> YOLO, Faster R-CNN</li>
+                        <li><strong>Image Generation:</strong> GANs</li>
+                        <li><strong>Example:</strong> Google Photos auto-tagging</li>
+                    </ul>
+                </div>
+
+                <div class="application-card">
+                    <h4>2. Natural Language Processing</h4>
+                    <ul>
+                        <li><strong>Machine Translation:</strong> Google Translate, DeepL</li>
+                        <li><strong>Language Models:</strong> GPT, BERT, ChatGPT</li>
+                        <li><strong>Text Generation:</strong> Automated writing assistants</li>
+                        <li><strong>Example:</strong> ChatGPT conversation</li>
+                    </ul>
+                </div>
+
+                <div class="application-card">
+                    <h4>3. Speech Recognition</h4>
+                    <ul>
+                        <li><strong>Voice Assistants:</strong> Siri, Alexa, Google Assistant</li>
+                        <li><strong>Transcription:</strong> Automatic speech-to-text</li>
+                        <li><strong>Example:</strong> Real-time voice commands</li>
+                    </ul>
+                </div>
+
+                <div class="application-card">
+                    <h4>4. Autonomous Systems</h4>
+                    <ul>
+                        <li><strong>Self-Driving Cars:</strong> Tesla Autopilot, Waymo</li>
+                        <li><strong>Robotics:</strong> Robot manipulation and navigation</li>
+                        <li><strong>Example:</strong> Autonomous delivery robots</li>
+                    </ul>
+                </div>
+
+                <div class="application-card">
+                    <h4>5. Healthcare</h4>
+                    <ul>
+                        <li><strong>Medical Imaging:</strong> X-ray, MRI analysis</li>
+                        <li><strong>Drug Discovery:</strong> Protein folding prediction</li>
+                        <li><strong>Example:</strong> DeepMind's AlphaFold</li>
+                    </ul>
+                </div>
+
+                <div class="application-card">
+                    <h4>6. Games and Entertainment</h4>
+                    <ul>
+                        <li><strong>Game AI:</strong> AlphaGo, AlphaStar</li>
+                        <li><strong>Content Recommendation:</strong> Netflix, YouTube</li>
+                        <li><strong>Example:</strong> AlphaGo defeating world champion</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px;">
+                <div class="attempt-box success">
+                    <h4>Advantages</h4>
+                    <ul>
+                        <li>✅ Automatic Feature Extraction</li>
+                        <li>✅ Handles High-Dimensional Data</li>
+                        <li>✅ End-to-End Learning</li>
+                        <li>✅ State-of-the-Art Performance</li>
+                    </ul>
+                </div>
+
+                <div class="attempt-box">
+                    <h4>Challenges</h4>
+                    <ul>
+                        <li>❌ Large Data Requirements</li>
+                        <li>❌ Computational Resources</li>
+                        <li>❌ Black Box Nature</li>
+                        <li>❌ Training Time</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: AI and Humans -->
+        <div class="slide">
+            <h2>AI and Humans</h2>
+
+            <h3>The Relationship Between AI and Humans</h3>
+
+            <div class="paradigm-box">
+                <h4>1. AI as a Tool for Augmentation</h4>
+                <p><strong>Enhancing Human Capabilities:</strong></p>
+                <ul>
+                    <li><strong>Medical Diagnosis:</strong> AI assists doctors in detecting diseases earlier</li>
+                    <li><strong>Education:</strong> Personalized learning platforms adapt to student needs</li>
+                    <li><strong>Research:</strong> AI accelerates scientific discovery and data analysis</li>
+                    <li><strong>Accessibility:</strong> AI enables people with disabilities (voice-to-text, image recognition)</li>
+                </ul>
+            </div>
+
+            <div class="paradigm-box">
+                <h4>2. Collaboration Between AI and Humans</h4>
+                <p><strong>Complementary Strengths:</strong></p>
+                <ul>
+                    <li><strong>Humans:</strong> Creativity, empathy, ethical judgment, common sense</li>
+                    <li><strong>AI:</strong> Pattern recognition, speed, consistency, scalability</li>
+                </ul>
+                <p><strong>Example:</strong> Medical Diagnosis</p>
+                <ul>
+                    <li>AI: Analyzes medical images faster and can detect subtle patterns</li>
+                    <li>Human: Provides context, patient interaction, final decision-making</li>
+                </ul>
+            </div>
+
+            <div class="paradigm-box">
+                <h4>3. AI Impact on Employment</h4>
+                <p><strong>Job Transformation:</strong></p>
+                <ul>
+                    <li><strong>Automation:</strong> Routine, repetitive tasks automated</li>
+                    <li><strong>New Opportunities:</strong> AI creates new job categories (ML engineers, data scientists)</li>
+                    <li><strong>Skill Evolution:</strong> Workers need to adapt and learn new skills</li>
+                </ul>
+                <p><strong>Examples:</strong></p>
+                <ul>
+                    <li>Manufacturing: Robots handle assembly, humans oversee and maintain</li>
+                    <li>Customer Service: Chatbots handle common queries, humans handle complex issues</li>
+                    <li>Finance: AI analyzes transactions, humans make strategic decisions</li>
+                </ul>
+            </div>
+
+            <div class="paradigm-box">
+                <h4>4. Ethical Considerations</h4>
+                <p><strong>Challenges:</strong></p>
+                <ul>
+                    <li><strong>Bias:</strong> AI systems can perpetuate societal biases</li>
+                    <li><strong>Privacy:</strong> Data collection and surveillance concerns</li>
+                    <li><strong>Transparency:</strong> Need for explainable AI decisions</li>
+                    <li><strong>Accountability:</strong> Who is responsible for AI decisions?</li>
+                </ul>
+                <p><strong>Responsible AI Development:</strong></p>
+                <ul>
+                    <li>Fairness and non-discrimination</li>
+                    <li>Privacy protection</li>
+                    <li>Transparency and explainability</li>
+                    <li>Human oversight and control</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 13: Role of AI in Specialized Fields -->
+        <div class="slide">
+            <h2>The Role of AI in Specialized Fields</h2>
+
+            <div class="application-grid">
+                <div class="application-card">
+                    <h4>1. Healthcare</h4>
+                    <p><strong>Applications:</strong></p>
+                    <ul>
+                        <li>Medical Imaging: X-rays, MRIs, CT scans</li>
+                        <li>Drug Discovery</li>
+                        <li>Personalized Medicine</li>
+                        <li>Telemedicine</li>
+                    </ul>
+                    <p><strong>Impact:</strong> Earlier detection, reduced errors, accelerated development</p>
+                </div>
+
+                <div class="application-card">
+                    <h4>2. Finance</h4>
+                    <p><strong>Applications:</strong></p>
+                    <ul>
+                        <li>Fraud Detection</li>
+                        <li>Algorithmic Trading</li>
+                        <li>Credit Scoring</li>
+                        <li>Risk Management</li>
+                    </ul>
+                    <p><strong>Impact:</strong> Faster detection, better strategies, improved assessment</p>
+                </div>
+
+                <div class="application-card">
+                    <h4>3. Transportation</h4>
+                    <p><strong>Applications:</strong></p>
+                    <ul>
+                        <li>Autonomous Vehicles</li>
+                        <li>Traffic Management</li>
+                        <li>Route Optimization</li>
+                        <li>Predictive Maintenance</li>
+                    </ul>
+                    <p><strong>Impact:</strong> Reduced accidents, improved flow, lower costs</p>
+                </div>
+
+                <div class="application-card">
+                    <h4>4. Education</h4>
+                    <p><strong>Applications:</strong></p>
+                    <ul>
+                        <li>Personalized Learning</li>
+                        <li>Automated Grading</li>
+                        <li>Intelligent Tutoring</li>
+                        <li>Content Generation</li>
+                    </ul>
+                    <p><strong>Impact:</strong> Customized experiences, better engagement</p>
+                </div>
+
+                <div class="application-card">
+                    <h4>5. Agriculture</h4>
+                    <p><strong>Applications:</strong></p>
+                    <ul>
+                        <li>Precision Agriculture</li>
+                        <li>Pest Detection</li>
+                        <li>Yield Prediction</li>
+                        <li>Automated Harvesting</li>
+                    </ul>
+                    <p><strong>Impact:</strong> Increased yields, reduced waste</p>
+                </div>
+
+                <div class="application-card">
+                    <h4>6. Manufacturing</h4>
+                    <p><strong>Applications:</strong></p>
+                    <ul>
+                        <li>Quality Control</li>
+                        <li>Predictive Maintenance</li>
+                        <li>Supply Chain Optimization</li>
+                        <li>Robotics</li>
+                    </ul>
+                    <p><strong>Impact:</strong> Higher quality, reduced downtime</p>
+                </div>
+
+                <div class="application-card">
+                    <h4>7. Natural Language Processing</h4>
+                    <p><strong>Applications:</strong></p>
+                    <ul>
+                        <li>Translation Services</li>
+                        <li>Content Moderation</li>
+                        <li>Customer Support</li>
+                        <li>Content Creation</li>
+                    </ul>
+                    <p><strong>Impact:</strong> Breaking language barriers, improved communication</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Comparison -->
+        <div class="slide">
+            <h2>Comparison: Traditional AI vs. Machine Learning vs. Deep Learning</h2>
+
+            <div class="application-grid">
+                <div class="application-card">
+                    <h3>Traditional AI (Symbolic AI)</h3>
+                    <ul>
+                        <li><strong>Approach:</strong> Rule-based systems, explicit programming</li>
+                        <li><strong>Example:</strong> Expert systems, search algorithms</li>
+                        <li class="checkmark"><strong>Strengths:</strong> Interpretable, deterministic</li>
+                        <li class="cross"><strong>Limitations:</strong> Cannot learn, requires explicit rules</li>
+                    </ul>
+                </div>
+
+                <div class="application-card">
+                    <h3>Machine Learning</h3>
+                    <ul>
+                        <li><strong>Approach:</strong> Learn from data, pattern recognition</li>
+                        <li><strong>Example:</strong> Decision trees, SVM, random forests</li>
+                        <li class="checkmark"><strong>Strengths:</strong> Adapts to data, handles uncertainty</li>
+                        <li class="cross"><strong>Limitations:</strong> Requires feature engineering</li>
+                    </ul>
+                </div>
+
+                <div class="application-card">
+                    <h3>Deep Learning</h3>
+                    <ul>
+                        <li><strong>Approach:</strong> Neural networks with multiple layers</li>
+                        <li><strong>Example:</strong> CNNs, RNNs, Transformers</li>
+                        <li class="checkmark"><strong>Strengths:</strong> Automatic feature learning, best performance</li>
+                        <li class="cross"><strong>Limitations:</strong> Requires large data, computational resources</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="comparison-box" style="margin-top: 30px;">
+                <h3>Evolution Path</h3>
+                <pre style="text-align: center; font-size: 1.2em;"><code>Traditional AI → Machine Learning → Deep Learning
+(Rules)         (Learning)         (Deep Learning)</code></pre>
+            </div>
+        </div>
+
+        <!-- Slide 15: Key Takeaways -->
+        <div class="slide">
+            <h2>Key Takeaways</h2>
+
+            <h3>Main Points Covered:</h3>
+
+            <div class="paradigm-box">
+                <h4>1. Limitations of Traditional Search</h4>
+                <ul>
+                    <li>Cannot solve pattern recognition problems</li>
+                    <li>Image recognition example demonstrates necessity for ML</li>
+                </ul>
+            </div>
+
+            <div class="paradigm-box">
+                <h4>2. Machine Learning</h4>
+                <ul>
+                    <li>Learns from data without explicit programming</li>
+                    <li>Three paradigms: Supervised, Unsupervised, Reinforcement Learning</li>
+                    <li>Wide range of applications across industries</li>
+                </ul>
+            </div>
+
+            <div class="paradigm-box">
+                <h4>3. Deep Learning</h4>
+                <ul>
+                    <li>Subset of ML using deep neural networks</li>
+                    <li>Automatic feature extraction</li>
+                    <li>State-of-the-Art performance in many domains</li>
+                </ul>
+            </div>
+
+            <div class="paradigm-box">
+                <h4>4. AI and Humans</h4>
+                <ul>
+                    <li>Collaborative relationship</li>
+                    <li>AI augments human capabilities</li>
+                    <li>Ethical considerations important</li>
+                </ul>
+            </div>
+
+            <div class="paradigm-box">
+                <h4>5. AI in Specialized Fields</h4>
+                <ul>
+                    <li>Transformative impact across multiple domains</li>
+                    <li>Real-world applications solving real problems</li>
+                </ul>
+            </div>
+
+            <div class="attempt-box success" style="margin-top: 30px;">
+                <h3>Next Steps:</h3>
+                <ul>
+                    <li><strong>Week 13:</strong> Introduction to Neural Networks (Perceptron)</li>
+                    <li><strong>Week 14:</strong> Hands-on Neural Network Training</li>
+                    <li><strong>Week 15:</strong> Advanced Topics and Applications</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 16: References -->
+        <div class="slide">
+            <h2>References and Further Reading</h2>
+
+            <h3>Textbooks:</h3>
+            <div class="paradigm-box">
+                <p><strong>Russell & Norvig (2020):</strong> Artificial Intelligence: A Modern Approach</p>
+                <ul>
+                    <li>Chapter 18: Learning from Examples</li>
+                    <li>Chapter 21: Deep Learning</li>
+                </ul>
+            </div>
+
+            <h3>Online Resources:</h3>
+            <div class="paradigm-box">
+                <ul>
+                    <li><strong>Coursera:</strong> Machine Learning (Andrew Ng)</li>
+                    <li><strong>Deep Learning Specialization:</strong> DeepLearning.AI</li>
+                    <li><strong>Fast.ai:</strong> Practical Deep Learning for Coders</li>
+                </ul>
+            </div>
+
+            <h3>Key Papers:</h3>
+            <div class="paradigm-box">
+                <ul>
+                    <li>ImageNet Classification with Deep Convolutional Neural Networks (AlexNet, 2012)</li>
+                    <li>Deep Residual Learning for Image Recognition (ResNet, 2015)</li>
+                    <li>Attention Is All You Need (Transformer, 2017)</li>
+                </ul>
+            </div>
+
+            <div style="text-align: center; margin-top: 50px; padding-top: 30px; border-top: 2px solid #e2e8f0;">
+                <p style="color: #718096; font-style: italic;">
+                    Content prepared for Introduction to AI Course - Weeks 13-15<br>
+                    Based on "AI va Con nguoi - NEU.pdf" slides 10 and 16
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-indicator" id="slide-indicator"></div>
+
+    <div class="navigation">
+        <button class="nav-btn" onclick="previousSlide()">◀ Previous</button>
+        <button class="nav-btn" onclick="nextSlide()">Next ▶</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        // Create slide indicators
+        const indicatorContainer = document.getElementById('slide-indicator');
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'indicator-dot';
+            if (i === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => goToSlide(i));
+            indicatorContainer.appendChild(dot);
+        }
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            document.querySelectorAll('.indicator-dot')[currentSlide].classList.remove('active');
+            
+            currentSlide = (n + totalSlides) % totalSlides;
+            
+            slides[currentSlide].classList.add('active');
+            document.querySelectorAll('.indicator-dot')[currentSlide].classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            
+            slides[currentSlide].scrollTop = 0;
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        function goToSlide(n) {
+            showSlide(n);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                previousSlide();
+            }
+        });
+
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>
+

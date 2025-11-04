@@ -370,6 +370,36 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 
 ### Latest Updates (Session Review)
 
+#### Week 13-14 Schedule Updated with ML/DL Content
+- **Date:** Current Session
+- **File Added:** `slides/8.Intro_ML_DL.pdf` (3.7MB)
+- **Files Updated:** `data/lectures.yml`, `index.html`
+- **Week 13 Changes:**
+  - Topic changed to: "From Search Algorithms and Logic to Learning Systems"
+  - Slide added: `slides/8.Intro_ML_DL.pdf`
+  - Material added: `exercises/First_Order_Logic_Solutions_CORRECTED.html` (Solution for First-Order Logic)
+- **Week 14 Changes:**
+  - Topic changed to: "From Search Algorithms and Logic to Learning Systems (continuous)"
+  - Slide reference: `slides/8.Intro_ML_DL.pdf`
+- **Week 15:** Unchanged (Supplementary Topics)
+- **Integration:** Website regenerated with updated schedule, accessible at https://nghianguyen7171.github.io/Intro_to_AI/
+
+#### Introduction to Machine Learning and Deep Learning Content Created
+- **Date:** Current Session
+- **File Added:** `idea/Introduction_to_Machine_Learning_and_Deep_Learning.md`
+- **Content:** Comprehensive lecture content for Weeks 13-15 covering ML/DL introduction
+- **Structure:**
+  - Slide 1: Title with connection to previous course content (Search Algorithms, Logic)
+  - Slide 2: Motivation - Image recognition example demonstrating limitations of traditional AI
+  - Slides 3-4: AI and Machine Learning (definitions, paradigms, applications)
+  - Slide 5: Deep Learning (concepts, architecture, applications)
+  - Slides 6-7: AI and Humans, Role in Specialized Fields
+  - Slides 8-10: Comparison, Takeaways, References
+- **Key Feature:** Explicitly connects previous course content (search algorithms, propositional logic, first-order logic) with ML/DL through the image recognition example
+- **Based On:** Content from "AI va Con nguoi - NEU.pdf" slides 10 and 16
+- **Purpose:** Content preparation for upcoming ML/DL lecture slides (Weeks 13-15)
+- **Connection Strategy:** Shows how traditional search algorithms and logic systems fail on pattern recognition problems, motivating the need for machine learning
+
 #### Week 11 First-Order Logic Slide Added
 - **Date:** Current Session
 - **File Added:** `slides/7. First-Order logic.pdf`
@@ -377,6 +407,19 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 - **Integration:** Added slide reference to Week 11 lecture materials in `data/lectures.yml`
 - **HTML Update:** `index.html` regenerated with First-Order Logic slide link
 - **Access:** Available at https://nghianguyen7171.github.io/Intro_to_AI/slides/7.%20First-Order%20logic.pdf
+
+#### First-Order Logic Solutions File Created
+- **Date:** Current Session
+- **File Added:** `exercises/First_Order_Logic_Solutions.md`
+- **Content:** Comprehensive step-by-step solutions for Examples 1-5 (pages 16-22 of lecture slides)
+- **Topics Covered:**
+  - Example 1: Converting to Prenex Normal Form (PNF)
+  - Example 2: Skolemization
+  - Example 3: Converting to CNF with Herbrand Universe/Base
+  - Example 4: Resolution in First-Order Logic
+  - Example 5: Unification (Most General Unifier)
+- **Format:** Detailed mathematical derivations with LaTeX notation
+- **Purpose:** Student reference and study guide for Week 11 exercises
 
 ### Latest Updates (October 21, 2025)
 

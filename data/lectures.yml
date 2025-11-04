@@ -165,12 +165,11 @@
     2024-11-26:
       Label: Lecture
       Topics:
-          - Introduction to Neural Networks
-          - Perceptron, Single-layer Neural Models
-          - Chapter 18, lecture slides
+          - From Search Algorithms and Logic to Learning Systems
+          - {"Slides": "slides/8.Intro_ML_DL.pdf"}
       Materials:
-        - Chapter 18, lecture slides
-        - TensorFlow/PyTorch notebooks
+        - {"Slides": "slides/8.Intro_ML_DL.pdf"}
+        - {"Solution for First-Order Logic (Corrected)": "exercises/First_Order_Logic_Solutions_CORRECTED.html"}
 
 -
   Title: Week 14
@@ -178,10 +177,9 @@
     2024-12-03:
       Label: Lecture
       Topics:
-          - Hands-on training for single-layer neural networks
-          - Lab notebook on classification tasks using perceptron
+          - From Search Algorithms and Logic to Learning Systems (continuous)
       Materials:
-        - Lab notebook on classification tasks using perceptron
+        - {"Slides": "slides/8.Intro_ML_DL.pdf"}
 
 -
   Title: Week 15
