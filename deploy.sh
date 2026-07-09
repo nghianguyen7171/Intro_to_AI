@@ -1,41 +1,52 @@
 #!/bin/bash
-## Run this from project root
+## Publish the built site to the gh-pages branch. Run from the project root.
 
-set -e # Exit with nonzero exit code if anything fails
+set -euo pipefail
 
-SOURCE_BRANCH="main"
 TARGET_BRANCH="gh-pages"
 
-function doCompile {
-    ./build.sh
-}
+REPO=$(git config remote.origin.url)
+SHA=$(git rev-parse --verify HEAD)
 
-# Save some useful information
-REPO=`git config remote.origin.url`
-SSH_REPO=${REPO/https:\/\/github.com\//git@github.com:}
-SHA=`git rev-parse --verify HEAD`
+# Refuse to publish a dirty tree: the deployed site should always correspond to
+# a commit that exists on main.
+if [ -n "$(git status --porcelain -- src build.js build.sh)" ]; then
+  echo "error: uncommitted changes to the site source. Commit them first." >&2
+  exit 1
+fi
 
-# Clone the existing gh-pages for this repo into out/
-# Create a new empty branch if gh-pages doesn't exist yet (should only happen on first deply)
+# Clone the existing gh-pages branch into out/, or start it if it is missing.
 rm -rf out
-git clone $REPO out
+git clone --quiet "$REPO" out
 cd out
-git checkout $TARGET_BRANCH || git checkout --orphan $TARGET_BRANCH
+git checkout --quiet "$TARGET_BRANCH" 2>/dev/null || git checkout --quiet --orphan "$TARGET_BRANCH"
 cd ..
 
-# Clean out existing contents
-rm -rf out/**/* || exit 0
+# Clean every tracked path, keeping .git.
+#
+# The previous version used `rm -rf out/**/*`, which without `globstar` expands
+# to `out/*/*`: it deletes files two levels deep but leaves the directories.
+# `cp -r images out/` would then copy into the surviving out/images, producing
+# out/images/images/. It also ended in `|| exit 0`, so a failure to clean exited
+# with SUCCESS and silently deployed a stale tree.
+find out -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
 
-# Run our compile script
-doCompile
+# Build the site and stage a publishable copy in out/.
+./build.sh
 
-# Now let's go have some fun with the cloned repo
 cd out
 
-# Commit the "changes", i.e. the new version.
-# The delta will show diffs between new and old versions.
-git add --all .
-git commit -m "Deploy to GitHub Pages: ${SHA}"
+# Prevent GitHub Pages from running Jekyll over the output.
+touch .nojekyll
 
-# Now that we're all set up, we can push.
-git push $REPO $TARGET_BRANCH
+git add --all .
+if git diff --cached --quiet; then
+  echo "No changes to deploy."
+  exit 0
+fi
+
+git commit --quiet -m "Deploy to GitHub Pages: ${SHA}"
+git push --quiet "$REPO" "$TARGET_BRANCH"
+
+echo ""
+echo "Deployed ${SHA} to ${TARGET_BRANCH}."
