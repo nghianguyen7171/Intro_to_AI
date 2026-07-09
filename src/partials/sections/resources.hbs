@@ -1,0 +1,62 @@
+<section id="resources" class="section section-alt">
+  <div class="wrap">
+    <h2 class="section-title">Resources</h2>
+
+    <div class="subsection">
+      <h3>Related courses</h3>
+      <div class="prose prose-narrow">
+        <ul>{{#each course.related_courses}}<li>{{this}}</li>{{/each}}</ul>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3 id="past_exams">Course materials</h3>
+      <div class="prose prose-narrow">
+        <ul>
+          {{#each course.course_materials}}
+          <li>
+            {{this.text}}{{#if this.link}}: <a href="{{url this.link}}">{{this.link_text}}</a>{{/if}}
+          </li>
+          {{/each}}
+        </ul>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3 id="textbooks">Textbooks</h3>
+      <div class="textbook-covers">
+        {{#each course.textbooks}}
+        <a href="{{this.url}}" target="_blank" rel="noopener">
+          <img src="{{url this.cover}}" alt="Cover of {{this.title}}">
+        </a>
+        {{/each}}
+      </div>
+      <dl class="ref-list">
+        {{#each course.textbooks}}
+        <dt>
+          <a href="{{this.url}}" target="_blank" rel="noopener">
+            {{this.ref}} <cite>{{this.title}}</cite>
+          </a>
+          <span class="ref-authors">({{this.authors}})</span>
+        </dt>
+        <dd>
+          {{this.description}}
+          {{#if this.download}}
+          <a href="{{this.url}}" target="_blank" rel="noopener"><strong>Download PDF</strong></a>
+          {{/if}}
+        </dd>
+        {{/each}}
+      </dl>
+    </div>
+
+    <div class="subsection">
+      <h3 id="software">Software</h3>
+      <dl class="ref-list">
+        {{#each course.software}}
+        <dt><a href="{{this.url}}" target="_blank" rel="noopener"><cite>{{this.name}}</cite></a></dt>
+        <dd>{{this.description}}</dd>
+        {{/each}}
+      </dl>
+    </div>
+  </div>
+</section>

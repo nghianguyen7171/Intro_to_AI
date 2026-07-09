@@ -1,0 +1,19 @@
+<section id="people" class="section section-alt">
+  <div class="wrap">
+    <h2 class="section-title">People</h2>
+    <div class="people-grid">
+      {{#each staff.instructors}}
+      <div class="person">
+        <img class="person-photo" src="{{url this.photo}}" alt="Photograph of {{this.name}}">
+        <div class="person-info">
+          <p class="person-role">{{this.role}}</p>
+          <p class="person-name"><a href="{{this.website}}">{{this.name}}</a></p>
+          <p class="person-line"><a href="mailto:{{this.email}}">{{this.email}}</a></p>
+          <p class="person-line"><a href="{{this.website}}">Profile page</a></p>
+          <p class="person-bio">{{this.bio}}</p>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+  </div>
+</section>

@@ -1,3 +1,20 @@
 node_modules/
 *.DS_Store
 out/
+
+# Generated exam figures live under assets/ alongside the compiled stylesheet.
+# They belong to the unpublished exams in assessments/ and must not be tracked
+# or deployed. Only assets/css is part of the site.
+assets/*
+!assets/css/
+
+# Instructor build (answer keys)
+docs-keys/
+
+# Local-only exam material and scratch. Never publish.
+assessments/
+Final_exam/
+final_exam_idea/
+tmp/
+tmp_*.png
+scripts/generate_*.py

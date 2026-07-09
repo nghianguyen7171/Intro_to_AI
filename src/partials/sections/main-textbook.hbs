@@ -1,0 +1,20 @@
+<section id="main-textbook" class="section section-alt">
+  <div class="wrap">
+    <h2 class="section-title">Main course textbook</h2>
+
+    <div class="textbook-feature">
+      <a href="{{course.main_textbook.url}}" target="_blank" rel="noopener">
+        <img class="textbook-cover" src="{{url course.main_textbook.cover}}"
+             alt="Cover of {{course.main_textbook.title}}">
+      </a>
+      <div class="textbook-body">
+        <h3><a href="{{course.main_textbook.url}}" target="_blank" rel="noopener">{{course.main_textbook.title}}</a></h3>
+        <p class="textbook-meta">{{course.main_textbook.authors}} · {{course.main_textbook.publisher}}</p>
+        <p>{{course.main_textbook.description}}</p>
+        <p class="cta-row">
+          <a class="btn" href="{{course.main_textbook.url}}" target="_blank" rel="noopener">Download AIMA 4th Edition (PDF)</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

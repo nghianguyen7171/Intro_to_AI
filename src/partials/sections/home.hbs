@@ -1,0 +1,30 @@
+<section id="home" class="hero">
+  <div class="wrap">
+    <p class="hero-eyebrow">
+      {{course.code}} ·
+      <a href="{{course.university_url}}">{{course.university}}</a>
+    </p>
+    <h1 class="hero-title">{{course.title}}</h1>
+
+    <dl class="hero-facts">
+      <div>
+        <dt>Instructors</dt>
+        <dd>
+          {{#each staff.instructors}}
+            <a href="mailto:{{this.email}}">{{this.name}}</a>{{#unless @last}}<br>{{/unless}}
+          {{/each}}
+        </dd>
+      </div>
+      <div>
+        <dt>Format</dt>
+        <dd>{{course.format}}</dd>
+      </div>
+      <div>
+        <dt>Prerequisite</dt>
+        <dd>{{course.prerequisite_code}}</dd>
+      </div>
+    </dl>
+
+    <p class="hero-location">{{course.location}}</p>
+  </div>
+</section>

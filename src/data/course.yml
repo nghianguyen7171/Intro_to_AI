@@ -1,0 +1,133 @@
+# Single source of truth for the course. The build fails if assessment weights
+# do not sum to 100%, or if a CLO maps to an undeclared objective.
+#
+# Credits, contact hours, and formal CLOs are NOT recorded here because the old
+# site never published them. They exist only in the syllabus PDF
+# (INTRO_AI_MANAGER/). They were deliberately not invented during the migration.
+# Add them from the PDF when convenient — the syllabus section will pick them up.
+
+title: "Introduction to Artificial Intelligence"
+short_name: "Intro to AI"
+code: "EP15.TOKT11121 (DS) & EP16.TOKT11121 (AI)"
+
+# Empty: the site is served from https://nghianguyen7171.github.io/Intro_to_AI/
+# and all internal links are relative, so no prefix is needed.
+baseurl: ""
+canonical: "https://nghianguyen7171.github.io/Intro_to_AI"
+
+university: "National Economics University"
+university_url: "https://neu.edu.vn"
+department: "Department of Data Science and Artificial Intelligence"
+college: "School of Technology"
+
+format: "In-person"
+location: "National Economics University, 207 Giai Phong street, Bach Mai ward, Hanoi, Vietnam"
+
+prerequisite_code: "EP16.TOKT11108"
+prerequisite_name: "Fundamental Programming Concepts in Python"
+
+description: |
+  This course aims to deliver a comprehensive overview of Artificial
+  Intelligence, its implications, applications, and the skills to leverage it.
+  The course begins by describing what the latest generation of artificial
+  intelligence techniques can do. After an introduction to some basic concepts
+  and techniques, the course illustrates both the potential and current
+  limitations of these techniques with examples from a variety of applications.
+
+  We spend some time on understanding the strengths and weaknesses of human
+  decision-making and learning, specifically in combination with AI systems.
+  Exercises will include hands-on application of basic AI techniques as well as
+  selection of appropriate technologies for a given problem and anticipation of
+  design implications. In a final project, groups of students will participate
+  in the creation of a simple AI-based application.
+
+prerequisites:
+  note: |
+    If you'd like to waive the prerequisites, please send an email to the
+    instructor. For each prerequisite, please clearly list which courses you've
+    taken are equivalent, and highlight it in the transcript.
+  items:
+    - "**Prerequisite:** EP16.TOKT11108 (Fundamental Programming Concepts in Python)"
+    - "**Programming experience:** Python programming skills required"
+    - "**Mathematical background:** Basic understanding of algorithms and data structures"
+    - "**Software tools:** Python, numpy, sklearn, Kaggle"
+
+# Participation 20 + Midterm 20 + Final 60 = 100. The build enforces this.
+assessment:
+  items:
+    - name: "Participation"
+      weight: "20%"
+      criteria: "Attendance, homework check, volunteering for class questions. Homework and discussion are posted in the LMS. Code is uploaded to Kaggle."
+    - name: "Midterm Exam / Project"
+      weight: "20%"
+      criteria: "Project including presentation and submitted report. Criteria: content mastery; problem-solving skills; critical thinking; application of knowledge; time management."
+    - name: "Final Exam"
+      weight: "60%"
+      criteria: "Comprehensive examination covering all course topics."
+
+policies:
+  homework: "Homework is uploaded after each class. Submit your work in the LMS. Homework correction will be given the next session. Students who volunteer to do exercises will get extra points."
+  submission: "Assignments should be submitted through the LMS (Learning Management System). Code should be uploaded to the Kaggle platform."
+  collaboration: "You may form study groups and discuss problems with your classmates. However, you must write up the assignment solutions and the code from scratch, without referring to notes from your joint session."
+
+# The AIMA download is a third-party mirror (Yerevan State University). It is
+# the link the course has always used.
+main_textbook:
+  title: "Artificial Intelligence: A Modern Approach (4th Edition)"
+  authors: "Stuart Russell & Peter Norvig (2020)"
+  publisher: "Pearson"
+  cover: "images/AIMA_book.jpg"
+  url: "http://lib.ysu.am/disciplines_bk/efdd4d1d4c2087fe1cbe03d9ced67f34.pdf"
+  description: "The primary textbook covering all fundamental AI topics including search, knowledge representation, reasoning, machine learning, and applications. This is the main reference material for the course."
+
+textbooks:
+  - ref: "[1]"
+    title: "Artificial Intelligence: A Modern Approach (4th Edition)"
+    authors: "Russell & Norvig, 2020"
+    cover: "images/AIMA_book.jpg"
+    url: "http://lib.ysu.am/disciplines_bk/efdd4d1d4c2087fe1cbe03d9ced67f34.pdf"
+    description: "Main textbook covering all fundamental AI topics including search, knowledge representation, machine learning, and applications. Published by Pearson."
+    download: true
+  - ref: "[2]"
+    title: "Artificial Intelligence Fundamentals for Business Leaders: Up to Date With Generative AI"
+    authors: "I. Almeida, 2024 Edition"
+    cover: "images/AI_for_Bussiness.jpg"
+    url: "https://www.nownextlater.ai/"
+    description: "Practical insights into how AI is applied in business contexts, complementing the theoretical foundation from the main textbook."
+  - ref: "[3]"
+    title: "Introduction to Artificial Intelligence"
+    authors: "Wolfgang Ertel, 2017"
+    cover: "images/Wolf_IntroAI.jpeg"
+    url: "https://link.springer.com/book/10.1007/978-1-4471-6738-6"
+    description: "Additional reference material published by Springer for supplementary reading."
+
+software:
+  - name: "Python"
+    url: "https://www.python.org/"
+    description: "The primary programming language used in this course for implementing AI algorithms and working with data."
+  - name: "NumPy"
+    url: "https://numpy.org/"
+    description: "The fundamental package for scientific computing with Python."
+  - name: "scikit-learn"
+    url: "https://scikit-learn.org/"
+    description: "A comprehensive machine learning toolkit for Python."
+  - name: "Kaggle"
+    url: "https://www.kaggle.com/"
+    description: "Used for code submission and collaborative work on AI projects."
+
+related_courses:
+  - "This course is part of the Data Science and Artificial Intelligence program at National Economics University."
+  - "Prerequisite course: EP16.TOKT11108 (Fundamental Programming Concepts in Python)."
+  - "Course codes: EP15.TOKT11121 (DS) & EP16.TOKT11121 (AI)."
+
+course_materials:
+  - text: "All course materials are available through the LMS (Learning Management System)."
+  - text: "Code submissions and collaborative work are done through Kaggle."
+  - text: "Course syllabus"
+    link: "INTRO_AI_MANAGER/Syllabus Introduction to AI_Nghia_cNgan.pdf"
+    link_text: "Download PDF"
+  # Recovered during migration: this PDF existed only on the gh-pages branch,
+  # under Intro_ML_DL_ref/, and was linked from nowhere.
+  - text: "Supplementary reading: AI và Con người (AI and Humans), NEU"
+    link: "materials/AI va Con nguoi - NEU.pdf"
+    link_text: "Download PDF"

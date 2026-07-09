@@ -1,0 +1,40 @@
+# Assignments here are external LMS links, not local pages, so they live in a
+# data file rather than one Markdown file each (as in the template).
+#
+# In the old data/assignments.yml every homework carried a `PDF:` and a `ZIP:`
+# entry that pointed at the *same* forum URL. That duplication is dropped: one
+# link per homework, to the LMS forum thread where both files live.
+
+due_time: "After each class"
+submit_link: "LMS"
+
+homeworks:
+  - label: "Homework 0"
+    description: "Course Introduction and Setup"
+    due: "2024-09-03"
+    url: "https://elearning.fda.edu.vn/mod/forum/discuss.php?d=14"
+
+  - label: "Homework 1"
+    description: "Search Strategies (BFS and DFS)"
+    due: "2024-09-10"
+    url: "https://elearning.fda.edu.vn/mod/forum/discuss.php?d=16"
+
+  - label: "Homework 2"
+    description: "Informed Search Strategies"
+    due: "2024-09-17"
+    url: "https://elearning.fda.edu.vn/mod/forum/discuss.php?d=17"
+
+  - label: "Homework 3"
+    description: "Optimal Search (A* and Greedy Search)"
+    due: "2024-10-01"
+    url: "https://elearning.fda.edu.vn/mod/forum/discuss.php?d=18"
+
+  - label: "Homework 4"
+    description: "Adversarial Search (Minimax and Alpha-Beta Pruning)"
+    due: "2024-10-15"
+    url: "https://elearning.fda.edu.vn/mod/forum/discuss.php?d=19"
+
+  - label: "Homework 5"
+    description: "Logic and Neural Networks"
+    due: "2024-11-12"
+    url: "https://elearning.fda.edu.vn/mod/forum/discuss.php?d=24"

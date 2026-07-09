@@ -1,0 +1,58 @@
+<section id="lectures" class="section">
+  <div class="wrap">
+    <h2 class="section-title">Lectures</h2>
+    <p class="section-note">Future schedule is subject to change.</p>
+
+    <div class="table-scroll">
+      <table class="schedule">
+        <thead>
+          <tr>
+            <th scope="col" class="col-week">Week</th>
+            <th scope="col" class="col-date">Date</th>
+            <th scope="col" class="col-type">Type</th>
+            <th scope="col">Topics</th>
+            <th scope="col" class="col-materials">Slides &amp; materials</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each lectures.lectures}}
+          <tr>
+            <td class="col-week">{{this.week}}</td>
+            <td class="col-date">{{this.date}}</td>
+            <td class="col-type"><span class="pill pill-{{this.type}}">{{this.type}}</span></td>
+            <td>
+              <span class="lec-title">{{this.title}}</span>
+              {{#if this.topics}}
+              <ul class="lec-topics">
+                {{#each this.topics}}<li>{{this}}</li>{{/each}}
+              </ul>
+              {{/if}}
+            </td>
+            <td class="col-materials">
+              {{#if this.slides}}
+                {{#each this.slides}}
+                  <a class="mat mat-slide" href="{{url (linkHref this)}}">{{linkLabel this}}</a>
+                {{/each}}
+              {{/if}}
+              {{#if this.materials}}
+                <ul class="mat-list">
+                  {{#each this.materials}}
+                    <li>
+                      {{#if (isLink this)}}
+                        <a href="{{url (linkHref this)}}">{{linkLabel this}}</a>
+                      {{else}}
+                        {{this}}
+                      {{/if}}
+                    </li>
+                  {{/each}}
+                </ul>
+              {{/if}}
+              {{#unless this.slides}}{{#unless this.materials}}<span class="dash">—</span>{{/unless}}{{/unless}}
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

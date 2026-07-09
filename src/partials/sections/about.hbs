@@ -1,0 +1,41 @@
+<section id="about" class="section">
+  <div class="wrap">
+    <h2 class="section-title">About this course</h2>
+
+    <div class="prose prose-narrow">
+      {{{md course.description}}}
+      <p><strong>Prerequisite:</strong> {{course.prerequisite_code}} ({{course.prerequisite_name}})</p>
+    </div>
+
+    <div class="subsection">
+      <h3 id="prerequisites">Prerequisites</h3>
+      <div class="prose prose-narrow">
+        {{{md course.prerequisites.note}}}
+        <ul>
+          {{#each course.prerequisites.items}}<li>{{{mdInline this}}}</li>{{/each}}
+        </ul>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3 id="logistics">Logistics</h3>
+      <div class="prose prose-narrow">
+        <ul>
+          <li><strong>Lecture format:</strong> {{course.format}}</li>
+          <li><strong>Lecture location:</strong> {{course.location}}</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3 id="grading">Grading</h3>
+      <div class="prose prose-narrow">
+        <ul>
+          {{#each course.assessment.items}}
+          <li><strong>{{this.name}} ({{this.weight}}):</strong> {{this.criteria}}</li>
+          {{/each}}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

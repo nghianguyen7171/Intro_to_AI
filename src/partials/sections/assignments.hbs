@@ -1,0 +1,40 @@
+<section id="assignments" class="section section-alt">
+  <div class="wrap">
+    <h2 class="section-title">Assignments</h2>
+
+    <div class="prose prose-narrow policies">
+      <p><strong>Homework policy:</strong> {{course.policies.homework}}</p>
+      <p><strong>Submission:</strong> {{course.policies.submission}}</p>
+      <p><strong>Collaboration policy:</strong> {{course.policies.collaboration}}</p>
+    </div>
+
+    <p class="section-note">
+      Due: {{assignments.due_time}} · Submit via {{assignments.submit_link}}
+    </p>
+
+    <div class="table-scroll">
+      <table class="schedule assignments-table">
+        <thead>
+          <tr>
+            <th scope="col" class="col-hw">Assignment</th>
+            <th scope="col">Description</th>
+            <th scope="col" class="col-date">Due</th>
+            <th scope="col" class="col-materials">Files</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each assignments.homeworks}}
+          <tr>
+            <td class="col-hw"><span class="lec-title">{{this.label}}</span></td>
+            <td>{{this.description}}</td>
+            <td class="col-date">{{this.due}}</td>
+            <td class="col-materials">
+              <a class="mat" href="{{this.url}}" target="_blank" rel="noopener">LMS forum</a>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
