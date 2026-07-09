@@ -487,3 +487,15 @@ html { scroll-behavior: smooth; }
      only place topics appear, so keep them. */
   .lec-topics { display: block; }
 }
+
+/* The FDA crest is dark navy linework on a transparent background (71% of its
+   pixels are fully transparent, mean luminance of the rest is 90/255). On the
+   dark theme it would all but disappear. Both logos get a white plate in dark
+   mode so the pair stays legible and consistent. */
+@media (prefers-color-scheme: dark) {
+  .brand-logo {
+    background: #fff;
+    border-radius: 3px;
+    padding: 2px;
+  }
+}
