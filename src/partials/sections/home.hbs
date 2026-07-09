@@ -8,7 +8,7 @@
 
     <dl class="hero-facts">
       <div>
-        <dt>Instructors</dt>
+        <dt>{{#if staff.instructors.[1]}}Instructors{{else}}Instructor{{/if}}</dt>
         <dd>
           {{#each staff.instructors}}
             <a href="mailto:{{this.email}}">{{this.name}}</a>{{#unless @last}}<br>{{/unless}}

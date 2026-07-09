@@ -18,12 +18,11 @@ This project creates a course website for "Introduction to Artificial Intelligen
 - **Profile:** https://nghianguyen7171.github.io/
 - **Image:** images/people/Dr.TrongNghiaNguyen.jpeg
 - **Background:** Member of Business AI Lab (BAI LAB), PhD from Chonnam National University, Korea (2025)
+- **Source of truth:** `src/data/staff.yml`
 
-### Dr. Nguyen Thi Kim Ngan
-- **Email:** ngannguyen@neu.edu.vn
-- **Profile:** https://fda.neu.edu.vn/fda-members/ts-nguyen-thi-kim-ngan/
-- **Image:** images/people/Dr.NTKN.jpg
-- **Background:** PhD in Computer Science, INSA de Lyon, France (2013)
+> Dr. Nguyen Thi Kim Ngan was removed as Co-Instructor on 2026-07-09. Her entry
+> and photo (`images/people/Dr.NTKN.jpg`) were deleted from the site and the
+> deployment. Both remain recoverable from git history if she rejoins the course.
 
 ## Course Content
 
@@ -192,65 +191,112 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 
 ## Technical Architecture
 
+**As of 2026-07-09 this site runs on the NEU FDA course site template**
+(https://github.com/nghianguyen7171/neu_fda_coursesite). The previous build —
+a fork of NYU DS-GA 1003 using `index.hbs` at the repo root, `build/templater.js`,
+and Stylus stylesheets — has been removed. Anything below describing `.styl`
+files, `data/*.yml`, or `npm run build-in-place` is obsolete; it survives only in
+git history at commit `f64571d`.
+
 ### Technologies Used
-- **Handlebars:** Templating engine
-- **Stylus:** CSS preprocessor
-- **YAML:** Data configuration
-- **Node.js:** Build system
-- **GitHub Pages:** Hosting
+- **Handlebars:** Templating engine (partials under `src/partials/`)
+- **SCSS (sass):** CSS preprocessor, replacing Stylus
+- **YAML:** Data configuration, now under `src/data/`
+- **marked:** Markdown for long-form prose (`src/content/`)
+- **Node.js:** Build system (`build.js`, replacing `build/templater.js`)
+- **GitHub Pages:** Hosting, from the `gh-pages` branch
+
+### How this course differs from the template
+The template builds into `docs/`. This course **builds into the repository root**
+and publishes via `./deploy.sh` to the `gh-pages` branch, because `slides/`,
+`images/`, and `exercises/` already live at the root and GitHub Pages was already
+configured that way. Keeping the root as the output directory preserved every
+existing URL and avoided storing 17 MB of slides twice in git.
+
+Consequences, both load-bearing:
+- `build.js` **must never delete its output directory.** The output directory is
+  the repository. It writes only `index.html` and `assets/css/main.css`.
+- The site is a **single page** with anchor sections, not the template's
+  multi-page layout, so previously published deep links keep working.
+
+Assignments are external LMS links rather than local pages, so they live in
+`src/data/assignments.yml` instead of one Markdown file per assignment.
 
 ### File Structure
 ```
 /
-├── index.hbs                 # Main template
-├── data/
-│   ├── lectures.yml         # Lecture schedule
-│   ├── assignments.yml       # Assignment information
-│   └── this-week.yml         # Current week info
-├── templates/               # Handlebars partials
-├── styles/                 # Stylus stylesheets
-├── slides/                 # Course presentation slides
-│   ├── 0.Intro_to_AI.pdf
-│   ├── 1.Searching_1.pdf
-│   ├── 2.Searching_2.pdf
-│   ├── 3.Optimal_search.pdf
-│   ├── 4.Adversarial_search.pdf
-│   ├── 5.Propositional_Logic.pdf
-│   ├── 6. (Cont) Propositional logic.pdf
-│   └── 7. First-Order logic.pdf
+├── build.js                 # Build: YAML + Handlebars + SCSS -> index.html
+├── build.sh                 # Build, then stage a publishable copy in out/
+├── deploy.sh                # Push out/ to the gh-pages branch
+├── src/
+│   ├── index.hbs            # Page composition (which sections, in what order)
+│   ├── templates/
+│   │   └── base.hbs         # <html>, header, nav, footer
+│   ├── partials/sections/   # home, main-textbook, about, resources,
+│   │                        #   lectures, assignments, project, people
+│   ├── data/
+│   │   ├── course.yml       # Single source of truth: description, grading,
+│   │   │                    #   policies, textbooks, software, prerequisites
+│   │   ├── lectures.yml     # 15-week schedule, slides, materials
+│   │   ├── assignments.yml  # Homework 0–5, LMS forum links
+│   │   └── staff.yml        # Instructor(s)
+│   ├── content/
+│   │   └── project.md       # Course project brief (long prose)
+│   └── styles/
+│       ├── _variables.scss  # Theme tokens (accent colour, fonts)
+│       └── main.scss        # Template stylesheet + course-specific additions
+├── index.html               # GENERATED — do not edit by hand
+├── assets/
+│   ├── css/main.css         # GENERATED
+│   └── chapter*/            # Exam figures. GITIGNORED. Never deployed.
+├── slides/                  # 9 lecture PDFs (all linked from lectures.yml)
 ├── exercises/               # Student exercise materials
-│   ├── Week9_Exercises_Interactive.html    # Interactive exercises (25+ problems)
-│   ├── Week9_Exercises_Student.md          # PDF version exercises
-│   └── CNF_Conversion_Method_English.md    # CNF conversion guide
+├── materials/
+│   └── AI va Con nguoi - NEU.pdf   # Recovered from gh-pages, see change log
 ├── images/
-│   ├── people/             # Instructor photos
+│   ├── people/             # Instructor photo
+│   ├── neu-logo.png        # Header logo
+│   ├── fda-logo.png        # Header logo
 │   └── *.jpg               # Book covers
-├── scripts/                # JavaScript files
-├── fonts/                  # Web fonts
-├── build/
-│   └── templater.js        # Build logic
-├── build.sh                # Build script
-├── deploy.sh               # Deployment script
+├── INTRO_AI_MANAGER/       # Syllabus (PDF + docx)
+├── assessments/            # Exams. GITIGNORED. Never deployed.
+├── Final_exam/             # Exams. GITIGNORED. Never deployed.
 ├── idea/                   # Private preparation materials
-│   └── Prositional logic/  # Week 9 lecture preparation
-└── package.json            # Dependencies
+└── package.json
 ```
 
 ### Key Files to Edit
-- **Course Info:** index.hbs
-- **Lectures:** data/lectures.yml
-- **Assignments:** data/assignments.yml
-- **This Week:** data/this-week.yml
-- **Styles:** styles/*.styl
-- **Exercises:** exercises/*.html, exercises/*.md
-- **Slides:** slides/*.pdf
+- **Course info, grading, policies, textbooks:** `src/data/course.yml`
+- **Lectures / schedule:** `src/data/lectures.yml`
+- **Assignments:** `src/data/assignments.yml`
+- **Instructors:** `src/data/staff.yml`
+- **Course project text:** `src/content/project.md`
+- **Theme colour / fonts:** `src/styles/_variables.scss`
+- **Slides:** `slides/*.pdf` (then reference them from `lectures.yml`)
+- **Never edit:** `index.html` and `assets/css/main.css` — both are generated.
 
 ### Build Process
-1. `npm install` - Install dependencies
-2. `npm run build-in-place` - Build locally
-3. `./build.sh` - Build to out directory (includes exercises folder)
-4. `./deploy.sh` - Deploy to GitHub Pages
-5. **Note:** exercises/ folder must be copied to out/ directory for deployment
+1. `npm install` — install dependencies
+2. `npm run build` — regenerate `index.html` and `assets/css/main.css`
+3. `npm run serve` — preview at http://localhost:4000
+4. `./deploy.sh` — build, stage into `out/`, push to `gh-pages`
+
+`deploy.sh` refuses to run against a dirty source tree, so commit first.
+
+### Build-time safety checks
+The build **fails**, writing nothing, if:
+- assessment weights in `course.yml` do not sum to 100%
+- a weight cannot be parsed as a number
+- a CLO maps to an objective that is not declared
+- **any local link in the page points at a file that does not exist**
+
+That last check exists because the syllabus download link was silently broken on
+the live site for an entire term (see change log).
+
+### Solution gating
+`npm run build` strips `::: solution` blocks. `SOLUTIONS=1 npm run build`
+(`npm run build:keys`) renders them and adds a red "do not publish" banner.
+Publishing answer keys therefore requires deliberately opting in.
 
 ## Important Fixes Applied
 
@@ -276,8 +322,12 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 
 ### Image Management
 - **Dr. Trong-Nghia Nguyen:** Dr.TrongNghiaNguyen.jpeg
-- **Dr. Nguyen Thi Kim Ngan:** Dr.NTKN.jpg
 - **Book Covers:** AIMA_book.jpg, AI_for_Bussiness.jpg, Wolf_IntroAI.jpeg
+- **Header logos:** neu-logo.png, fda-logo.png (140 px, ~59 KB for the pair)
+- **Removed 2026-07-09:** Dr.NTKN.jpg (co-instructor removed), and four NYU
+  staff photos inherited from the DS-GA fork (mengye_ren.jpg,
+  pavan_ravishankar.jpg, yash_amin.jpg, yilun_kuang.jpg). All were publicly
+  served while linked from nowhere.
 
 ## Current Status
 
@@ -309,12 +359,12 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 ## Future Maintenance
 
 ### Content Updates
-- Edit YAML files for schedule changes
-- Update index.hbs for course information changes
-- Add new slides to slides/ folder
-- Update assignment links as needed
-- Add new exercises to exercises/ folder
-- Update lecture materials in data/lectures.yml
+- Schedule changes: `src/data/lectures.yml`
+- Course information, grading, policies: `src/data/course.yml`
+- Assignment links: `src/data/assignments.yml`
+- Add new slides to `slides/`, then reference them from `src/data/lectures.yml`
+- Add new exercises to `exercises/`, then link them from `src/data/lectures.yml`
+- Then run `npm run build` and `./deploy.sh`. Never hand-edit `index.html`.
 
 ### Technical Maintenance
 - Keep Node.js dependencies updated
@@ -346,8 +396,22 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 ### Supporting Materials
 - **CNF Conversion Guide:** exercises/CNF_Conversion_Method_English.md
 - **PDF Version:** exercises/Week9_Exercises_Student.md
-- **Exercise Solutions:** exercises/Week9_Exercises_Solutions.html (comprehensive step-by-step solutions for all 35 exercises)
+- **Printable worksheet:** exercises/Week9_Exercises_Solutions.html
+  - **The filename is misleading.** Despite "Solutions", this file contains no
+    answers — it is a blank worksheet with 35 `Your Answer: ____` fields. It was
+    linked from Week 9 as "Exercise Solutions" until 2026-07-09; students
+    clicking for answers got an empty form. Now labelled "Printable Worksheet
+    (blank)". Renaming the file would break any bookmarked URL, so the label was
+    fixed instead.
 - **Answer Key:** idea/Prositional logic/Week9_Exercises_ANSWER_KEY.md (instructor only)
+
+### Files present but deliberately NOT linked
+- `exercises/Week9_Exercises_Comprehensive.html` — byte-identical to
+  `Week9_Exercises_Interactive.html` (same MD5). A duplicate.
+- `exercises/Week9_Exercises_Interactive_Expanded.html` — differs from
+  `Interactive` by one line and is **broken**: `checkChainRule()` passes an
+  undefined `isCorrect` to `showResult()`, throwing a `ReferenceError`. The
+  working file defines `hasSteps`.
 
 ### Technical Implementation
 - **HTML/CSS/JavaScript** for interactivity
@@ -362,13 +426,108 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 - Email: nghiant@neu.edu.vn
 - Profile: https://nghianguyen7171.github.io/
 
-**Dr. Nguyen Thi Kim Ngan**
-- Email: ngannguyen@neu.edu.vn
-- Profile: https://fda.neu.edu.vn/fda-members/ts-nguyen-thi-kim-ngan/
-
 ## Change Log
 
+### 2026-07-09 — Co-Instructor Removed
+
+- **Removed:** Dr. Nguyen Thi Kim Ngan from `src/data/staff.yml`.
+- **Deleted:** `images/people/Dr.NTKN.jpg`, so the photo is no longer published.
+- The hero label now reads "Instructor" rather than "Instructors" automatically.
+- Recoverable from git history if she rejoins.
+
+### 2026-07-09 — Site Rebuilt on the NEU FDA Course Site Template
+
+The site was migrated off the forked NYU DS-GA 1003 build (Handlebars + Stylus +
+`build/templater.js`) onto the shared template
+(https://github.com/nghianguyen7171/neu_fda_coursesite): YAML + Handlebars + SCSS
+compiled by `build.js`.
+
+**No content was lost.** The site is still a single page and keeps all eleven
+original anchors (`#home #about #resources #lectures #assignments #project
+#people #main-textbook #past_exams #textbooks #software`), so published deep
+links still work. All 9 slides, 6 homework links, 3 textbooks, the AIMA download,
+the Google Drive submission folder, the instructor bio and photo, the full
+course-project brief, and every policy carried across. Verified against the live
+site: all local links and all external links return HTTP 200.
+
+**Bugs found and fixed during the migration:**
+
+1. **Syllabus download had been 404 for the whole term.** `index.hbs` linked
+   `INTRO_AI_MANAGER/Syllabus…pdf`, but `build.sh` never copied
+   `INTRO_AI_MANAGER/` into `out/`, so the folder did not exist on `gh-pages`.
+   `build.sh` now deploys it, and `build.js` now fails the build if any local
+   link points at a missing file.
+
+2. **A slide was invisible to students.** `slides/6. (Cont) Propositional
+   logic.pdf` was committed but referenced from nowhere. Now attached to Week 10.
+
+3. **Week 9's "Exercise Solutions" link was a blank worksheet.** Relabelled
+   "Printable Worksheet (blank)". See the Interactive Exercises section above.
+
+4. **A PDF existed only on `gh-pages`.** `Intro_ML_DL_ref/AI va Con nguoi -
+   NEU.pdf` was never on `main` and was linked from nowhere; the next deploy
+   would have erased it permanently. Recovered to `materials/` and linked under
+   Course materials.
+
+5. **`build.sh` was about to leak exam material.** It copied all of `assets/`,
+   which now also holds generated exam figures for the unpublished exams in
+   `assessments/`. It now copies only `assets/css`. `assessments/`,
+   `Final_exam/`, `final_exam_idea/`, `tmp/` and the figures are gitignored.
+
+6. **`deploy.sh` cleaned the gh-pages tree incorrectly.** `rm -rf out/**/*`
+   expands to `out/*/*` without `globstar`: it deleted files two levels deep but
+   left the directories, so `cp -r images out/` would have produced
+   `out/images/images/`. It also ended in `|| exit 0`, meaning a failed clean
+   exited **successfully** and deployed a stale tree. Replaced with a `find`
+   that removes every top-level entry except `.git`, plus a dirty-tree guard, a
+   no-op skip, and `.nojekyll`.
+
+7. **The Ertel textbook link was dead**, and had been before the migration.
+   `10.1007/978-1-4471-6738-6` returns 404; the cited 2017 2nd edition is
+   `10.1007/978-3-319-58487-4`.
+
+**Removed NYU residue:** the HTF/SSBD/JWHT abbreviations for books this course
+does not use, the DS-GA reference list, the `dsga1003` package name, the NYU
+repository URLs, four NYU staff photos, and the dead Universal Analytics tag
+(UA properties stopped processing data in 2023). All recoverable from git history
+at `f64571d`.
+
+**Added:** NEU and FDA logos in the header. The FDA crest is dark navy linework
+on a transparent background (71% of pixels fully transparent, opaque pixels
+averaging 90/255 luminance), so it was almost invisible on the dark theme; both
+logos get a white plate under `prefers-color-scheme: dark`.
+
+**Deliberately not invented:** credits, contact hours, and formal CLOs. The old
+site never published them and they exist only in the syllabus PDF. `course.yml`
+marks where they belong. Do not guess them — they are part of a document the
+faculty signs off on.
+
 ### Latest Updates (Session Review)
+
+#### Final Examination Package Created
+- **Date:** 2025-11-11
+- **Files Added:** `assessments/final_exam_intro_to_ai.md`, `assessments/final_exam_intro_to_ai.html`, `scripts/generate_final_exam_figures.py`, image assets in `assets/final_exam/figure*.png`
+- **English Translation (Chapter 2)**
+  - **Date:** 2025-11-11
+  - **Files Added:** `assets/chapter2_search/figure1_graph.png`, `assets/chapter2_search/figure2_graph.png`, `assets/chapter2_search/figure3_graph.png`, `assessments/chapter2_search_exam.html`
+  - **Content:** English multiple-choice exam covering Chapter 2 search exercises with refreshed figures for DFS/BFS scenarios.
+  - **Automation:** `scripts/generate_chapter2_figures.py` (same session) draws graphs via NetworkX; HTML embeds figures and includes answer key.
+  - **Assumptions:** BFS enqueues children left-to-right; DFS pushes children left-to-right (rightmost pops first).
+  - **Update (same day):** Adjusted `assessments/chapter2_search_exam.html` so each question now embeds its associated figure inline, matching the original docx layout requirement.
+- **English Translation (Chapters 3–4)**
+  - **Date:** 2025-11-11
+  - **Files Added:** `assets/chapter34_search/figure1_astar_graph.png`, `assets/chapter34_search/figure2_8puzzle.png`, `assets/chapter34_search/figure3_weighted_graph.png`, `assets/chapter34_search/figure4_local_search_graph.png`, `scripts/generate_chapter34_figures.py`, `assessments/chapter3_4_search_exam.html`
+  - **Content:** English practice exam for heuristic search topics covering A*, heuristic evaluation, hill climbing, and branch-and-bound with inline figures and translated tables.
+  - **Implementation:** Python script recreates all diagrams with Matplotlib/NetworkX (state space graphs plus 8-puzzle boards); HTML places each figure directly inside its corresponding question card, mirrors partial execution tables, and provides an answer key.
+  - **Notes:** Edge costs and heuristics are mapped from the original Vietnamese materials; OPEN/L/MIN placeholders preserved (shown as “?”) where the student is expected to fill in values.
+- **Content:** Complete 90-minute, 40-question multiple-choice final exam covering course overview, uninformed and informed search, logic, and the new ML/DL transition materials.
+- **Features:**
+  - Sectional structure respects required theory/exercise distribution; optional ML questions provided to reach 12 theory items from the new slide deck.
+  - Embedded answer key covering all items (and optional questions) for rapid grading.
+  - Python script generates four supporting figures (BFS graph, heuristic graph, A* weighted graph, minimax tree) stored as high-resolution PNGs.
+  - Answer choices evenly distributed across options A–D to minimize guessing bias.
+- **Update (same day):** Trimmed Section A to remove general-purpose items not tied to slides, absorbed the optional ML/DL questions into Section H, and temporarily hid the HTML answer key (commented out) before publishing.
+- **Usage:** Markdown and HTML exam versions ready for LMS or print; HTML version now embeds figures directly within the relevant questions, with hi-res copies available separately.
 
 #### Week 13-14 Schedule Updated with ML/DL Content
 - **Date:** Current Session
@@ -455,7 +614,8 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 
 ---
 
-**Last Updated:** Current Session  
+**Last Updated:** 2026-07-09 (migrated to the NEU FDA course site template;
+co-instructor removed)  
 **AI Readiness:** 100%
 
 *This document serves as a comprehensive backup context for the Introduction to AI course website project. It contains all essential information needed to understand, maintain, and continue development of the project.*
