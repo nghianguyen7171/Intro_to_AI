@@ -98,7 +98,9 @@ textbooks:
     title: "Introduction to Artificial Intelligence"
     authors: "Wolfgang Ertel, 2017"
     cover: "images/Wolf_IntroAI.jpeg"
-    url: "https://link.springer.com/book/10.1007/978-1-4471-6738-6"
+    # The old site linked 10.1007/978-1-4471-6738-6, which 404s. This is the
+    # 2nd edition (2017), the one the citation names.
+    url: "https://link.springer.com/book/10.1007/978-3-319-58487-4"
     description: "Additional reference material published by Springer for supplementary reading."
 
 software:
