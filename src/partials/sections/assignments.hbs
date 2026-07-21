@@ -29,11 +29,15 @@
             <td>{{this.description}}</td>
             <td class="col-date">{{this.due}}</td>
             <td class="col-materials">
+              {{#if this.url}}
               {{!-- Triple-stache: the escaping form turns "=" into an entity in
                     the query string. Browsers decode it, but the raw href is
                     unreadable. These URLs come from our data file, not user
                     input. --}}
               <a class="mat" href="{{{this.url}}}" target="_blank" rel="noopener">LMS forum</a>
+              {{else}}
+              <span class="mat mat-disabled" aria-disabled="true">LMS</span>
+              {{/if}}
             </td>
           </tr>
           {{/each}}

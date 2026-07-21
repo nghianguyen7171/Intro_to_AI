@@ -251,6 +251,9 @@ code {
   display: inline-block; margin: 0 0.5rem 0.2rem 0;
   font-size: 0.87rem; white-space: nowrap;
 }
+.mat-disabled {
+  color: var(--text-soft); cursor: not-allowed; opacity: 0.5;
+}
 .dash { color: var(--text-soft); }
 
 /* ------------------------------------------------------------ staff */

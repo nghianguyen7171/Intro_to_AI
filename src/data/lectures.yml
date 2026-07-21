@@ -131,8 +131,8 @@ lectures:
     materials:
       - "Chapter 7, AIMA (Russell & Norvig, 2020)"
       - { "Main Textbook (AIMA, PDF)": "http://lib.ysu.am/disciplines_bk/efdd4d1d4c2087fe1cbe03d9ced67f34.pdf" }
-      - { "Interactive Practice Exercises": "exercises/Week9_Exercises_Interactive.html" }
-      - { "Printable Worksheet (blank)": "exercises/Week9_Exercises_Solutions.html" }
+      - "Interactive Practice Exercises"
+      - "Printable Worksheet (blank)"
       - "Reasoning examples and exercises"
       - "CNF conversion practice problems"
 
@@ -182,7 +182,7 @@ lectures:
     slides:
       - { "Intro to ML & DL": "slides/8.Intro_ML_DL.pdf" }
     materials:
-      - { "First-Order Logic — Worked Solutions": "exercises/First_Order_Logic_Solutions_CORRECTED.html" }
+      - "First-Order Logic — Worked Solutions"
 
   - week: 14
     date: "2024-12-03"

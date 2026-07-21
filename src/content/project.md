@@ -68,9 +68,4 @@ Upload your project files in PDF format:
 - File naming convention: `TeamName_Presentation.pdf` and `TeamName_Report.pdf`.
 - Deadline: report due one week after the presentation date.
 
-<p class="cta-row">
-  <a class="btn" href="https://drive.google.com/drive/folders/1p14ShnfRMPj5UzJjS6VaJ4dAhvELUd_Y?usp=sharing" target="_blank" rel="noopener">Upload project files to Google Drive</a>
-</p>
-
-You will need to sign in with your account to upload files. If you encounter any
-issues, please contact the instructors.
+To submit, please contact the instructors directly.
