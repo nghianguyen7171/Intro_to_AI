@@ -24,7 +24,7 @@ lectures:
       - "Introduction to Artificial Intelligence"
       - "Search Strategies (Breadth-First Search, Depth-First Search)"
     slides:
-      - { "Intro to AI": "slides/0.Intro_to_AI.pdf" }
+      - { "Intro to AI": "slides/0.Intro.pdf" }
       - { "Searching 1": "slides/1.Searching_1.pdf" }
     materials:
       - "Chapter 1–3, lecture slides"
