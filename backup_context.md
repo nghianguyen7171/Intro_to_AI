@@ -120,12 +120,16 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 - **Extra Points:** Students who volunteer to do exercises get extra points
 
 ### Assignment Links (LMS Forum Discussions)
-- **Homework 0:** https://elearning.fda.edu.vn/mod/forum/discuss.php?d=14
-- **Homework 1:** https://elearning.fda.edu.vn/mod/forum/discuss.php?d=16
-- **Homework 2:** https://elearning.fda.edu.vn/mod/forum/discuss.php?d=17
-- **Homework 3:** https://elearning.fda.edu.vn/mod/forum/discuss.php?d=18
-- **Homework 4:** https://elearning.fda.edu.vn/mod/forum/discuss.php?d=19
-- **Homework 5:** https://elearning.fda.edu.vn/mod/forum/discuss.php?d=24
+> **Disabled as of 2026-07-21.** LMS forum URLs have been removed from
+> `src/data/assignments.yml`. The "Files" column now renders a grayed-out
+> `<span class="mat mat-disabled">` instead of a live link. Re-add `url:`
+> fields to each homework entry to re-enable them.
+- **Homework 0:** https://elearning.fda.edu.vn/mod/forum/discuss.php?d=14 *(disabled)*
+- **Homework 1:** https://elearning.fda.edu.vn/mod/forum/discuss.php?d=16 *(disabled)*
+- **Homework 2:** https://elearning.fda.edu.vn/mod/forum/discuss.php?d=17 *(disabled)*
+- **Homework 3:** https://elearning.fda.edu.vn/mod/forum/discuss.php?d=18 *(disabled)*
+- **Homework 4:** https://elearning.fda.edu.vn/mod/forum/discuss.php?d=19 *(disabled)*
+- **Homework 5:** https://elearning.fda.edu.vn/mod/forum/discuss.php?d=24 *(disabled)*
 
 ## Course Project
 
@@ -168,12 +172,14 @@ This course aims to deliver a comprehensive overview of Artificial Intelligence,
 - Teams encouraged to use visualizations, simulations, examples
 
 ### Project Submission
-- **Google Drive Folder:** https://drive.google.com/drive/folders/1p14ShnfRMPj5UzJjS6VaJ4dAhvELUd_Y?usp=sharing
+> **Google Drive button disabled as of 2026-07-21.** The CTA button linking to
+> the Drive folder has been removed from `src/content/project.md`. Students are
+> now directed to contact the instructors directly. The Drive URL is preserved
+> here for reference only.
+- **Google Drive Folder (disabled):** https://drive.google.com/drive/folders/1p14ShnfRMPj5UzJjS6VaJ4dAhvELUd_Y?usp=sharing
 - **File Format:** PDF files only (presentation slides and final report)
 - **Naming Convention:** TeamName_Presentation.pdf and TeamName_Report.pdf
 - **Deadline:** Report due one week after presentation date
-- **Access:** Students need to sign in with their account to upload files
-- **Website Integration:** Project submission section added to main website with direct Google Drive link
 
 ## Textbooks & Resources
 
@@ -336,7 +342,7 @@ Publishing answer keys therefore requires deliberately opting in.
 - Course information and schedule
 - Instructor profiles and photos
 - Assignment links and project guidelines
-- Project submission system with Google Drive integration
+- ~~Project submission system with Google Drive integration~~ *(Drive button disabled 2026-07-21)*
 - Slides integration and accessibility
 - Interactive exercises system (25+ exercises for Week 9)
 - Exercise questions system (questions-only format with answer spaces)
@@ -428,6 +434,32 @@ Publishing answer keys therefore requires deliberately opting in.
 
 ## Change Log
 
+### 2026-07-21 — Private Links Disabled
+
+All links pointing to personal/institutional systems (LMS, Google Drive) and
+to exercise/solution files have been removed from the public site. Only book
+links, slide links, and instructor profile links remain active.
+
+**Changes made:**
+- `src/data/assignments.yml`: Removed `url:` from all 6 homework entries.
+  The assignments table still renders but shows a grayed-out disabled label
+  instead of a live LMS link.
+- `src/data/lectures.yml`: Converted 3 exercise/solution material links to
+  plain text (no hyperlink):
+  - Week 9: `exercises/Week9_Exercises_Interactive.html` ("Interactive Practice Exercises")
+  - Week 9: `exercises/Week9_Exercises_Solutions.html` ("Printable Worksheet (blank)")
+  - Week 13: `exercises/First_Order_Logic_Solutions_CORRECTED.html` ("First-Order Logic — Worked Solutions")
+- `src/content/project.md`: Removed the Google Drive CTA button; replaced
+  with "contact the instructors directly."
+- `src/partials/sections/assignments.hbs`: Updated to render
+  `<span class="mat mat-disabled" aria-disabled="true">LMS</span>` when no
+  `url` is present.
+- `src/styles/main.scss`: Added `.mat-disabled` rule (opacity 0.5,
+  cursor: not-allowed, var(--text-soft) colour).
+
+To re-enable any of these links, restore the `url:` fields in the relevant
+data files and redeploy.
+
 ### 2026-07-09 — Co-Instructor Removed
 
 - **Removed:** Dr. Nguyen Thi Kim Ngan from `src/data/staff.yml`.
@@ -501,6 +533,25 @@ logos get a white plate under `prefers-color-scheme: dark`.
 site never published them and they exist only in the syllabus PDF. `course.yml`
 marks where they belong. Do not guess them — they are part of a document the
 faculty signs off on.
+
+### 2026-08-04 — Maintenance Review (no content changes)
+
+Full audit of all source files against this document. No discrepancies found.
+State confirmed as of this date:
+
+- **Staff:** `src/data/staff.yml` — only Dr. Trong-Nghia Nguyen (role: Instructor).
+- **Assignments:** `src/data/assignments.yml` — 6 homeworks (HW 0–5), no `url:` fields on any entry; rendered as disabled labels on the site.
+- **Lectures:** `src/data/lectures.yml` — 15 weeks, 9 slides (0.Intro.pdf through 8.Intro_ML_DL.pdf). Week 9 and Week 13 exercise links are plain text (no hyperlinks), consistent with 2026-07-21 change.
+- **Project:** `src/content/project.md` — no Google Drive CTA; students directed to contact instructors.
+- **Slides on disk:** `slides/` contains exactly the 9 PDFs referenced in lectures.yml.
+- **Exercises on disk:** `exercises/` contains 8 files; 3 are not linked from the site (Comprehensive.html duplicate, Interactive_Expanded.html broken, Week9_Exercises_Student.md unused).
+- **Images:** `images/people/` contains only `Dr.TrongNghiaNguyen.jpeg`; all removed photos (Dr.NTKN.jpg, four NYU staff photos) are absent.
+- **Build safety:** `build.js` still enforces weight-sum-to-100 and broken-local-link checks. `SOLUTIONS=1` env var gates solution rendering.
+- **Deploy:** `deploy.sh` still requires a clean source tree before pushing to gh-pages.
+
+No action required. Next update warranted when content changes.
+
+---
 
 ### Latest Updates (Session Review)
 
@@ -612,10 +663,25 @@ faculty signs off on.
 - Main textbook prominently featured with PDF link
 - Comprehensive course documentation and backup context
 
+### 2026-08-09 — Week 1 Quiz Added
+
+- **New folder:** `quizz/` — holds interactive HTML quizzes for lectures.
+- **New file:** `quizz/Quizz1.html` — interactive Quiz 1 for Week 1
+  (Introduction to AI & Search Strategies).
+- **`src/data/lectures.yml`:** Added
+  `{ "Quiz 1 (Interactive)": "quizz/Quizz1.html" }` to Week 1 materials. It
+  renders as a link in the "Slides & materials" column.
+- **`build.sh`:** Added `quizz` to the `cp -r` list so the folder ships to
+  `gh-pages` on every deploy. Without it, the link would 404 in production
+  (the build's local-link check only catches missing files in the source tree).
+- **Deployed:** via `./deploy.sh` after committing the source changes.
+
+To add future quizzes: drop `quizz/QuizzN.html` and reference it from the
+appropriate week in `lectures.yml` — no other changes needed.
+
 ---
 
-**Last Updated:** 2026-07-09 (migrated to the NEU FDA course site template;
-co-instructor removed)  
+**Last Updated:** 2026-08-09 (Week 1 quiz added; new `quizz/` folder shipped to gh-pages)  
 **AI Readiness:** 100%
 
 *This document serves as a comprehensive backup context for the Introduction to AI course website project. It contains all essential information needed to understand, maintain, and continue development of the project.*

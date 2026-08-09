@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trắc nghiệm Nhập môn Trí tuệ Nhân tạo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
+            color: #111827;
+            line-height: 1.6;
+        }
+        .question-card {
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            min-height: 350px;
+            display: flex;
+            flex-direction: column;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .options-list {
+            list-style-type: none;
+            padding-left: 0;
+            margin-top: 1.5rem;
+            flex-grow: 1;
+        }
+        .option-item {
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: flex-start;
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+            transition: background-color 0.2s;
+        }
+        .option-item:hover:not(.disabled) {
+            background-color: #f3f4f6;
+        }
+        .option-input {
+            margin-top: 0.3rem;
+            margin-right: 0.75rem;
+            cursor: pointer;
+        }
+        .correct-answer-box {
+            display: none;
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 0.375rem;
+            color: #166534;
+            font-size: 0.875rem;
+        }
+        .section-title {
+            color: #6b7280;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-10 flex items-center justify-center min-h-screen">
+    <div class="max-w-3xl w-full mx-auto">
+        <header class="mb-8 text-center">
+            <h1 class="text-2xl font-bold text-gray-900 mb-1">Bài tập Trắc nghiệm</h1>
+            <h2 class="text-lg text-gray-600">Môn: Nhập môn Trí tuệ Nhân tạo</h2>
+        </header>
+
+        <!-- Container chứa nội dung câu hỏi -->
+        <main id="quiz-container">
+            <!-- Nội dung sẽ được render bằng JS -->
+        </main>
+
+        <!-- Bảng tổng kết (ẩn mặc định) -->
+        <div id="summary-container" class="hidden text-center bg-white border border-gray-200 rounded-lg p-8 shadow-sm">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">Hoàn thành bài thi!</h3>
+            <p class="text-lg mb-6">Điểm số của bạn: <span id="final-score" class="font-bold text-blue-600 text-3xl">0/20</span></p>
+            <div class="flex justify-center space-x-4">
+                <button id="review-btn" class="px-6 py-2 bg-gray-200 text-gray-800 font-semibold rounded hover:bg-gray-300 transition duration-150">Xem lại đáp án</button>
+                <button id="reset-btn" class="px-6 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition duration-150">Làm lại từ đầu</button>
+            </div>
+        </div>
+
+        <!-- Điều hướng -->
+        <div id="navigation-controls" class="mt-6 flex justify-between items-center">
+            <button id="prev-btn" class="px-4 py-2 bg-gray-200 text-gray-700 font-medium rounded hover:bg-gray-300 transition duration-150 disabled:opacity-50 disabled:cursor-not-allowed">
+                &larr; Câu trước
+            </button>
+            
+            <span id="progress-text" class="text-sm font-medium text-gray-500">1 / 20</span>
+            
+            <button id="next-btn" class="px-4 py-2 bg-blue-600 text-white font-medium rounded hover:bg-blue-700 transition duration-150">
+                Câu tiếp &rarr;
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const rawQuizData = [
+            // Phần 1: Nền tảng
+            {
+                section: "Phần 1: Nền tảng của AI",
+                questions: [
+                    { question: "Phép thử Turing (Turing Test) đại diện cho cách tiếp cận nào trong việc định nghĩa Trí tuệ nhân tạo?", options: ["Suy nghĩ như con người (Thinking Humanly).", "Hành động như con người (Acting Humanly).", "Suy nghĩ hợp lý (Thinking Rationally).", "Hành động hợp lý (Acting Rationally)."], correctAnswer: 1 },
+                    { question: "Khoa học nhận thức (Cognitive Science) trong AI đòi hỏi hệ thống phải đáp ứng điều kiện gì để được xem là thông minh?", options: ["Đưa ra câu trả lời đúng nhanh nhất có thể.", "Mô phỏng các bước suy luận của con người.", "Tối ưu hóa hàm mục tiêu được định nghĩa trước.", "Đánh lừa được người thẩm vấn trong Phép thử Turing."], correctAnswer: 1 },
+                    { question: "Một 'Tác nhân hợp lý' (Rational Agent) đưa ra quyết định hành động dựa trên tiêu chí cốt lõi nào?", options: ["Sao chép chính xác hành vi của con người.", "Tuân thủ tuyệt đối các quy tắc logic hình thức (Syllogism).", "Tối đa hóa thước đo hiệu suất được định trước.", "Đảm bảo tính giải thích được của mọi hành động."], correctAnswer: 2 },
+                    { question: "Sự cố 'Value Alignment Problem' (Vấn đề liên kết giá trị) xảy ra khi nào?", options: ["Hệ thống AI không thể giải quyết được bài toán bùng nổ tổ hợp.", "Mạng nơ-ron không đủ dữ liệu để huấn luyện.", "Hệ thống tối ưu hóa hoàn hảo nhưng sai thước đo hiệu suất do con người thiết lập.", "Khả năng tính toán của phần cứng không đáp ứng được thuật toán."], correctAnswer: 2 }
+                ]
+            },
+            // Phần 2: Lịch sử
+            {
+                section: "Phần 2: Lịch sử của AI",
+                questions: [
+                    { question: "Sự kiện nào được xem là nơi chính thức khai sinh ra thuật ngữ 'Trí tuệ nhân tạo' (Artificial Intelligence)?", options: ["Bài báo của Alan Turing về Phép thử Turing (1950).", "Việc tạo ra mô hình nơ-ron nhân tạo đầu tiên của McCulloch-Pitts (1943).", "Hội thảo mùa hè tại Dartmouth (1956).", "Sự ra đời của Hệ chuyên gia MYCIN (1970s)."], correctAnswer: 2 },
+                    { question: "Nguyên nhân chính dẫn đến sự kết thúc của giai đoạn AI dựa trên logic hình thức và gây ra 'Mùa đông AI' đầu tiên là gì?", options: ["Thiếu dữ liệu văn bản lớn (Big Data).", "Sự sụp đổ của các hệ chuyên gia thương mại.", "Thuật toán Back-propagation chưa được phát minh.", "Vấn đề bùng nổ tổ hợp và sự phức tạp của thực tế."], correctAnswer: 3 },
+                    { question: "Đóng góp quan trọng của nhóm PDP (Rumelhart, Hinton, McClelland) vào năm 1986 đối với lĩnh vực mạng nơ-ron nhân tạo là gì?", options: ["Phát minh ra máy mạng nơ-ron đầu tiên (SNARC).", "Phổ biến lại thuật toán lan truyền ngược (back-propagation).", "Chứng minh giới hạn của Perceptron một lớp.", "Giới thiệu mạng Bayes để xử lý tính bất định."], correctAnswer: 1 },
+                    { question: "Sự ra đời của kiến trúc Transformer (2017) đã mang lại bước tiến đột phá nào cho Deep Learning?", options: ["Cho phép huấn luyện các mạng tích chập sâu (CNN) hiệu quả hơn.", "Loại bỏ tính đệ quy, cho phép tính toán song song quy mô lớn.", "Lần đầu tiên đánh bại con người trong trò chơi Cờ vây (Go).", "Giảm thiểu sự phụ thuộc vào GPU."], correctAnswer: 1 }
+                ]
+            },
+            // Phần 3: Phân loại
+            {
+                section: "Phần 3: Phân loại AI",
+                questions: [
+                    { question: "Mối quan hệ phân cấp giữa Trí tuệ nhân tạo (AI), Học máy (ML) và Học sâu (DL) là gì?", options: ["AI, ML và DL là 3 lĩnh vực hoàn toàn độc lập.", "AI là tập con của ML, và ML là tập con của DL.", "DL là tập con của ML, và ML là tập con của AI.", "ML là tập con của AI, nhưng DL không thuộc ML."], correctAnswer: 2 },
+                    { question: "Đặc điểm cơ bản phân biệt Machine Learning (ML) với Symbolic AI (GOFAI) truyền thống là gì?", options: ["Hệ thống tự học các quy tắc từ dữ liệu thay vì được lập trình quy tắc thủ công.", "ML chỉ xử lý được dữ liệu hình ảnh, còn Symbolic AI xử lý văn bản.", "Symbolic AI sử dụng mạng nơ-ron nhân tạo, còn ML sử dụng logic hình thức.", "ML luôn yêu cầu phần cứng siêu máy tính."], correctAnswer: 0 },
+                    { question: "Theo cách phân loại đầu ra, AI Dự đoán/Phân tích (Predictive/Analytical AI) hoạt động dựa trên nguyên lý nào?", options: ["Mở rộng một đầu vào ngắn gọn thành một đầu ra phong phú, mới mẻ.", "Nén một đầu vào phức tạp thành một đánh giá/nhãn ngắn gọn.", "Mô phỏng lại toàn bộ phân phối xác suất của tập dữ liệu huấn luyện.", "Học cách tạo ra các điểm dữ liệu không thể phân biệt với dữ liệu thật."], correctAnswer: 1 },
+                    { question: "Trong ma trận phân loại AI, yếu tố nào định hình mức độ 'Giải thích được' (Explainability) của một mô hình?", options: ["Khối lượng dữ liệu huấn luyện (Data Volume).", "Định dạng dữ liệu đầu vào (Data Modality).", "Sức mạnh tính toán của phần cứng (GPU Compute).", "Phương thức luận (Methodology) được sử dụng."], correctAnswer: 3 }
+                ]
+            },
+            // Phần 4: Ứng dụng
+            {
+                section: "Phần 4: Ứng dụng của AI",
+                questions: [
+                    { question: "Trong lĩnh vực Y tế, vì sao tính 'Giải thích được' (Explainability) lại mang tính bắt buộc đối với các mô hình chẩn đoán hình ảnh?", options: ["Vì mạng nơ-ron tích chập (CNN) chỉ hoạt động được khi có tính năng này.", "Để giảm thiểu chi phí lưu trữ dữ liệu y tế.", "Để cung cấp cơ sở lâm sàng (vd: bản đồ nhiệt chỉ ra vùng bệnh) cho bác sĩ xác minh.", "Vì bệnh nhân thường yêu cầu xem mã nguồn của thuật toán."], correctAnswer: 2 },
+                    { question: "Hệ thống AlphaFold ứng dụng trong sinh học là minh chứng cho khả năng đặc biệt nào của Deep Learning?", options: ["Nén dữ liệu hình ảnh phức tạp thành nhãn phân loại đơn giản.", "Mô phỏng chính xác quá trình tư duy của con người.", "Khả năng mở rộng chiều dữ liệu từ chuỗi tuyến tính (1D) sang cấu trúc không gian (3D).", "Khả năng thay thế hoàn toàn bác sĩ trong chẩn đoán."], correctAnswer: 2 },
+                    { question: "Quy trình thiết kế thuốc (Drug Discovery) bằng AI là sự kết hợp khép kín giữa hai loại mô hình nào?", options: ["Mô hình Học máy cổ điển và Hệ chuyên gia dựa trên luật.", "Mô hình Phân loại hình ảnh và Mô hình Xử lý ngôn ngữ tự nhiên.", "Mô hình Tạo sinh (đề xuất cấu trúc) và Mô hình Dự đoán (đánh giá, sàng lọc).", "Mô hình Học tăng cường và Mô hình Cây quyết định."], correctAnswer: 2 },
+                    { question: "Trong lĩnh vực Quân sự & Quốc phòng, yêu cầu nào là điều kiện tiên quyết để con người có thể giám sát các Hệ thống Tự trị Không người lái (ISR)?", options: ["Hệ thống phải được huấn luyện bằng thuật toán Back-propagation.", "Hệ thống phải xử lý tín hiệu radar nhanh hơn con người.", "Hệ thống phải có tính năng giải thích quyết định để con người hiểu tại sao một mục tiêu được chọn.", "Hệ thống phải sử dụng mạng nơ-ron đồ thị (GNN)."], correctAnswer: 2 }
+                ]
+            },
+            // Phần 5: Nghề nghiệp
+            {
+                section: "Phần 5: Nghề nghiệp trong lĩnh vực AI",
+                questions: [
+                    { question: "Sự khác biệt cốt lõi về mục tiêu giữa nghiên cứu AI trong Học thuật (Academia) và Công nghiệp (Industry) là gì?", options: ["Học thuật dùng Deep Learning, Công nghiệp dùng Symbolic AI.", "Học thuật tối ưu hóa cho việc tạo ra tri thức mới, Công nghiệp tối ưu hóa cho sản phẩm và lợi nhuận.", "Học thuật tập trung vào phần cứng, Công nghiệp tập trung vào phần mềm.", "Nghiên cứu học thuật có thời gian ngắn hơn, chú trọng tính khả thi ngay lập tức."], correctAnswer: 1 },
+                    { question: "Theo bản đồ vị trí công việc (Careers in AI), vai trò nào tập trung chính vào việc xây dựng cơ sở hạ tầng có khả năng mở rộng (scaling infrastructure) để triển khai mô hình?", options: ["Nhà Khoa học Nghiên cứu (Research Scientist).", "Kỹ sư vận hành Học máy (MLOps/ML Infrastructure Engineer).", "Nhà Khoa học Dữ liệu (Data Scientist).", "Quản lý Sản phẩm AI (AI Product Manager)."], correctAnswer: 1 },
+                    { question: "Một lợi thế lớn của làm nghiên cứu AI tại các Tập đoàn Công nghệ Lớn (Big Tech) so với môi trường Học thuật là gì?", options: ["Có toàn quyền tự do tuyệt đối trong việc chọn chủ đề nghiên cứu.", "Không bao giờ phải chịu áp lực về deadline sản phẩm.", "Được tiếp cận nguồn tài nguyên máy tính (Compute) và dữ liệu độc quyền khổng lồ.", "Không phải viết bất kỳ báo cáo khoa học nào."], correctAnswer: 2 },
+                    { question: "Trên lộ trình thăng tiến học thuật (Professor Track), áp lực chủ đạo (Dominant Pressure) mà các nhà nghiên cứu thường xuyên phải đối mặt là gì?", options: ["Sức ép từ khách hàng yêu cầu tính năng mới.", "Chỉ số kinh doanh và doanh số bán phần mềm.", "Áp lực xuất bản bài báo khoa học và tìm kiếm nguồn tài trợ (Grant funding).", "Sửa lỗi (bug) trong hệ thống mạng của trường đại học."], correctAnswer: 2 }
+                ]
+            }
+        ];
+
+        // Làm phẳng mảng câu hỏi để dễ dàng quản lý phân trang
+        let flatQuestions = [];
+        rawQuizData.forEach((sectionData) => {
+            sectionData.questions.forEach((q) => {
+                flatQuestions.push({
+                    sectionTitle: sectionData.section,
+                    question: q.question,
+                    options: q.options,
+                    correctAnswer: q.correctAnswer,
+                    userAnswer: null // Lưu trữ câu trả lời của sinh viên
+                });
+            });
+        });
+
+        const totalQuestions = flatQuestions.length;
+        let currentIndex = 0;
+        let isReviewMode = false;
+
+        const container = document.getElementById('quiz-container');
+        const summaryContainer = document.getElementById('summary-container');
+        const navControls = document.getElementById('navigation-controls');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const progressText = document.getElementById('progress-text');
+        const reviewBtn = document.getElementById('review-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const finalScoreSpan = document.getElementById('final-score');
+
+        function renderQuestion(index) {
+            // Xóa nội dung cũ để animation có hiệu lực lại
+            container.innerHTML = '';
+            
+            const q = flatQuestions[index];
+            const card = document.createElement('div');
+            card.className = 'question-card';
+
+            // Tiêu đề phần
+            const sectionEl = document.createElement('h3');
+            sectionEl.className = 'section-title';
+            sectionEl.textContent = q.sectionTitle;
+            card.appendChild(sectionEl);
+
+            // Nội dung câu hỏi
+            const questionText = document.createElement('p');
+            questionText.className = 'font-semibold text-gray-800 text-lg mb-2';
+            questionText.textContent = `Câu ${index + 1}: ${q.question}`;
+            card.appendChild(questionText);
+
+            // Danh sách đáp án
+            const optionsList = document.createElement('ul');
+            optionsList.className = 'options-list';
+            
+            // Kiểm tra xem câu hỏi đã được trả lời chưa
+            const hasAnswered = q.userAnswer !== null;
+            // Hiển thị kết quả nếu đã trả lời xong hoặc đang ở chế độ xem lại cuối bài
+            const shouldShowResult = hasAnswered || isReviewMode;
+
+            q.options.forEach((opt, optIndex) => {
+                const li = document.createElement('li');
+                li.className = `option-item ${shouldShowResult ? 'disabled' : ''}`;
+                
+                const inputId = `opt-${optIndex}`;
+                
+                const input = document.createElement('input');
+                input.type = 'radio';
+                input.name = `question-radio`;
+                input.id = inputId;
+                input.value = optIndex;
+                input.className = 'option-input';
+                
+                // Khôi phục lựa chọn của người dùng
+                if (q.userAnswer === optIndex) {
+                    input.checked = true;
+                }
+
+                // Vô hiệu hóa input nếu đang ở chế độ xem lại hoặc đã trả lời
+                if (shouldShowResult) {
+                    input.disabled = true;
+                } else {
+                    input.addEventListener('change', (e) => {
+                        q.userAnswer = parseInt(e.target.value);
+                        renderQuestion(currentIndex); // Render lại để hiển thị kết quả tức thì
+                    });
+                }
+
+                const label = document.createElement('label');
+                label.htmlFor = inputId;
+                label.className = `text-gray-700 w-full ${shouldShowResult ? 'cursor-default' : 'cursor-pointer'}`;
+                label.textContent = opt;
+
+                // Áp dụng màu sắc đúng/sai khi đã có kết quả
+                if (shouldShowResult) {
+                    if (optIndex === q.correctAnswer) {
+                        label.classList.add('text-green-700', 'font-bold');
+                    } else if (q.userAnswer === optIndex && optIndex !== q.correctAnswer) {
+                        label.classList.add('text-red-600', 'line-through');
+                    }
+                }
+
+                li.appendChild(input);
+                li.appendChild(label);
+                optionsList.appendChild(li);
+            });
+
+            card.appendChild(optionsList);
+
+            // Khung hiển thị đáp án đúng
+            if (shouldShowResult) {
+                const answerBox = document.createElement('div');
+                answerBox.className = 'correct-answer-box';
+                answerBox.style.display = 'block';
+                
+                if (hasAnswered && q.userAnswer === q.correctAnswer) {
+                    answerBox.classList.remove('bg-f0fdf4', 'border-bbf7d0', 'text-166534');
+                    answerBox.classList.add('bg-green-100', 'border-green-300', 'text-green-800');
+                    answerBox.innerHTML = `<strong>Chính xác!</strong> Bạn đã chọn đúng.`;
+                } else if (hasAnswered && q.userAnswer !== q.correctAnswer) {
+                    answerBox.classList.remove('bg-f0fdf4', 'border-bbf7d0', 'text-166534');
+                    answerBox.classList.add('bg-red-50', 'border-red-200', 'text-red-700');
+                    answerBox.innerHTML = `<strong>Sai.</strong> Đáp án đúng là: <span class="font-semibold">${q.options[q.correctAnswer]}</span>`;
+                } else {
+                    // Xử lý trường hợp người dùng bấm Bỏ qua (chưa trả lời) nhưng vào xem lại
+                    answerBox.classList.remove('bg-f0fdf4', 'border-bbf7d0', 'text-166534');
+                    answerBox.classList.add('bg-yellow-50', 'border-yellow-200', 'text-yellow-800');
+                    answerBox.innerHTML = `<strong>Chưa trả lời.</strong> Đáp án đúng là: <span class="font-semibold">${q.options[q.correctAnswer]}</span>`;
+                }
+                card.appendChild(answerBox);
+            }
+
+            container.appendChild(card);
+            updateNavigation();
+        }
+
+        function updateNavigation() {
+            progressText.textContent = `${currentIndex + 1} / ${totalQuestions}`;
+            
+            // Xử lý nút Prev
+            prevBtn.disabled = currentIndex === 0;
+
+            // Xử lý nút Next/Submit
+            if (currentIndex === totalQuestions - 1) {
+                if (!isReviewMode) {
+                    nextBtn.textContent = 'Nộp bài';
+                    nextBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                    nextBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+                } else {
+                    // Nếu đang review và ở trang cuối, ta có thể ẩn nút hoặc đổi thành 'Kết thúc'
+                    nextBtn.textContent = 'Kết thúc';
+                    nextBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
+                    nextBtn.classList.add('bg-gray-600', 'hover:bg-gray-700');
+                }
+            } else {
+                nextBtn.innerHTML = 'Câu tiếp &rarr;';
+                nextBtn.classList.remove('bg-green-600', 'hover:bg-green-700', 'bg-gray-600', 'hover:bg-gray-700');
+                nextBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+            }
+        }
+
+        function calculateScore() {
+            let score = 0;
+            flatQuestions.forEach(q => {
+                if (q.userAnswer === q.correctAnswer) {
+                    score++;
+                }
+            });
+            return score;
+        }
+
+        function showSummary() {
+            const score = calculateScore();
+            container.style.display = 'none';
+            navControls.style.display = 'none';
+            summaryContainer.style.display = 'block';
+            finalScoreSpan.textContent = `${score}/${totalQuestions}`;
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                renderQuestion(currentIndex);
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentIndex < totalQuestions - 1) {
+                currentIndex++;
+                renderQuestion(currentIndex);
+            } else if (currentIndex === totalQuestions - 1) {
+                if (!isReviewMode) {
+                    // Chuyển sang Nộp bài
+                    showSummary();
+                } else {
+                    // Đang ở trang cuối chế độ review -> quay lại trang kết quả
+                    showSummary();
+                }
+            }
+        });
+
+        reviewBtn.addEventListener('click', () => {
+            isReviewMode = true;
+            summaryContainer.style.display = 'none';
+            container.style.display = 'block';
+            navControls.style.display = 'flex';
+            currentIndex = 0; // Quay về câu 1 để xem lại
+            renderQuestion(currentIndex);
+        });
+
+        resetBtn.addEventListener('click', () => {
+            // Đặt lại toàn bộ state
+            isReviewMode = false;
+            currentIndex = 0;
+            flatQuestions.forEach(q => q.userAnswer = null);
+            
+            summaryContainer.style.display = 'none';
+            container.style.display = 'block';
+            navControls.style.display = 'flex';
+            
+            renderQuestion(currentIndex);
+        });
+
+        // Khởi chạy
+        renderQuestion(currentIndex);
+
+    </script>
+</body>
+</html>

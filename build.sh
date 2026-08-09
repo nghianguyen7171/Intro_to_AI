@@ -23,7 +23,7 @@ cp -r assets/css out/assets/css
 # INTRO_AI_MANAGER was absent from every previous deploy, so the "Course
 # syllabus: Download PDF" link 404'd on the live site. materials/ holds the
 # supplementary PDF recovered from the gh-pages branch, where it was orphaned.
-cp -r images slides exercises materials INTRO_AI_MANAGER out/
+cp -r images slides exercises materials quizz INTRO_AI_MANAGER out/
 
 echo ""
 echo "Staged in out/:"

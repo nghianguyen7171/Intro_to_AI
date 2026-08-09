@@ -29,6 +29,7 @@ lectures:
     materials:
       - "Chapter 1–3, lecture slides"
       - "Sample Python code for search algorithms"
+      - { "Quiz 1 (Interactive)": "quizz/Quizz1.html" }
 
   - week: 2
     date: "2024-09-10"
