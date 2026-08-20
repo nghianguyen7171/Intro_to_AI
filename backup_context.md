@@ -679,9 +679,26 @@ No action required. Next update warranted when content changes.
 To add future quizzes: drop `quizz/QuizzN.html` and reference it from the
 appropriate week in `lectures.yml` — no other changes needed.
 
+### 2026-08-20 — Week 2 Quizzes Deployed
+
+- **New files:** `quizz/quizz2_bfs.html`, `quizz/quizz2_dfs.html`,
+  `quizz/quizz2_Adv_dfs.html` — three interactive Week 2 quizzes covering
+  BFS, DFS, and advanced DFS hands-on practice.
+- **`src/data/lectures.yml`:** Week 2 materials now include:
+  - `{ "Quiz 2 — BFS": "quizz/quizz2_bfs.html" }`
+  - `{ "Quiz 2 — DFS": "quizz/quizz2_dfs.html" }`
+  - `{ "Quiz 2 — Advanced DFS": "quizz/quizz2_Adv_dfs.html" }`
+- **Source commit:** `d246092` — "Add Week 2 interactive quizzes for BFS, DFS, and advanced DFS."
+- **Deployment:** `./deploy.sh` published commit `d246092` to `gh-pages`.
+  No changes to `build.sh` needed (quizz folder was already shipped since 2026-08-09).
+- **Live URLs:**
+  - https://nghianguyen7171.github.io/Intro_to_AI/quizz/quizz2_bfs.html
+  - https://nghianguyen7171.github.io/Intro_to_AI/quizz/quizz2_dfs.html
+  - https://nghianguyen7171.github.io/Intro_to_AI/quizz/quizz2_Adv_dfs.html
+
 ---
 
-**Last Updated:** 2026-08-09 (Week 1 quiz added; new `quizz/` folder shipped to gh-pages)  
+**Last Updated:** 2026-08-20 (Week 2 quizzes deployed: BFS, DFS, Advanced DFS)  
 **AI Readiness:** 100%
 
 *This document serves as a comprehensive backup context for the Introduction to AI course website project. It contains all essential information needed to understand, maintain, and continue development of the project.*
