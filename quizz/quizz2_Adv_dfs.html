@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced DFS, DLS & IDS Visualizer Lab</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        #network-graph { width: 100%; height: 100%; border-radius: 0.5rem; background-color: white; border: 1px solid #e5e7eb; box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05); }
+        .tab-btn.active { background-color: #7c3aed; color: white; border-color: #7c3aed; }
+        .tab-btn { background-color: white; color: #4b5563; border-color: #d1d5db; transition: all 0.2s; }
+        .tab-btn:hover:not(.active) { background-color: #f3f4f6; }
+        
+        .algo-btn.active { background-color: #ede9fe; color: #6d28d9; border-color: #8b5cf6; font-weight: 600; }
+        .algo-btn { background-color: white; color: #6b7280; border-color: #e5e7eb; transition: all 0.2s; }
+        .algo-btn:hover:not(.active) { background-color: #f9fafb; }
+
+        .table-container::-webkit-scrollbar { height: 8px; width: 8px; }
+        .table-container::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        .table-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .table-container::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        .iteration-row { background-color: #f5f3ff; font-weight: 600; color: #5b21b6; }
+    </style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden">
+
+    <header class="bg-violet-900 text-white p-4 shadow-md z-10 flex justify-between items-center shrink-0">
+        <div>
+            <h1 class="text-xl font-bold tracking-wide">🌌 Advanced Search: DFS, DLS & IDS</h1>
+            <p class="text-sm text-violet-200">Introduction to Artificial Intelligence - Trace Table Lab</p>
+        </div>
+        <div class="flex space-x-2" id="tabs">
+            <button onclick="loadExercise(0)" class="tab-btn active px-4 py-2 border rounded-md text-sm font-medium">Bài 1: Bẫy Nhánh Sâu</button>
+            <button onclick="loadExercise(1)" class="tab-btn px-4 py-2 border rounded-md text-sm font-medium">Bài 2: Vượt Giới Hạn</button>
+            <button onclick="loadExercise(2)" class="tab-btn px-4 py-2 border rounded-md text-sm font-medium">Bài 3: Cây Tìm Kiếm Đầy Đủ</button>
+        </div>
+    </header>
+
+    <main class="flex-1 flex overflow-hidden p-4 gap-4">
+        
+        <!-- Graph Panel -->
+        <div class="w-5/12 flex flex-col h-full bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="p-3 border-b border-gray-200 bg-gray-50 shrink-0">
+                <h2 id="ex-title" class="font-semibold text-gray-800">Đồ thị không gian trạng thái (Top-Down)</h2>
+                <p id="ex-desc" class="text-xs text-gray-500 mt-1">Đồ thị được vẽ từ trên xuống để hiện thị rõ các tầng độ sâu (Depth Levels).</p>
+                <div class="flex items-center gap-4 mt-2 text-xs">
+                    <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-pink-300 border border-pink-500 inline-block"></span> Start (L=0)</span>
+                    <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-violet-300 border-2 border-violet-600 inline-block"></span> Goal</span>
+                </div>
+            </div>
+            <div class="flex-1 p-2">
+                <div id="network-graph"></div>
+            </div>
+        </div>
+
+        <!-- Table Panel -->
+        <div class="w-7/12 flex flex-col h-full bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden relative">
+            <div class="p-3 border-b border-gray-200 bg-gray-50 shrink-0 flex flex-col gap-3">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="font-semibold text-gray-800">Bảng vết (Trace Table) & Phân tích</h2>
+                        <p class="text-xs text-gray-500 mt-1">Chọn thuật toán để xem cách duyệt đồ thị khác nhau.</p>
+                    </div>
+                    <button id="toggle-answer-btn" onclick="toggleAnswer()" class="px-4 py-1.5 bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium rounded-md shadow-sm transition-colors flex items-center gap-2">
+                        <span id="toggle-btn-text">Hiện đáp án</span>
+                    </button>
+                </div>
+                
+                <!-- Algorithm Selectors -->
+                <div class="flex gap-2">
+                    <button onclick="selectAlgo('dfs')" id="btn-dfs" class="algo-btn active flex-1 py-1.5 border rounded text-sm text-center">Standard DFS</button>
+                    <button onclick="selectAlgo('dls')" id="btn-dls" class="algo-btn flex-1 py-1.5 border rounded text-sm text-center">Depth-Limited (DLS)</button>
+                    <button onclick="selectAlgo('ids')" id="btn-ids" class="algo-btn flex-1 py-1.5 border rounded text-sm text-center">Iterative Deepening (IDS)</button>
+                </div>
+            </div>
+            
+            <!-- Hidden Overlay -->
+            <div id="hidden-placeholder" class="absolute inset-0 top-[110px] z-20 flex flex-col items-center justify-center text-gray-400 p-6 text-center bg-gray-50/95 backdrop-blur-sm">
+                <svg class="w-16 h-16 mb-3 text-violet-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path></svg>
+                <p class="text-lg font-semibold text-gray-700">Đáp án đang được ẩn</p>
+                <p class="text-sm mt-1 max-w-sm text-gray-500">Hãy chọn thuật toán, lấy giấy nháp tự vẽ Stack OPEN. Sau đó nhấn "Hiện đáp án" để kiểm tra xem bạn có bị lừa bởi giới hạn độ sâu không nhé!</p>
+            </div>
+
+            <!-- Context Alert for Limit -->
+            <div id="limit-alert" class="px-4 py-2 bg-amber-50 border-b border-amber-200 text-amber-800 text-sm hidden">
+                <span class="font-bold">Lưu ý:</span> Đang chạy với giới hạn độ sâu <span id="depth-limit-val" class="font-mono bg-amber-200 px-1 rounded"></span>. Trạng thái vượt quá độ sâu này sẽ bị Cắt (Cutoff).
+            </div>
+
+            <div id="trace-table-container" class="flex-1 overflow-auto table-container p-0">
+                <table class="w-full text-sm text-left text-gray-700">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-100 sticky top-0 z-10">
+                        <tr>
+                            <th scope="col" class="px-3 py-3 font-semibold border-b border-r">Step</th>
+                            <th scope="col" class="px-3 py-3 font-semibold border-b border-r text-violet-700">u (Level)</th>
+                            <th scope="col" class="px-3 py-3 font-semibold border-b border-r">edge(u)</th>
+                            <th scope="col" class="px-3 py-3 font-semibold border-b text-rose-700">OPEN (Stack LIFO)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="trace-body" class="divide-y divide-gray-200">
+                        <!-- Rendered via JS -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id="result-container" class="p-4 border-t border-gray-200 bg-violet-50 shrink-0">
+                <h3 class="font-bold text-violet-900 text-sm">Phân tích kết quả:</h3>
+                <p id="ex-result" class="text-sm text-violet-800 mt-1 leading-relaxed"></p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const exercisesData = [
+            {
+                title: "Bài 1: Bẫy Nhánh Sâu",
+                desc: "DFS có thể bị mắc kẹt ở một nhánh rất sâu bên trái, trong khi đích lại ở rất gần bên phải.",
+                nodes: [
+                    { id: 'S', label: 'S\n(L=0)', level: 0, color: { background: '#f9a8d4', border: '#db2777' }, borderWidth: 2 },
+                    { id: 'A', label: 'A\n(L=1)', level: 1 }, { id: 'B', label: 'B\n(L=1)', level: 1 },
+                    { id: 'C', label: 'C\n(L=2)', level: 2 }, { id: 'D', label: 'D\n(L=3)', level: 3 },
+                    { id: 'E', label: 'E\n(L=4)', level: 4 },
+                    { id: 'G', label: 'G\n(L=2)', level: 2, color: { background: '#c4b5fd', border: '#7c3aed' }, borderWidth: 3 }
+                ],
+                edges: [
+                    { from: 'S', to: 'A' }, { from: 'S', to: 'B' },
+                    { from: 'A', to: 'C' }, { from: 'C', to: 'D' }, { from: 'D', to: 'E' },
+                    { from: 'B', to: 'G' }
+                ],
+                solutions: {
+                    dfs: {
+                        trace: [
+                            { step: 0, u: '-', edges: '-', open: 'S' },
+                            { step: 1, u: 'S (L0)', edges: 'A, B', open: 'A, B' },
+                            { step: 2, u: 'A (L1)', edges: 'C', open: 'C, B' },
+                            { step: 3, u: 'C (L2)', edges: 'D', open: 'D, B' },
+                            { step: 4, u: 'D (L3)', edges: 'E', open: 'E, B' },
+                            { step: 5, u: 'E (L4)', edges: '- (Cụt)', open: 'B' },
+                            { step: 6, u: 'B (L1)', edges: 'G', open: 'G' },
+                            { step: 7, u: '<span class="font-bold text-violet-700">G (L2)</span>', edges: '-', open: '<span class="font-bold text-green-600">(Đích - Dừng)</span>' }
+                        ],
+                        result: "DFS đi mù quáng xuống tận đáy nhánh A (đến E ở độ sâu 4) trước khi chịu quay lui lại nhánh B. <strong>Chi phí duyệt: 7 bước.</strong>"
+                    },
+                    dls: {
+                        limit: 2,
+                        trace: [
+                            { step: 0, u: '-', edges: '-', open: 'S' },
+                            { step: 1, u: 'S (L0)', edges: 'A, B', open: 'A, B' },
+                            { step: 2, u: 'A (L1)', edges: 'C', open: 'C, B' },
+                            { step: 3, u: 'C (L2)', edges: '<span class="text-red-500 font-bold">Cutoff!</span> (L=2)', open: 'B' },
+                            { step: 4, u: 'B (L1)', edges: 'G', open: 'G' },
+                            { step: 5, u: '<span class="font-bold text-violet-700">G (L2)</span>', edges: '-', open: '<span class="font-bold text-green-600">(Đích - Dừng)</span>' }
+                        ],
+                        result: "Với giới hạn độ sâu L=2, DLS từ chối mở rộng đỉnh C (vì C đã ở L=2). Nhờ đó, nó thoát khỏi bẫy nhánh sâu và quay sang tìm thấy G ngay lập tức. <strong>Chi phí duyệt: 5 bước.</strong>"
+                    },
+                    ids: {
+                        iterations: [
+                            { limit: 0, trace: [
+                                { step: 1, u: 'S (L0)', edges: 'Cutoff! (L=0)', open: 'Rỗng' }
+                            ]},
+                            { limit: 1, trace: [
+                                { step: 2, u: 'S (L0)', edges: 'A, B', open: 'A, B' },
+                                { step: 3, u: 'A (L1)', edges: 'Cutoff!', open: 'B' },
+                                { step: 4, u: 'B (L1)', edges: 'Cutoff!', open: 'Rỗng' }
+                            ]},
+                            { limit: 2, trace: [
+                                { step: 5, u: 'S (L0)', edges: 'A, B', open: 'A, B' },
+                                { step: 6, u: 'A (L1)', edges: 'C', open: 'C, B' },
+                                { step: 7, u: 'C (L2)', edges: 'Cutoff!', open: 'B' },
+                                { step: 8, u: 'B (L1)', edges: 'G', open: 'G' },
+                                { step: 9, u: '<span class="font-bold">G (L2)</span>', edges: '-', open: '<span class="text-green-600">Đích</span>' }
+                            ]}
+                        ],
+                        result: "IDS thử từng độ sâu. L=0 và L=1 đều thất bại (Cutoff). Đến L=2, nó tìm thấy đích mà không bị sa lầy vào nhánh E."
+                    }
+                }
+            },
+            {
+                title: "Bài 2: Vượt Giới Hạn",
+                desc: "Đích nằm ở độ sâu lớn. Nếu đặt giới hạn DLS quá nhỏ sẽ không thể tìm thấy đích.",
+                nodes: [
+                    { id: 'S', label: 'S\n(L=0)', level: 0, color: { background: '#f9a8d4', border: '#db2777' }, borderWidth: 2 },
+                    { id: '1', label: '1\n(L=1)', level: 1 }, { id: '2', label: '2\n(L=1)', level: 1 },
+                    { id: '3', label: '3\n(L=2)', level: 2 }, { id: '4', label: '4\n(L=2)', level: 2 },
+                    { id: '5', label: '5\n(L=3)', level: 3 },
+                    { id: 'Target', label: 'Target\n(L=3)', level: 3, color: { background: '#c4b5fd', border: '#7c3aed' }, borderWidth: 3 }
+                ],
+                edges: [
+                    { from: 'S', to: '1' }, { from: 'S', to: '2' },
+                    { from: '1', to: '3' }, { from: '1', to: '4' },
+                    { from: '2', to: '5' }, { from: '5', to: 'Target' }
+                ],
+                solutions: {
+                    dfs: {
+                        trace: [
+                            { step: 0, u: '-', edges: '-', open: 'S' },
+                            { step: 1, u: 'S (L0)', edges: '1, 2', open: '1, 2' },
+                            { step: 2, u: '1 (L1)', edges: '3, 4', open: '3, 4, 2' },
+                            { step: 3, u: '3 (L2)', edges: '-', open: '4, 2' },
+                            { step: 4, u: '4 (L2)', edges: '-', open: '2' },
+                            { step: 5, u: '2 (L1)', edges: '5', open: '5' },
+                            { step: 6, u: '5 (L3)', edges: 'Target', open: 'Target' },
+                            { step: 7, u: '<span class="font-bold text-violet-700">Target</span>', edges: '-', open: '<span class="font-bold text-green-600">(Đích - Dừng)</span>' }
+                        ],
+                        result: "DFS duyệt cạn nhánh bên trái trước khi sang nhánh phải và tìm thấy Target ở độ sâu 3."
+                    },
+                    dls: {
+                        limit: 2,
+                        trace: [
+                            { step: 0, u: '-', edges: '-', open: 'S' },
+                            { step: 1, u: 'S (L0)', edges: '1, 2', open: '1, 2' },
+                            { step: 2, u: '1 (L1)', edges: '3, 4', open: '3, 4, 2' },
+                            { step: 3, u: '3 (L2)', edges: 'Cutoff!', open: '4, 2' },
+                            { step: 4, u: '4 (L2)', edges: 'Cutoff!', open: '2' },
+                            { step: 5, u: '2 (L1)', edges: '5', open: '5, 2' },
+                            { step: 6, u: '5 (L2)', edges: 'Cutoff!', open: 'Rỗng' }
+                        ],
+                        result: "<strong>THẤT BẠI!</strong> Với giới hạn L=2, DLS đã 'cắt' việc mở rộng đỉnh 5 (đỉnh 5 nằm ở L=2 so với nhánh này), do đó nó vĩnh viễn không bao giờ thấy được Target ở L=3."
+                    },
+                    ids: {
+                        iterations: [
+                            { limit: 2, trace: [
+                                { step: '-', u: 'Bỏ qua L=0,1', edges: 'để tối ưu...', open: '-' },
+                                { step: 1, u: 'L=2 chạy lại', edges: 'như bảng DLS', open: 'Thất bại' }
+                            ]},
+                            { limit: 3, trace: [
+                                { step: 2, u: 'S (L0)', edges: '1, 2', open: '1, 2' },
+                                { step: 3, u: '1 (L1)', edges: '3, 4', open: '3, 4, 2' },
+                                { step: 4, u: '3 (L2)', edges: 'Cutoff!', open: '4, 2' },
+                                { step: 5, u: '4 (L2)', edges: 'Cutoff!', open: '2' },
+                                { step: 6, u: '2 (L1)', edges: '5', open: '5' },
+                                { step: 7, u: '5 (L2)', edges: 'Target', open: 'Target' },
+                                { step: 8, u: '<span class="font-bold">Target</span>', edges: '-', open: '<span class="text-green-600">Đích</span>' }
+                            ]}
+                        ],
+                        result: "Sự ưu việt của IDS: Mặc dù L=2 thất bại, nó tự động tăng giới hạn lên L=3 và tìm thấy đích thành công, khắc phục nhược điểm của DLS."
+                    }
+                }
+            },
+            {
+                title: "Bài 3: Cây Tìm Kiếm Đầy Đủ",
+                desc: "Mô phỏng lại ví dụ trong bài giảng slide 50. Cây phân nhánh rộng và đều.",
+                nodes: [
+                    { id: 'A', label: 'A\n(L=0)', level: 0, color: { background: '#f9a8d4', border: '#db2777' }, borderWidth: 2 },
+                    { id: 'B', label: 'B\n(L=1)', level: 1 }, { id: 'C', label: 'C\n(L=1)', level: 1 },
+                    { id: 'D', label: 'D\n(L=2)', level: 2 }, { id: 'E', label: 'E\n(L=2)', level: 2 },
+                    { id: 'F', label: 'F\n(L=2)', level: 2 }, { id: 'G', label: 'G\n(L=2)', level: 2 },
+                    { id: 'M', label: 'M\n(L=3)', level: 3, color: { background: '#c4b5fd', border: '#7c3aed' }, borderWidth: 3 }
+                ],
+                edges: [
+                    { from: 'A', to: 'B' }, { from: 'A', to: 'C' },
+                    { from: 'B', to: 'D' }, { from: 'B', to: 'E' },
+                    { from: 'C', to: 'F' }, { from: 'C', to: 'G' },
+                    { from: 'F', to: 'M' }
+                ],
+                solutions: {
+                    dfs: {
+                        trace: [
+                            { step: 1, u: 'A', edges: 'B, C', open: 'B, C' },
+                            { step: 2, u: 'B', edges: 'D, E', open: 'D, E, C' },
+                            { step: 3, u: 'D', edges: '-', open: 'E, C' },
+                            { step: 4, u: 'E', edges: '-', open: 'C' },
+                            { step: 5, u: 'C', edges: 'F, G', open: 'F, G' },
+                            { step: 6, u: 'F', edges: 'M', open: 'M, G' },
+                            { step: 7, u: '<span class="font-bold text-violet-700">M</span>', edges: '-', open: '<span class="font-bold text-green-600">(Đích)</span>' }
+                        ],
+                        result: "DFS duyệt theo thứ tự: A -> B -> D -> E -> C -> F -> M."
+                    },
+                    dls: {
+                        limit: 2,
+                        trace: [
+                            { step: 1, u: 'A (L0)', edges: 'B, C', open: 'B, C' },
+                            { step: 2, u: 'B (L1)', edges: 'D, E', open: 'D, E, C' },
+                            { step: 3, u: 'D (L2)', edges: 'Cutoff!', open: 'E, C' },
+                            { step: 4, u: 'E (L2)', edges: 'Cutoff!', open: 'C' },
+                            { step: 5, u: 'C (L1)', edges: 'F, G', open: 'F, G' },
+                            { step: 6, u: 'F (L2)', edges: 'Cutoff! (Bỏ lỡ M)', open: 'G' },
+                            { step: 7, u: 'G (L2)', edges: 'Cutoff!', open: 'Rỗng' }
+                        ],
+                        result: "Do giới hạn L=2, khi xét tới đỉnh F, DLS từ chối mở rộng tiếp xuống L=3, dẫn đến việc bỏ lỡ hoàn toàn đích M."
+                    },
+                    ids: {
+                        iterations: [
+                            { limit: 2, trace: [
+                                { step: '-', u: 'L=0, L=1', edges: 'Thất bại (như trên)', open: '-' },
+                                { step: '-', u: 'L=2', edges: 'Thất bại do Cutoff tại F', open: '-' }
+                            ]},
+                            { limit: 3, trace: [
+                                { step: 1, u: 'A', edges: 'B, C', open: 'B, C' },
+                                { step: 2, u: 'B', edges: 'D, E', open: 'D, E, C' },
+                                { step: 3, u: 'D', edges: 'Cutoff(L3)', open: 'E, C' },
+                                { step: 4, u: 'E', edges: 'Cutoff(L3)', open: 'C' },
+                                { step: 5, u: 'C', edges: 'F, G', open: 'F, G' },
+                                { step: 6, u: 'F', edges: 'M', open: 'M, G' },
+                                { step: 7, u: '<span class="font-bold">M</span>', edges: '-', open: '<span class="text-green-600">Đích</span>' }
+                            ]}
+                        ],
+                        result: "Chỉ khi vòng lặp Iterative tăng L=3, hệ thống mới cho phép đỉnh F sinh ra đỉnh con M. Kết hợp được tính an toàn của BFS và ít tốn RAM của DFS."
+                    }
+                }
+            }
+        ];
+
+        let network = null;
+        let currentExercise = 0;
+        let currentAlgo = 'dfs';
+        let isAnswerVisible = false;
+
+        function toggleAnswer() {
+            isAnswerVisible = !isAnswerVisible;
+            const placeholder = document.getElementById('hidden-placeholder');
+            const btnText = document.getElementById('toggle-btn-text');
+            const toggleBtn = document.getElementById('toggle-answer-btn');
+
+            if (isAnswerVisible) {
+                placeholder.classList.add('hidden');
+                btnText.textContent = 'Ẩn đáp án';
+                toggleBtn.classList.replace('bg-violet-600', 'bg-gray-500');
+                toggleBtn.classList.replace('hover:bg-violet-700', 'hover:bg-gray-600');
+            } else {
+                placeholder.classList.remove('hidden');
+                btnText.textContent = 'Hiện đáp án';
+                toggleBtn.classList.replace('bg-gray-500', 'bg-violet-600');
+                toggleBtn.classList.replace('hover:bg-gray-600', 'hover:bg-violet-700');
+            }
+        }
+
+        function renderGraph(nodesArray, edgesArray) {
+            const container = document.getElementById('network-graph');
+            const data = {
+                nodes: new vis.DataSet(nodesArray.map(n => ({
+                    ...n, 
+                    shape: 'circle',
+                    font: { size: 14, color: '#1f2937', face: 'Inter', multi: 'html' },
+                    color: n.color || { background: 'white', border: '#4b5563', highlight: { background: '#f5f3ff', border: '#7c3aed' } }
+                }))),
+                edges: new vis.DataSet(edgesArray.map(e => ({
+                    ...e,
+                    arrows: 'to',
+                    color: { color: '#9ca3af', highlight: '#8b5cf6' },
+                    smooth: { type: 'cubicBezier', forceDirection: 'vertical', roundness: 0.4 }
+                })))
+            };
+
+            const options = {
+                layout: {
+                    hierarchical: {
+                        direction: 'UD', // Up-Down layout to show depth
+                        sortMethod: 'directed',
+                        levelSeparation: 100,
+                        nodeSpacing: 120
+                    }
+                },
+                interaction: { hover: true, tooltipDelay: 200 },
+                physics: false
+            };
+
+            if (network !== null) { network.destroy(); }
+            network = new vis.Network(container, data, options);
+        }
+
+        function renderTable(algoKey) {
+            const tbody = document.getElementById('trace-body');
+            tbody.innerHTML = '';
+            
+            const ex = exercisesData[currentExercise];
+            const solution = ex.solutions[algoKey];
+
+            // Alert for DLS limit
+            const limitAlert = document.getElementById('limit-alert');
+            if (algoKey === 'dls') {
+                document.getElementById('depth-limit-val').textContent = "L = " + solution.limit;
+                limitAlert.classList.remove('hidden');
+            } else {
+                limitAlert.classList.add('hidden');
+            }
+
+            document.getElementById('ex-result').innerHTML = solution.result;
+
+            if (algoKey === 'dfs' || algoKey === 'dls') {
+                solution.trace.forEach(row => {
+                    const tr = document.createElement('tr');
+                    tr.className = "hover:bg-violet-50 transition-colors";
+                    tr.innerHTML = `
+                        <td class="px-3 py-2 border-b border-r text-gray-500">${row.step}</td>
+                        <td class="px-3 py-2 border-b border-r font-medium text-violet-700 bg-violet-50/50">${row.u}</td>
+                        <td class="px-3 py-2 border-b border-r text-gray-600">${row.edges}</td>
+                        <td class="px-3 py-2 border-b text-rose-700 font-mono tracking-tight">${row.open}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } else if (algoKey === 'ids') {
+                solution.iterations.forEach(iter => {
+                    const trHeader = document.createElement('tr');
+                    trHeader.className = "iteration-row";
+                    trHeader.innerHTML = `<td colspan="4" class="px-3 py-2 border-b text-center">--- Bắt đầu dò với Giới hạn Depth = ${iter.limit} ---</td>`;
+                    tbody.appendChild(trHeader);
+
+                    iter.trace.forEach(row => {
+                        const tr = document.createElement('tr');
+                        tr.className = "hover:bg-violet-50 transition-colors";
+                        tr.innerHTML = `
+                            <td class="px-3 py-2 border-b border-r text-gray-500">${row.step}</td>
+                            <td class="px-3 py-2 border-b border-r font-medium text-violet-700 bg-violet-50/50">${row.u}</td>
+                            <td class="px-3 py-2 border-b border-r text-gray-600">${row.edges}</td>
+                            <td class="px-3 py-2 border-b text-rose-700 font-mono tracking-tight">${row.open}</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                });
+            }
+        }
+
+        function selectAlgo(algoId) {
+            currentAlgo = algoId;
+            document.querySelectorAll('.algo-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-' + algoId).classList.add('active');
+            renderTable(algoId);
+        }
+
+        function loadExercise(index) {
+            currentExercise = index;
+            document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+                if(i === index) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+
+            isAnswerVisible = false;
+            const placeholder = document.getElementById('hidden-placeholder');
+            placeholder.classList.remove('hidden');
+            document.getElementById('toggle-btn-text').textContent = 'Hiện đáp án';
+            document.getElementById('toggle-answer-btn').classList.replace('bg-gray-500', 'bg-violet-600');
+
+            const ex = exercisesData[index];
+            document.getElementById('ex-title').textContent = ex.title;
+            
+            // Note: Vis.js requires explicit level properties for strict Top-Down hierarchical
+            renderGraph(ex.nodes, ex.edges);
+            
+            // Reset to DFS on new exercise
+            selectAlgo('dfs');
+        }
+
+        window.onload = () => loadExercise(0);
+    </script>
+</body>
+</html>
