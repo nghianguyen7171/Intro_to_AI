@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BFS Graph Visualizer Lab</title>
+    <!-- Tailwind CSS cho giao diện -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Vis-Network cho vẽ đồ thị tương tác -->
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        #network-graph { width: 100%; height: 100%; border-radius: 0.5rem; background-color: white; border: 1px solid #e5e7eb; box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05); }
+        .tab-btn.active { background-color: #2563eb; color: white; border-color: #2563eb; }
+        .tab-btn { background-color: white; color: #4b5563; border-color: #d1d5db; transition: all 0.2s; }
+        .tab-btn:hover:not(.active) { background-color: #f3f4f6; }
+        /* Tùy chỉnh thanh cuộn cho bảng */
+        .table-container::-webkit-scrollbar { height: 8px; width: 8px; }
+        .table-container::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        .table-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .table-container::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden">
+
+    <header class="bg-blue-900 text-white p-4 shadow-md z-10 flex justify-between items-center shrink-0">
+        <div>
+            <h1 class="text-xl font-bold tracking-wide">🔍 BFS Graph Visualizer</h1>
+            <p class="text-sm text-blue-200">Introduction to Artificial Intelligence - Trace Table Lab</p>
+        </div>
+        <div class="flex space-x-2" id="tabs">
+            <button onclick="loadExercise(0)" class="tab-btn active px-4 py-2 border rounded-md text-sm font-medium">Bài tập 1 (Từ Ảnh)</button>
+            <button onclick="loadExercise(1)" class="tab-btn px-4 py-2 border rounded-md text-sm font-medium">Bài tập 2</button>
+            <button onclick="loadExercise(2)" class="tab-btn px-4 py-2 border rounded-md text-sm font-medium">Bài tập 3</button>
+            <button onclick="loadExercise(3)" class="tab-btn px-4 py-2 border rounded-md text-sm font-medium">Bài tập 4</button>
+        </div>
+    </header>
+
+    <main class="flex-1 flex overflow-hidden p-4 gap-4">
+        
+        <!-- Khung chứa đồ thị bên trái -->
+        <div class="w-1/2 flex flex-col h-full bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="p-3 border-b border-gray-200 bg-gray-50 shrink-0">
+                <h2 id="ex-title" class="font-semibold text-gray-800">Đồ thị không gian trạng thái</h2>
+                <p id="ex-desc" class="text-xs text-gray-500 mt-1">Sử dụng chuột để kéo, thả hoặc phóng to/thu nhỏ đồ thị.</p>
+                <div class="flex items-center gap-4 mt-2 text-xs">
+                    <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-pink-300 border border-pink-500 inline-block"></span> Trạng thái Bắt đầu</span>
+                    <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-blue-300 border-2 border-blue-600 inline-block"></span> Trạng thái Đích</span>
+                </div>
+            </div>
+            <div class="flex-1 p-2">
+                <div id="network-graph"></div>
+            </div>
+        </div>
+
+        <!-- Khung chứa bảng vết bên phải -->
+        <div class="w-1/2 flex flex-col h-full bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="p-3 border-b border-gray-200 bg-gray-50 shrink-0 flex justify-between items-center">
+                <div>
+                    <h2 class="font-semibold text-gray-800">Bảng vết chạy thuật toán BFS (Trace Table)</h2>
+                    <p class="text-xs text-gray-500 mt-1">Cơ chế Hàng đợi (Queue) - Vào trước ra trước (FIFO).</p>
+                </div>
+                <button id="toggle-answer-btn" onclick="toggleAnswer()" class="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md shadow-sm transition-colors flex items-center gap-2">
+                    <svg id="toggle-icon-show" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.543 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                    <svg id="toggle-icon-hide" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path></svg>
+                    <span id="toggle-btn-text">Hiện đáp án</span>
+                </button>
+            </div>
+            
+            <div id="hidden-placeholder" class="flex-1 flex flex-col items-center justify-center text-gray-400 p-6 text-center bg-gray-50/50">
+                <svg class="w-16 h-16 mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                <p class="text-lg font-medium text-gray-600">Đáp án đang được ẩn</p>
+                <p class="text-sm mt-1 max-w-xs">Hãy thử tự phân tích và vẽ bảng nháp trước, sau đó nhấn "Hiện đáp án" để đối chiếu kết quả nhé!</p>
+            </div>
+
+            <div id="trace-table-container" class="flex-1 overflow-auto table-container p-0 hidden">
+                <table class="w-full text-sm text-left text-gray-700">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-100 sticky top-0 z-10">
+                        <tr>
+                            <th scope="col" class="px-4 py-3 font-semibold border-b border-r">Step</th>
+                            <th scope="col" class="px-4 py-3 font-semibold border-b border-r text-blue-700">u</th>
+                            <th scope="col" class="px-4 py-3 font-semibold border-b border-r">edge(u)</th>
+                            <th scope="col" class="px-4 py-3 font-semibold border-b text-green-700">OPEN</th>
+                        </tr>
+                    </thead>
+                    <tbody id="trace-body" class="divide-y divide-gray-200">
+                        <!-- Nội dung bảng sẽ được JS render -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id="result-container" class="p-4 border-t border-gray-200 bg-blue-50 shrink-0 hidden">
+                <h3 class="font-bold text-blue-900 text-sm">Kết luận:</h3>
+                <p id="ex-result" class="text-sm text-blue-800 mt-1"></p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Dữ liệu cho 4 bài tập
+        const exercisesData = [
+            {
+                title: "Bài tập 1: Đồ thị mẫu từ Ảnh của giảng viên",
+                desc: "Tìm đường đi ngắn nhất từ đỉnh K đến đỉnh G.",
+                // Trạng thái nút
+                nodes: [
+                    { id: 'K', label: 'K', color: { background: '#f9a8d4', border: '#db2777' }, borderWidth: 2 },
+                    { id: 'A', label: 'A' }, { id: 'B', label: 'B' }, { id: 'C', label: 'C' },
+                    { id: 'D', label: 'D' }, { id: 'E', label: 'E' }, { id: 'F', label: 'F' }, { id: 'H', label: 'H' },
+                    { id: 'G', label: 'G', color: { background: '#93c5fd', border: '#2563eb' }, borderWidth: 3 }
+                ],
+                // Tập hợp các cạnh có hướng (theo ảnh)
+                edges: [
+                    { from: 'K', to: 'A' }, { from: 'K', to: 'B' }, { from: 'K', to: 'C' },
+                    { from: 'A', to: 'D' }, 
+                    { from: 'C', to: 'B' }, { from: 'C', to: 'F' }, { from: 'C', to: 'H' },
+                    { from: 'B', to: 'F' }, 
+                    { from: 'D', to: 'E' }, 
+                    { from: 'E', to: 'G' }, 
+                    { from: 'F', to: 'G' }, 
+                    { from: 'H', to: 'G' }
+                ],
+                // Dữ liệu bảng mô phỏng BFS
+                trace: [
+                    { step: 0, u: '-', edges: '-', open: 'K' },
+                    { step: 1, u: 'K', edges: 'A, B, C', open: 'A, B, C' },
+                    { step: 2, u: 'A', edges: 'D', open: 'B, C, D' },
+                    { step: 3, u: 'B', edges: 'F', open: 'C, D, F' },
+                    { step: 4, u: 'C', edges: 'B (đã duyệt), F (có trong OPEN), H', open: 'D, F, H' },
+                    { step: 5, u: 'D', edges: 'E', open: 'F, H, E' },
+                    { step: 6, u: 'F', edges: 'G', open: 'H, E, G' },
+                    { step: 7, u: 'H', edges: 'G (có trong OPEN)', open: 'E, G' },
+                    { step: 8, u: 'E', edges: 'G (có trong OPEN)', open: 'G' },
+                    { step: 9, u: '<span class="font-bold text-blue-700">G</span>', edges: '-', open: '<span class="font-bold text-green-700">(Đích - Dừng thuật toán)</span>' }
+                ],
+                result: "Đường đi: <strong>K &rarr; B &rarr; F &rarr; G</strong>. Tổng chi phí: 3 bước."
+            },
+            {
+                title: "Bài tập 2: Đồ thị Mạng nhện (Nhiều đường cắt)",
+                desc: "Tìm đường từ S (Start) đến T (Target). Chú ý các vòng lặp.",
+                nodes: [
+                    { id: 'S', label: 'S', color: { background: '#f9a8d4', border: '#db2777' }, borderWidth: 2 },
+                    { id: '1', label: '1' }, { id: '2', label: '2' }, { id: '3', label: '3' },
+                    { id: '4', label: '4' }, { id: '5', label: '5' }, { id: '6', label: '6' },
+                    { id: 'T', label: 'T', color: { background: '#93c5fd', border: '#2563eb' }, borderWidth: 3 }
+                ],
+                edges: [
+                    { from: 'S', to: '1' }, { from: 'S', to: '2' }, { from: 'S', to: '3' },
+                    { from: '1', to: '4' }, { from: '2', to: '4' }, { from: '2', to: '5' },
+                    { from: '3', to: '5' }, { from: '4', to: '6' }, { from: '5', to: '6' },
+                    { from: '6', to: 'T' }, { from: '4', to: 'T' }
+                ],
+                trace: [
+                    { step: 0, u: '-', edges: '-', open: 'S' },
+                    { step: 1, u: 'S', edges: '1, 2, 3', open: '1, 2, 3' },
+                    { step: 2, u: '1', edges: '4', open: '2, 3, 4' },
+                    { step: 3, u: '2', edges: '4 (có trong OPEN), 5', open: '3, 4, 5' },
+                    { step: 4, u: '3', edges: '5 (có trong OPEN)', open: '4, 5' },
+                    { step: 5, u: '4', edges: '6, T', open: '5, 6, T' },
+                    { step: 6, u: '5', edges: '6 (có trong OPEN)', open: '6, T' },
+                    { step: 7, u: '6', edges: 'T (có trong OPEN)', open: 'T' },
+                    { step: 8, u: '<span class="font-bold text-blue-700">T</span>', edges: '-', open: '<span class="font-bold text-green-700">(Đích - Dừng)</span>' }
+                ],
+                result: "Đường đi: <strong>S &rarr; 1 &rarr; 4 &rarr; T</strong> (Hoặc S->2->4->T). Tổng chi phí: 3 bước."
+            },
+            {
+                title: "Bài tập 3: Bẫy đường dài ảo ảnh",
+                desc: "Nhánh trên nhìn dài nhưng nhánh dưới chưa chắc đã ngắn. Tìm đường A -> Z.",
+                nodes: [
+                    { id: 'A', label: 'A', color: { background: '#f9a8d4', border: '#db2777' }, borderWidth: 2 },
+                    { id: 'B', label: 'B' }, { id: 'C', label: 'C' }, { id: 'D', label: 'D' },
+                    { id: 'E', label: 'E' }, { id: 'F', label: 'F' }, { id: 'X', label: 'X' },
+                    { id: 'Z', label: 'Z', color: { background: '#93c5fd', border: '#2563eb' }, borderWidth: 3 }
+                ],
+                edges: [
+                    { from: 'A', to: 'B' }, { from: 'A', to: 'E' },
+                    { from: 'B', to: 'C' }, { from: 'C', to: 'D' }, { from: 'D', to: 'Z' },
+                    { from: 'E', to: 'F' }, { from: 'F', to: 'X' }, { from: 'X', to: 'Z' },
+                    { from: 'C', to: 'X' } 
+                ],
+                trace: [
+                    { step: 0, u: '-', edges: '-', open: 'A' },
+                    { step: 1, u: 'A', edges: 'B, E', open: 'B, E' },
+                    { step: 2, u: 'B', edges: 'C', open: 'E, C' },
+                    { step: 3, u: 'E', edges: 'F', open: 'C, F' },
+                    { step: 4, u: 'C', edges: 'D, X', open: 'F, D, X' },
+                    { step: 5, u: 'F', edges: 'X (có trong OPEN)', open: 'D, X' },
+                    { step: 6, u: 'D', edges: 'Z', open: 'X, Z' },
+                    { step: 7, u: 'X', edges: 'Z (có trong OPEN)', open: 'Z' },
+                    { step: 8, u: '<span class="font-bold text-blue-700">Z</span>', edges: '-', open: '<span class="font-bold text-green-700">(Đích - Dừng)</span>' }
+                ],
+                result: "Đường đi: <strong>A &rarr; B &rarr; C &rarr; D &rarr; Z</strong>. BFS không bị lừa bởi nhánh dưới E-F-X-Z."
+            },
+            {
+                title: "Bài tập 4: Đồ thị hẹp sâu",
+                desc: "Thử thách duyệt với ít sự lựa chọn mở rộng. Tìm M -> Goal.",
+                nodes: [
+                    { id: 'M', label: 'M', color: { background: '#f9a8d4', border: '#db2777' }, borderWidth: 2 },
+                    { id: 'N', label: 'N' }, { id: 'P', label: 'P' }, { id: 'Q', label: 'Q' },
+                    { id: 'R', label: 'R' }, { id: 'S', label: 'S' },
+                    { id: 'Goal', label: 'Goal', color: { background: '#93c5fd', border: '#2563eb' }, borderWidth: 3 }
+                ],
+                edges: [
+                    { from: 'M', to: 'N' }, { from: 'M', to: 'P' },
+                    { from: 'N', to: 'Q' }, { from: 'P', to: 'Q' },
+                    { from: 'P', to: 'R' }, { from: 'Q', to: 'S' },
+                    { from: 'R', to: 'Goal' }, { from: 'S', to: 'Goal' }
+                ],
+                trace: [
+                    { step: 0, u: '-', edges: '-', open: 'M' },
+                    { step: 1, u: 'M', edges: 'N, P', open: 'N, P' },
+                    { step: 2, u: 'N', edges: 'Q', open: 'P, Q' },
+                    { step: 3, u: 'P', edges: 'Q (có trong OPEN), R', open: 'Q, R' },
+                    { step: 4, u: 'Q', edges: 'S', open: 'R, S' },
+                    { step: 5, u: 'R', edges: 'Goal', open: 'S, Goal' },
+                    { step: 6, u: 'S', edges: 'Goal (có trong OPEN)', open: 'Goal' },
+                    { step: 7, u: '<span class="font-bold text-blue-700">Goal</span>', edges: '-', open: '<span class="font-bold text-green-700">(Đích - Dừng)</span>' }
+                ],
+                result: "Đường đi: <strong>M &rarr; P &rarr; R &rarr; Goal</strong>. Tổng chi phí: 3 bước."
+            }
+        ];
+
+        let network = null;
+        let isAnswerVisible = false;
+
+        function toggleAnswer() {
+            isAnswerVisible = !isAnswerVisible;
+            updateAnswerVisibility();
+        }
+
+        function updateAnswerVisibility() {
+            const tableContainer = document.getElementById('trace-table-container');
+            const resultContainer = document.getElementById('result-container');
+            const placeholder = document.getElementById('hidden-placeholder');
+            const btnText = document.getElementById('toggle-btn-text');
+            const toggleBtn = document.getElementById('toggle-answer-btn');
+            const iconShow = document.getElementById('toggle-icon-show');
+            const iconHide = document.getElementById('toggle-icon-hide');
+
+            if (isAnswerVisible) {
+                // Hiện đáp án
+                tableContainer.classList.remove('hidden');
+                resultContainer.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+                
+                btnText.textContent = 'Ẩn đáp án';
+                toggleBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                toggleBtn.classList.add('bg-gray-500', 'hover:bg-gray-600');
+                
+                iconShow.classList.remove('hidden');
+                iconHide.classList.add('hidden');
+            } else {
+                // Ẩn đáp án
+                tableContainer.classList.add('hidden');
+                resultContainer.classList.add('hidden');
+                placeholder.classList.remove('hidden');
+                
+                btnText.textContent = 'Hiện đáp án';
+                toggleBtn.classList.remove('bg-gray-500', 'hover:bg-gray-600');
+                toggleBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                
+                iconShow.classList.add('hidden');
+                iconHide.classList.remove('hidden');
+            }
+        }
+
+        function renderGraph(nodesArray, edgesArray) {
+            const container = document.getElementById('network-graph');
+            const data = {
+                nodes: new vis.DataSet(nodesArray.map(n => ({
+                    ...n, 
+                    shape: 'circle',
+                    font: { size: 16, color: '#1f2937', face: 'Inter' },
+                    color: n.color || { background: 'white', border: '#4b5563', highlight: { background: '#eff6ff', border: '#2563eb' } }
+                }))),
+                edges: new vis.DataSet(edgesArray.map(e => ({
+                    ...e,
+                    arrows: 'to', // Chỉ định đồ thị có hướng
+                    color: { color: '#9ca3af', highlight: '#3b82f6' },
+                    smooth: { type: 'cubicBezier', forceDirection: 'horizontal', roundness: 0.4 } // Bố cục uốn cong mượt
+                })))
+            };
+
+            const options = {
+                layout: {
+                    hierarchical: {
+                        direction: 'LR', // Left to Right layout (Quan trọng để giống ảnh)
+                        sortMethod: 'directed',
+                        nodeSpacing: 100,
+                        levelSeparation: 150
+                    }
+                },
+                interaction: { hover: true, tooltipDelay: 200 },
+                physics: false // Tắt vật lý để đồ thị đứng im cân đối
+            };
+
+            if (network !== null) { network.destroy(); }
+            network = new vis.Network(container, data, options);
+        }
+
+        function renderTable(traceData) {
+            const tbody = document.getElementById('trace-body');
+            tbody.innerHTML = '';
+            traceData.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-blue-50 transition-colors";
+                tr.innerHTML = `
+                    <td class="px-4 py-2 border-b border-r text-gray-500 font-medium">${row.step}</td>
+                    <td class="px-4 py-2 border-b border-r font-bold text-blue-700 bg-blue-50/50">${row.u}</td>
+                    <td class="px-4 py-2 border-b border-r text-gray-600">${row.edges}</td>
+                    <td class="px-4 py-2 border-b text-green-700 font-mono tracking-tight">${row.open}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function loadExercise(index) {
+            // Cập nhật giao diện Tabs
+            document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+                if(i === index) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+
+            isAnswerVisible = false; 
+            updateAnswerVisibility();
+
+            const ex = exercisesData[index];
+            document.getElementById('ex-title').textContent = ex.title;
+            document.getElementById('ex-desc').textContent = ex.desc;
+            document.getElementById('ex-result').innerHTML = ex.result;
+
+            renderGraph(ex.nodes, ex.edges);
+            renderTable(ex.trace);
+        }
+
+        // Tự động tải bài tập 1 (đồ thị trong ảnh) khi mở trang
+        window.onload = () => loadExercise(0);
+    </script>
+</body>
+</html>
