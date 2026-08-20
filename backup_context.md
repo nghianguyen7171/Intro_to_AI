@@ -346,6 +346,7 @@ Publishing answer keys therefore requires deliberately opting in.
 - Slides integration and accessibility
 - Interactive exercises system (25+ exercises for Week 9)
 - Exercise questions system (questions-only format with answer spaces)
+- Interactive quizzes for Week 1 (Quizz1.html) and Week 2 (BFS, DFS, Advanced DFS)
 - Main textbook prominently featured with PDF link
 - Responsive design and styling
 - GitHub Pages deployment
@@ -691,14 +692,16 @@ appropriate week in `lectures.yml` — no other changes needed.
 - **Source commit:** `d246092` — "Add Week 2 interactive quizzes for BFS, DFS, and advanced DFS."
 - **Deployment:** `./deploy.sh` published commit `d246092` to `gh-pages`.
   No changes to `build.sh` needed (quizz folder was already shipped since 2026-08-09).
-- **Live URLs:**
+- **Live URLs (all verified HTTP 200):**
   - https://nghianguyen7171.github.io/Intro_to_AI/quizz/quizz2_bfs.html
   - https://nghianguyen7171.github.io/Intro_to_AI/quizz/quizz2_dfs.html
   - https://nghianguyen7171.github.io/Intro_to_AI/quizz/quizz2_Adv_dfs.html
+- **Verification:** `gh-pages` HEAD advanced to `e471120`; backup_context.md
+  update pushed to `main` as `b63aa4c`.
 
 ---
 
-**Last Updated:** 2026-08-20 (Week 2 quizzes deployed: BFS, DFS, Advanced DFS)  
+**Last Updated:** 2026-08-20 (Week 2 quizzes deployed and verified live: BFS, DFS, Advanced DFS)  
 **AI Readiness:** 100%
 
 *This document serves as a comprehensive backup context for the Introduction to AI course website project. It contains all essential information needed to understand, maintain, and continue development of the project.*
