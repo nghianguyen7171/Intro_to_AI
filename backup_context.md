@@ -680,6 +680,23 @@ No action required. Next update warranted when content changes.
 To add future quizzes: drop `quizz/QuizzN.html` and reference it from the
 appropriate week in `lectures.yml` — no other changes needed.
 
+### 2026-08-21 — Week 3 Quizzes Deployed
+
+- **New files:** `quizz/heuristic_search_visualizer_lab.html`,
+  `quizz/scenario_heuristic_search_lab.html` — two interactive Week 3 quizzes
+  covering informed/heuristic search (Best-First, Hill Climbing, Beam Search)
+  via an algorithm visualizer and applied scenario problem-formulation lab.
+- **`src/data/lectures.yml`:** Week 3 materials now include:
+  - `{ "Quiz 3 — Heuristic Search Visualizer Lab": "quizz/heuristic_search_visualizer_lab.html" }`
+  - `{ "Quiz 3 — Scenario Heuristic Search Lab": "quizz/scenario_heuristic_search_lab.html" }`
+- **Source commit:** `68b7063` — "Add Week 3 interactive quizzes:
+  heuristic search visualizer & scenario labs."
+- **Deployment:** `./deploy.sh` published commit `68b7063` to `gh-pages`.
+  No changes to `build.sh` needed (quizz folder was already shipped since 2026-08-09).
+- **Live URLs (both verified HTTP 200):**
+  - https://nghianguyen7171.github.io/Intro_to_AI/quizz/heuristic_search_visualizer_lab.html
+  - https://nghianguyen7171.github.io/Intro_to_AI/quizz/scenario_heuristic_search_lab.html
+
 ### 2026-08-20 — Week 2 Quizzes Deployed
 
 - **New files:** `quizz/quizz2_bfs.html`, `quizz/quizz2_dfs.html`,
@@ -701,7 +718,7 @@ appropriate week in `lectures.yml` — no other changes needed.
 
 ---
 
-**Last Updated:** 2026-08-20 (Week 2 quizzes deployed and verified live: BFS, DFS, Advanced DFS)  
+**Last Updated:** 2026-08-21 (Week 3 quizzes deployed and verified live: Heuristic Search Visualizer Lab, Scenario Heuristic Search Lab)  
 **AI Readiness:** 100%
 
 *This document serves as a comprehensive backup context for the Introduction to AI course website project. It contains all essential information needed to understand, maintain, and continue development of the project.*
