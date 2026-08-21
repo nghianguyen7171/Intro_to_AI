@@ -60,6 +60,8 @@ lectures:
     materials:
       - "Chapter 4, lecture slides"
       - "Search implementation examples"
+      - { "Quiz 3 — Heuristic Search Visualizer Lab": "quizz/heuristic_search_visualizer_lab.html" }
+      - { "Quiz 3 — Scenario Heuristic Search Lab": "quizz/scenario_heuristic_search_lab.html" }
 
   - week: 4
     date: "2024-09-24"
