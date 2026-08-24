@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 4 Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+/* ── Design tokens ── */
+:root {
+    --bg:          #f1f5f9;
+    --surface:     #ffffff;
+    --surface-2:   #f8fafc;
+    --border:      #e2e8f0;
+    --text:        #0f172a;
+    --text-2:      #475569;
+    --text-3:      #94a3b8;
+    --accent:      #6366f1;
+    --accent-lt:   #eef2ff;
+    --accent-bd:   #c7d2fe;
+    --code-bg:     #1e293b;
+    --code-text:   #e2e8f0;
+    --q-bg:        #fefce8;
+    --q-bd:        #fde047;
+    --task-bg:     #eff6ff;
+    --task-bd:     #93c5fd;
+    --sub-bg:      #f0fdf4;
+    --sub-bd:      #86efac;
+    --review-bg:   #fcfcfd;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --bg:        #0f172a;
+        --surface:   #1e293b;
+        --surface-2: #162032;
+        --border:    #334155;
+        --text:      #f1f5f9;
+        --text-2:    #94a3b8;
+        --text-3:    #64748b;
+        --accent:    #818cf8;
+        --accent-lt: #1e1b4b;
+        --accent-bd: #3730a3;
+        --code-bg:   #090e1a;
+        --code-text: #e2e8f0;
+        --q-bg:      #2d2508;
+        --q-bd:      #713f12;
+        --task-bg:   #0c1a2e;
+        --task-bd:   #1e3a5f;
+        --sub-bg:    #052e16;
+        --sub-bd:    #166534;
+        --review-bg: #172033;
+    }
+}
+:root[data-theme="dark"] {
+    --bg:        #0f172a;
+    --surface:   #1e293b;
+    --surface-2: #162032;
+    --border:    #334155;
+    --text:      #f1f5f9;
+    --text-2:    #94a3b8;
+    --text-3:    #64748b;
+    --accent:    #818cf8;
+    --accent-lt: #1e1b4b;
+    --accent-bd: #3730a3;
+    --code-bg:   #090e1a;
+    --code-text: #e2e8f0;
+    --q-bg:      #2d2508;
+    --q-bd:      #713f12;
+    --task-bg:   #0c1a2e;
+    --task-bd:   #1e3a5f;
+    --sub-bg:    #052e16;
+    --sub-bd:    #166534;
+    --review-bg: #172033;
+}
+
+/* ── Base ── */
+*, *::before, *::after { box-sizing: border-box; }
+body {
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.65;
+    margin: 0;
+}
+p { margin: 0 0 .7rem; }
+p:last-child { margin-bottom: 0; }
+strong { font-weight: 700; }
+em { font-style: italic; }
+code, pre, .mono { font-family: 'JetBrains Mono', 'Courier New', monospace; }
+
+/* ── Header ── */
+#site-header {
+    background: #0f172a;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    border-bottom: 1px solid #1e293b;
+}
+.header-inner {
+    max-width: 940px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+.header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .9rem 0 .5rem;
+}
+.header-eyebrow {
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #818cf8;
+    margin-bottom: .15rem;
+}
+.header-title {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.25;
+}
+.header-sub {
+    font-size: .75rem;
+    color: #94a3b8;
+    margin-top: .1rem;
+}
+.badge-pill {
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #94a3b8;
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .06em;
+    padding: .2rem .65rem;
+    border-radius: 4px;
+}
+
+/* ── Tabs ── */
+.tab-bar {
+    display: flex;
+    gap: .125rem;
+    border-top: 1px solid #1e293b;
+}
+.tab-btn {
+    padding: .45rem 1rem;
+    border-bottom: 2px solid transparent;
+    color: #64748b;
+    font-weight: 600;
+    font-size: .8rem;
+    cursor: pointer;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    transition: color .15s, border-color .15s;
+}
+.tab-btn:hover { color: #e2e8f0; }
+.tab-btn.active {
+    color: #fff;
+    border-bottom-color: #818cf8;
+}
+
+/* ── Main layout ── */
+main {
+    max-width: 940px;
+    margin: 0 auto;
+    padding: 1.75rem 1.5rem 5rem;
+}
+
+/* ── Section switch ── */
+.part-content { display: none; }
+.part-content.active { display: block; }
+
+/* ── Submission box ── */
+.sub-box {
+    background: var(--sub-bg);
+    border: 1px solid var(--sub-bd);
+    border-radius: 8px;
+    padding: 1.1rem 1.4rem;
+    margin-bottom: 1.75rem;
+}
+.sub-label {
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #15803d;
+    margin-bottom: .6rem;
+}
+
+/* ── Part header ── */
+.part-header {
+    display: flex;
+    align-items: center;
+    gap: .9rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: .75rem;
+    border-bottom: 2px solid var(--border);
+}
+.part-badge {
+    background: var(--accent);
+    color: #fff;
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .07em;
+    padding: .22rem .75rem;
+    border-radius: 9999px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+}
+.part-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--text);
+}
+
+/* ── Review section ── */
+.review-section {
+    background: var(--review-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.4rem 1.5rem;
+    margin-bottom: 1.75rem;
+}
+.review-eyebrow {
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: .8rem;
+}
+.review-sub {
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-top: 1.3rem;
+    margin-bottom: .7rem;
+}
+.review-sub .bar {
+    width: 5px;
+    height: 18px;
+    background: var(--accent);
+    border-radius: 3px;
+    flex-shrink: 0;
+}
+.review-sub:first-of-type { margin-top: 0; }
+
+/* ── Exercise card ── */
+.ex-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 1.4rem 1.5rem;
+    margin-bottom: 1.75rem;
+}
+.ex-eyebrow {
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: .25rem;
+}
+.ex-title {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: .85rem;
+    text-wrap: balance;
+}
+
+/* ── Formula box ── */
+.formula {
+    background: var(--accent-lt);
+    border: 1px solid var(--accent-bd);
+    border-radius: 6px;
+    padding: .65rem 1.2rem;
+    margin: .7rem 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .95rem;
+    text-align: center;
+    color: var(--accent);
+    font-weight: 600;
+}
+
+/* ── Note block ── */
+.note {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: .65rem 1rem;
+    font-size: .845rem;
+    color: var(--text-2);
+    margin: .75rem 0;
+}
+
+/* ── Question box ── */
+.q-box {
+    background: var(--q-bg);
+    border-left: 3px solid #eab308;
+    border-radius: 0 6px 6px 0;
+    padding: .9rem 1.2rem;
+    margin-top: 1.2rem;
+}
+.q-label {
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: #a16207;
+    margin-bottom: .45rem;
+}
+
+/* ── Task box ── */
+.task-box {
+    background: var(--task-bg);
+    border-left: 3px solid #60a5fa;
+    border-radius: 0 6px 6px 0;
+    padding: .9rem 1.2rem;
+    margin: .85rem 0;
+}
+.task-label {
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: #1d4ed8;
+    margin-bottom: .45rem;
+}
+
+/* ── Code ── */
+pre {
+    background: var(--code-bg);
+    color: var(--code-text);
+    border-radius: 6px;
+    padding: 1rem 1.2rem;
+    overflow-x: auto;
+    font-size: .78rem;
+    line-height: 1.6;
+    margin: .7rem 0;
+}
+code:not(pre code) {
+    background: var(--accent-lt);
+    color: var(--accent);
+    padding: .12em .4em;
+    border-radius: 3px;
+    font-size: .85em;
+}
+
+/* ── Tables ── */
+.tbl-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: .845rem; margin: .7rem 0; }
+th {
+    background: var(--surface-2);
+    padding: .45rem .75rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: .76rem;
+    letter-spacing: .02em;
+    color: var(--text-2);
+    border-bottom: 2px solid var(--border);
+}
+td { padding: .45rem .75rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+.tc { text-align: center; }
+.tnum { font-variant-numeric: tabular-nums; }
+
+/* ── Images ── */
+.graph-img {
+    display: block;
+    max-width: 100%;
+    margin: 1rem auto;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+.img-cap {
+    text-align: center;
+    font-size: .77rem;
+    color: var(--text-3);
+    margin-top: .2rem;
+    margin-bottom: .85rem;
+}
+
+/* ── Lists ── */
+.content-ol { padding-left: 1.3rem; margin: .4rem 0; }
+.content-ol li { margin-bottom: .35rem; }
+.content-ul { padding-left: 1.3rem; list-style: disc; margin: .4rem 0; }
+.content-ul li { margin-bottom: .3rem; }
+
+/* ── Algo selector grid ── */
+.algo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .85rem;
+    margin: .75rem 0;
+}
+.algo-box {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: .7rem .9rem;
+}
+.algo-box-label {
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: .35rem;
+}
+
+/* ── Scenario band ── */
+.scenario-band {
+    background: linear-gradient(135deg, #0c2340 0%, #0d3560 100%);
+    border-radius: 8px;
+    padding: 1.1rem 1.4rem;
+    margin-bottom: 1.1rem;
+}
+
+/* ── Question numbered list ── */
+.q-list { margin: .1rem 0 0; }
+.q-item { display: flex; gap: .6rem; margin-bottom: .5rem; font-size: .875rem; align-items: flex-start; }
+.q-item:last-child { margin-bottom: 0; }
+.q-num { flex-shrink: 0; font-weight: 700; color: var(--accent); min-width: 2.4rem; font-variant-numeric: tabular-nums; }
+
+/* ── Print ── */
+@media print {
+    #site-header { background: #1e293b !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .tab-bar { display: none !important; }
+    .part-content { display: block !important; }
+    pre { white-space: pre-wrap; }
+}
+</style>
+</head>
+<body>
+
+<!-- ========================================================= HEADER -->
+<header id="site-header">
+    <div class="header-inner">
+        <div class="header-top">
+            <div>
+                <div class="header-eyebrow">EP15/EP16.TOKT11121 · Introduction to AI</div>
+                <div class="header-title">Week 4 — Search Algorithms</div>
+                <div class="header-sub">Practice Lab &nbsp;·&nbsp; 90 minutes</div>
+            </div>
+            <div><span class="badge-pill">THEORY + CODE</span></div>
+        </div>
+        <div class="tab-bar">
+            <button class="tab-btn active" id="tab-part1" onclick="showPart('part1')">Part I — Theory</button>
+            <button class="tab-btn" id="tab-part2" onclick="showPart('part2')">Part II — Programming</button>
+        </div>
+    </div>
+</header>
+
+<!-- ========================================================= MAIN -->
+<main>
+
+    <!-- Submission instructions (always visible) -->
+    <div class="sub-box">
+        <div class="sub-label">Submission Instructions</div>
+        <div class="tbl-wrap">
+            <table>
+                <thead>
+                    <tr><th></th><th>Part I</th><th>Part II</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="font-weight:600; white-space:nowrap;">Format</td>
+                        <td><code>.docx</code> or <code>.pdf</code></td>
+                        <td><code>.ipynb</code> — run all cells before submitting</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:600; white-space:nowrap;">File name</td>
+                        <td><code>&lt;HọTên&gt;_&lt;MSSV&gt;_PART1</code></td>
+                        <td><code>&lt;HọTên&gt;_&lt;MSSV&gt;_PART2</code></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:600; white-space:nowrap;">Submit to</td>
+                        <td colspan="2" style="color:var(--text-2);">Google Drive link provided in class</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="font-size:.8rem; color:#166534; margin-top:.5rem;">
+            Example: &nbsp;<code>NguyenVanAn_12345678_PART1.pdf</code> &nbsp;&nbsp; <code>NguyenVanAn_12345678_PART2.ipynb</code>
+        </div>
+    </div>
+
+
+    <!-- ====================================================== PART I -->
+    <div id="part1-content" class="part-content active">
+
+        <div class="part-header">
+            <span class="part-badge">Part I</span>
+            <span class="part-title">Theory Exercises</span>
+        </div>
+
+        <!-- Algorithm Review -->
+        <div class="review-section">
+            <div class="review-eyebrow">Algorithm Review <span style="text-transform:none; font-weight:500; letter-spacing:0; font-size:.88em; opacity:.75;">(read before doing the test)</span></div>
+
+            <!-- Path Cost -->
+            <div class="review-sub"><span class="bar"></span> Path Cost</div>
+            <p>The <strong>path cost</strong> of a solution is the total weight of all edges along the path from start to goal.</p>
+            <p>If a path visits nodes S → n₁ → n₂ → … → T:</p>
+            <div class="formula">g(path) = w(S→n₁) + w(n₁→n₂) + … + w(nₖ→T)</div>
+            <p style="font-size:.845rem; color:var(--text-2);">where w(u→v) is the edge weight between u and v.</p>
+            <p><strong>Example</strong> — Graph G (refer to Exercise 1):</p>
+            <div class="tbl-wrap">
+                <table>
+                    <thead><tr><th>Path</th><th>Calculation</th><th class="tc">Total cost</th></tr></thead>
+                    <tbody>
+                        <tr>
+                            <td class="mono" style="font-size:.78rem;">S → A → D → H → T</td>
+                            <td>2 + 4 + 8 + 5</td>
+                            <td class="tc tnum">19</td>
+                        </tr>
+                        <tr>
+                            <td class="mono" style="font-size:.78rem;">S → C → F → I → T</td>
+                            <td>1 + 9 + 2 + 4</td>
+                            <td class="tc tnum">16</td>
+                        </tr>
+                        <tr>
+                            <td class="mono" style="font-size:.78rem;">S → A → E → I → T</td>
+                            <td>2 + 2 + 3 + 4</td>
+                            <td class="tc tnum" style="font-weight:700; color:var(--accent);">11 ✓</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="note">
+                A shorter path (fewer edges) is <strong>not</strong> necessarily cheaper — a longer route can cost less if its edge weights are smaller. Always sum the weights, do not count steps.
+            </div>
+
+            <!-- Hill Climbing -->
+            <div class="review-sub"><span class="bar"></span> Hill Climbing (Steepest Ascent)</div>
+            <p>Hill Climbing is a <strong>local search</strong> algorithm. It keeps track of only the <strong>current node</strong> — no OPEN list, no backtracking.</p>
+            <p><strong>Traversal rule:</strong></p>
+            <ol class="content-ol" style="font-size:.875rem;">
+                <li>Start at the initial node.</li>
+                <li>Generate all successors (neighbors reachable by one step).</li>
+                <li>Select the successor with the <strong>lowest h(n)</strong>.</li>
+                <li>If that successor's h is <strong>lower than the current node's h</strong> → move there (it becomes the new current node).</li>
+                <li>If <strong>no successor improves</strong> (all h ≥ current h) → <strong>stop</strong> (local minimum reached).</li>
+                <li>Repeat from step 2 until goal is reached or algorithm stops.</li>
+            </ol>
+            <div class="tbl-wrap" style="margin-top:.75rem;">
+                <table>
+                    <thead><tr><th>Property</th><th>Hill Climbing</th></tr></thead>
+                    <tbody>
+                        <tr><td>Uses h(n)?</td><td>Yes</td></tr>
+                        <tr><td>Tracks cost g(n)?</td><td>No</td></tr>
+                        <tr><td>Maintains OPEN list?</td><td>No</td></tr>
+                        <tr><td>Can backtrack?</td><td>No</td></tr>
+                        <tr><td>Guaranteed to find goal?</td><td>No — may get stuck at local minima</td></tr>
+                        <tr><td>Guaranteed optimal?</td><td>No</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="note">
+                <strong>Local minimum:</strong> a node whose h value is lower than all its neighbors. Hill Climbing cannot escape — it has no memory of other paths.
+            </div>
+        </div><!-- /review-section -->
+
+
+        <!-- Exercise 1 -->
+        <div class="ex-card">
+            <div class="ex-eyebrow">Exercise 1</div>
+            <div class="ex-title">Uninformed &amp; Heuristic Search on Graph G</div>
+            <p>The directed weighted graph <strong>G</strong> below is given. Each node shows its heuristic value <code>h(n)</code> — an estimate of the distance to goal node <strong>T</strong>. Edge weights represent movement costs.</p>
+
+            <img src="../idea/week4_graph1.png" alt="Graph G" class="graph-img" style="max-width:520px;">
+            <div class="img-cap">Graph G — nodes labeled with h(n) values</div>
+
+            <p>Choose <strong>one uninformed</strong> and <strong>one heuristic</strong> search algorithm from the lists below. For each, find a path from <strong>S</strong> to <strong>T</strong> and trace your steps.</p>
+
+            <div class="algo-grid">
+                <div class="algo-box">
+                    <div class="algo-box-label">Uninformed</div>
+                    <ul class="content-ul" style="font-size:.85rem;">
+                        <li>BFS</li>
+                        <li>DFS</li>
+                        <li>Depth-Limited DFS (L = 4)</li>
+                        <li>Iterative Deepening DFS</li>
+                    </ul>
+                </div>
+                <div class="algo-box">
+                    <div class="algo-box-label">Heuristic</div>
+                    <ul class="content-ul" style="font-size:.85rem;">
+                        <li>Greedy Best-First</li>
+                        <li>Beam Search (w = 2)</li>
+                        <li>Hill Climbing (Steepest Ascent)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="note"><strong>Tie-breaking rule:</strong> when multiple nodes have equal priority, expand in <strong>alphabetical order</strong>.</div>
+
+            <div class="q-box">
+                <div class="q-label">Questions</div>
+                <div class="q-list">
+                    <div class="q-item"><span class="q-num">1.1</span>Which of your two algorithms finds the lower-cost path? Why?</div>
+                    <div class="q-item"><span class="q-num">1.2</span>If Greedy Best-First is applied, which path does it follow? Why does <code>h(C) = 3</code> mislead Greedy but not BFS?</div>
+                    <div class="q-item"><span class="q-num">1.3</span>What is the true optimal path? <em>(Hint: total cost &lt; 12)</em></div>
+                </div>
+            </div>
+        </div><!-- /ex1 -->
+
+
+        <!-- Exercise 2 -->
+        <div class="ex-card">
+            <div class="ex-eyebrow">Exercise 2</div>
+            <div class="ex-title">Hill Climbing &amp; Beam Search on Graph G2</div>
+            <p>The directed weighted graph <strong>G2</strong> below is given with a new set of heuristic values.</p>
+
+            <img src="../idea/week4_graph2.png" alt="Graph G2" class="graph-img" style="max-width:480px;">
+            <div class="img-cap">Graph G2 — nodes labeled with h(n) values</div>
+
+            <p>Apply <strong>Hill Climbing (Steepest Ascent)</strong> and <strong>Beam Search (w = 2)</strong> to find a path from <strong>S</strong> to <strong>T</strong>. Trace your steps for each.</p>
+
+            <div class="note"><strong>Tie-breaking rule:</strong> alphabetical order.</div>
+
+            <div class="q-box">
+                <div class="q-label">Questions</div>
+                <div class="q-list">
+                    <div class="q-item"><span class="q-num">2.1</span>Does Hill Climbing find a path to <strong>T</strong>? If not, at which node does it stop and why?</div>
+                    <div class="q-item"><span class="q-num">2.2</span>How does Beam Search (w = 2) avoid the problem Hill Climbing encounters?</div>
+                    <div class="q-item"><span class="q-num">2.3</span>What is the true optimal path and its cost? Is it found by either algorithm?</div>
+                </div>
+            </div>
+        </div><!-- /ex2 -->
+
+
+        <!-- Exercise 3 -->
+        <div class="ex-card">
+            <div class="ex-eyebrow">Exercise 3</div>
+            <div class="ex-title">Missionaries and Cannibals</div>
+
+            <img src="../idea/mc3.png" alt="Missionaries and Cannibals — Start and Goal" class="graph-img" style="max-width:560px;">
+
+            <p><strong>Setup.</strong> 3 missionaries (M) and 3 cannibals (C) must all cross a river from the left bank to the right bank. A single boat holds <strong>at most 2 people</strong> and requires <strong>at least 1</strong> person per crossing.</p>
+            <p><strong>Constraint.</strong> On either bank, cannibals may <strong>never outnumber</strong> missionaries — unless no missionaries are present on that bank.</p>
+
+            <div style="margin:1rem 0;">
+                <div style="font-size:.8rem; font-weight:700; color:var(--text-2); margin-bottom:.4rem;">State notation: <code>(ML, CL, b)</code></div>
+                <ul class="content-ul" style="font-size:.875rem;">
+                    <li><strong>ML</strong> = number of missionaries on the <strong>left</strong> bank</li>
+                    <li><strong>CL</strong> = number of cannibals on the <strong>left</strong> bank</li>
+                    <li><strong>b</strong> = boat position: <strong>L</strong> (left) or <strong>R</strong> (right)</li>
+                </ul>
+                <p style="font-size:.845rem; color:var(--text-2); margin-top:.35rem;">The right bank is implicit: right missionaries = <code>3 − ML</code>, right cannibals = <code>3 − CL</code>.</p>
+            </div>
+
+            <div class="tbl-wrap">
+                <table>
+                    <thead><tr><th>State</th><th>Left bank</th><th>Boat</th><th>Right bank</th><th>Meaning</th></tr></thead>
+                    <tbody>
+                        <tr>
+                            <td class="mono" style="font-weight:700;">(3, 3, L)</td>
+                            <td>3M + 3C</td>
+                            <td>← left</td>
+                            <td>empty</td>
+                            <td style="font-weight:700; color:var(--accent);">Start</td>
+                        </tr>
+                        <tr>
+                            <td class="mono" style="font-weight:700;">(0, 0, R)</td>
+                            <td>empty</td>
+                            <td>right →</td>
+                            <td>3M + 3C</td>
+                            <td style="font-weight:700; color:#10b981;">Goal</td>
+                        </tr>
+                        <tr>
+                            <td class="mono">(3, 1, R)</td>
+                            <td>3M + 1C</td>
+                            <td>right →</td>
+                            <td>0M + 2C</td>
+                            <td style="color:var(--text-2);">After move 1: 2C cross right</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p style="font-size:.875rem; margin-top:.5rem;">
+                <strong>Start:</strong> <code>(3, 3, L)</code> &nbsp;&nbsp;
+                <strong>Goal:</strong> <code>(0, 0, R)</code>
+            </p>
+
+            <div style="margin:.75rem 0;">
+                <div style="font-size:.8rem; font-weight:700; color:var(--text-2); margin-bottom:.4rem;">Validity check for state (ML, CL, b):</div>
+                <ul class="content-ul" style="font-size:.875rem;">
+                    <li>Left bank: <code>ML = 0</code> <strong>or</strong> <code>ML ≥ CL</code></li>
+                    <li>Right bank: <code>(3−ML) = 0</code> <strong>or</strong> <code>(3−ML) ≥ (3−CL)</code></li>
+                </ul>
+            </div>
+
+            <p>Apply <strong>BFS</strong> to find the minimum-move solution. Use state <code>(ML, CL, b)</code> as the node representation. Expand states in order: smaller <code>ML</code> first, then smaller <code>CL</code>.</p>
+
+            <div class="q-box">
+                <div class="q-label">Questions</div>
+                <div class="q-list">
+                    <div class="q-item"><span class="q-num">3.1</span>How many moves does BFS need to reach the goal?</div>
+                    <div class="q-item"><span class="q-num">3.2</span>Suppose we apply Hill Climbing with heuristic <code>h(ML, CL, b) = ML + CL</code>. At which state does HC get stuck, and why?</div>
+                    <div class="q-item"><span class="q-num">3.3</span>What property of this problem makes it fundamentally harder for local search (HC, Greedy) than for BFS?</div>
+                </div>
+            </div>
+        </div><!-- /ex3 -->
+
+
+        <!-- Exercise 4 -->
+        <div class="ex-card">
+            <div class="ex-eyebrow">Exercise 4 — Scenario</div>
+            <div class="ex-title">Flood Relief Route Planning</div>
+
+            <div class="scenario-band">
+                <div style="font-size:.68rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:#60a5fa; margin-bottom:.35rem;">Scenario</div>
+                <p style="color:#bfdbfe; font-size:.875rem; margin:0;">A rescue convoy departs from the <strong style="color:#fff;">Provincial Coordination Center</strong> and must reach an <strong style="color:#fff;">Isolated Commune</strong> cut off by floodwater in Central Vietnam. Roads are partially flooded or damaged; travel times (hours) between checkpoints are listed below.</p>
+            </div>
+
+            <div class="tbl-wrap">
+                <table style="font-size:.82rem;">
+                    <thead><tr><th>From</th><th>To</th><th class="tc">g(n)</th></tr></thead>
+                    <tbody>
+                        <tr><td rowspan="3" style="vertical-align:middle; font-weight:600;">Coordination Center</td><td>Phố Cũ Town</td><td class="tc tnum">2</td></tr>
+                        <tr><td>Northern Border Post</td><td class="tc tnum">3</td></tr>
+                        <tr><td>Intercity Terminal</td><td class="tc tnum">4</td></tr>
+                        <tr><td rowspan="2" style="vertical-align:middle; font-weight:600;">Phố Cũ Town</td><td>Khe Đá Flooded Bridge</td><td class="tc tnum">1</td></tr>
+                        <tr><td>Hòa Bình School</td><td class="tc tnum">3</td></tr>
+                        <tr><td rowspan="2" style="vertical-align:middle; font-weight:600;">Northern Border Post</td><td>Hòa Bình School</td><td class="tc tnum">2</td></tr>
+                        <tr><td>Southern Supply Point</td><td class="tc tnum">4</td></tr>
+                        <tr><td rowspan="2" style="vertical-align:middle; font-weight:600;">Intercity Terminal</td><td>Southern Supply Point</td><td class="tc tnum">2</td></tr>
+                        <tr><td>Bản Đồng Junction</td><td class="tc tnum">5</td></tr>
+                        <tr><td rowspan="2" style="vertical-align:middle; font-weight:600;">Khe Đá Flooded Bridge</td><td>Highland Medical Post</td><td class="tc tnum">6</td></tr>
+                        <tr><td>Bản Đồng Junction</td><td class="tc tnum">7</td></tr>
+                        <tr><td rowspan="2" style="vertical-align:middle; font-weight:600;">Hòa Bình School</td><td>Bản Đồng Junction</td><td class="tc tnum">3</td></tr>
+                        <tr><td>Highland Medical Post</td><td class="tc tnum">2</td></tr>
+                        <tr><td rowspan="2" style="vertical-align:middle; font-weight:600;">Southern Supply Point</td><td>Highland Medical Post</td><td class="tc tnum">3</td></tr>
+                        <tr><td>Flood Checkpoint</td><td class="tc tnum">4</td></tr>
+                        <tr><td rowspan="2" style="vertical-align:middle; font-weight:600;">Bản Đồng Junction</td><td>Flood Checkpoint</td><td class="tc tnum">2</td></tr>
+                        <tr><td>Isolated Commune</td><td class="tc tnum">4</td></tr>
+                        <tr><td style="font-weight:600;">Highland Medical Post</td><td>Isolated Commune</td><td class="tc tnum">5</td></tr>
+                        <tr><td style="font-weight:600;">Flood Checkpoint</td><td>Isolated Commune</td><td class="tc tnum">2</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="margin-top:1.2rem;">
+                <p style="font-size:.845rem; font-weight:600; color:var(--text-2);">Heuristic h(n) — estimated helicopter flight time to the Isolated Commune:</p>
+                <div class="tbl-wrap">
+                    <table>
+                        <thead><tr><th>Location</th><th class="tc">h(n)</th><th>Location</th><th class="tc">h(n)</th></tr></thead>
+                        <tbody>
+                            <tr><td>Coordination Center</td><td class="tc tnum">9</td><td>Hòa Bình School</td><td class="tc tnum">6</td></tr>
+                            <tr><td>Phố Cũ Town</td><td class="tc tnum">5</td><td>Southern Supply Point</td><td class="tc tnum">5</td></tr>
+                            <tr><td>Northern Border Post</td><td class="tc tnum">7</td><td>Bản Đồng Junction</td><td class="tc tnum">4</td></tr>
+                            <tr><td>Intercity Terminal</td><td class="tc tnum">6</td><td>Highland Medical Post</td><td class="tc tnum">4</td></tr>
+                            <tr><td>Khe Đá Flooded Bridge</td><td class="tc tnum" style="font-weight:700; color:var(--accent);">3</td><td>Flood Checkpoint</td><td class="tc tnum">2</td></tr>
+                            <tr><td style="font-weight:700;">Isolated Commune (goal)</td><td class="tc tnum" style="font-weight:700; color:#10b981;">0</td><td></td><td></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="note" style="margin-top:1rem;">
+                <strong>Task:</strong> Draw the state space graph on paper from the description above. Then apply <strong>Hill Climbing (Steepest Ascent)</strong> and <strong>Greedy Best-First Search</strong> to find a route from the Coordination Center to the Isolated Commune.<br><br>
+                <strong>Tie-breaking rule:</strong> when equal priority, expand in <strong>alphabetical order</strong> of location names.
+            </div>
+
+            <div class="q-box">
+                <div class="q-label">Questions</div>
+                <div class="q-list">
+                    <div class="q-item"><span class="q-num">4.1</span>Does Hill Climbing find a route to the Isolated Commune? If not, at which location does it stop and why?</div>
+                    <div class="q-item"><span class="q-num">4.2</span>Which route does Greedy Best-First find? What is the total travel time?</div>
+                    <div class="q-item"><span class="q-num">4.3</span>What is the truly optimal route and its total travel time?</div>
+                </div>
+            </div>
+        </div><!-- /ex4 -->
+
+    </div><!-- /part1 -->
+
+
+    <!-- ====================================================== PART II -->
+    <div id="part2-content" class="part-content">
+
+        <div class="part-header">
+            <span class="part-badge">Part II</span>
+            <span class="part-title">Programming Exercises</span>
+        </div>
+
+        <div class="note" style="margin-bottom:1.5rem;">
+            Submission: one <code>.ipynb</code> file. Each exercise is one section. <strong>Run all cells before submitting</strong> — output must be visible.
+        </div>
+
+        <!-- P1 -->
+        <div class="ex-card">
+            <div class="ex-eyebrow">P1</div>
+            <div class="ex-title">Heuristic Search on Graph G</div>
+            <p>Graph G is provided as Python data structures below. Use them directly — do not re-type the graph.</p>
+
+<pre><code># graph[u] = list of (v, edge_cost) sorted alphabetically by v
+graph_G = {
+    'S': [('A', 2), ('B', 7), ('C', 1)],
+    'A': [('D', 4), ('E', 2)],
+    'B': [('E', 1), ('F', 5)],
+    'C': [('F', 9), ('G', 3)],
+    'D': [('E', 1), ('H', 8)],
+    'E': [('H', 6), ('I', 3)],
+    'F': [('I', 2), ('J', 8)],
+    'G': [('F', 3), ('J', 2)],
+    'H': [('I', 2), ('T', 5)],
+    'I': [('J', 2), ('T', 4)],
+    'J': [('T', 6)],
+    'T': []
+}
+
+h_G = {
+    'S': 11, 'A': 9, 'B': 8, 'C': 3,
+    'D': 8,  'E': 6, 'F': 4, 'G': 4,
+    'H': 5,  'I': 3, 'J': 5, 'T': 0
+}</code></pre>
+
+            <div class="task-box">
+                <div class="task-label">Tasks</div>
+                <ol class="content-ol" style="font-size:.875rem;">
+                    <li>Implement <code>greedy_search(graph, h, start, goal)</code> — use a priority queue (OPEN list) sorted by <code>h(n)</code>. Return <code>(path, cost, nodes_expanded)</code>.</li>
+                    <li>Implement <code>hill_climbing(graph, h, start, goal)</code> — no OPEN list, move greedily. Return <code>(path, cost, nodes_expanded)</code> or <code>(None, None, nodes_expanded)</code> if stuck before reaching the goal.</li>
+                    <li>Run both on <code>graph_G</code> with <code>start='S'</code>, <code>goal='T'</code> and print results in the format below.</li>
+                </ol>
+            </div>
+
+<pre><code>=== Greedy Best-First ===
+Path  : S → C → F → I → T
+Cost  : 16
+Nodes : 5
+
+=== Hill Climbing ===
+Path  : stuck at C
+Cost  : —
+Nodes : 2</code></pre>
+
+            <div class="q-box">
+                <div class="q-label">Questions — answer in a Markdown cell</div>
+                <div class="q-list">
+                    <div class="q-item"><span class="q-num">1.1</span>Does your output match the hand trace from Part I Exercise 1? If it differs, explain why.</div>
+                    <div class="q-item"><span class="q-num">1.2</span>Modify <code>h_G</code> so that <code>h['C'] = 10</code>. Re-run Greedy. Which path does it now find? What does this tell you about the role of the heuristic?</div>
+                </div>
+            </div>
+        </div><!-- /P1 -->
+
+
+        <!-- P2 -->
+        <div class="ex-card">
+            <div class="ex-eyebrow">P2</div>
+            <div class="ex-title">Missionaries and Cannibals (BFS)</div>
+            <p>A state is a tuple <code>(ML, CL, b)</code> where <code>ML</code> = missionaries on left, <code>CL</code> = cannibals on left, <code>b ∈ {'L', 'R'}</code>.</p>
+
+            <div class="task-box">
+                <div class="task-label">Tasks</div>
+                <ol class="content-ol" style="font-size:.875rem;">
+                    <li>Implement <code>is_valid(state)</code> — return <code>True</code> if the state satisfies the safety constraint on both banks.</li>
+                    <li>Implement <code>get_successors(state)</code> — return all valid next states reachable by one boat crossing. The boat carries between 1 and 2 people.</li>
+                    <li>Implement <code>bfs_mc(start, goal)</code> — BFS that returns the full solution path as a list of states, or <code>None</code> if no solution exists.</li>
+                    <li>Run from <code>(3, 3, 'L')</code> to <code>(0, 0, 'R')</code> and print each step:</li>
+                </ol>
+            </div>
+
+<pre><code>Step  0 : (3, 3, L)  →  send 2C right
+Step  1 : (3, 1, R)  →  ...
+...
+Step 11 : (0, 0, R)  ✓ Goal reached</code></pre>
+
+            <div class="q-box">
+                <div class="q-label">Questions — answer in a Markdown cell</div>
+                <div class="q-list">
+                    <div class="q-item"><span class="q-num">2.1</span>How many states does BFS explore before finding the goal? Print <code>len(closed)</code> at the end.</div>
+                    <div class="q-item"><span class="q-num">2.2</span>Try changing the boat capacity to 3. Does BFS find a shorter solution? How many steps?</div>
+                </div>
+            </div>
+        </div><!-- /P2 -->
+
+
+        <!-- P3 -->
+        <div class="ex-card">
+            <div class="ex-eyebrow">P3</div>
+            <div class="ex-title">Algorithm Comparison</div>
+            <p>Using <code>graph_G</code> and <code>h_G</code> from P1, implement <strong>Beam Search</strong> and run all three algorithms side by side.</p>
+
+            <div class="task-box">
+                <div class="task-label">Tasks</div>
+                <ol class="content-ol" style="font-size:.875rem;">
+                    <li>Implement <code>beam_search(graph, h, start, goal, w)</code> — at each level keep the <code>w</code> nodes with lowest <code>h</code>. Return <code>(path, cost, nodes_expanded)</code>.</li>
+                    <li>Run Greedy, Hill Climbing, and Beam Search (<code>w = 2</code>) on <code>graph_G</code>.</li>
+                    <li>Collect results into a table and <strong>plot two bar charts</strong> side by side using <code>matplotlib</code>:
+                        <ul class="content-ul" style="margin-top:.3rem;">
+                            <li>Chart 1: Path cost for each algorithm</li>
+                            <li>Chart 2: Nodes expanded for each algorithm</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+<pre><code># Expected table (your values may vary if HC gets stuck)
+# Algorithm     | Path cost | Nodes expanded
+# Greedy        |    16     |      5
+# Hill Climbing |    —      |      2
+# Beam (w=2)    |    16     |      ?</code></pre>
+
+            <div class="task-box" style="margin-top:.75rem;">
+                <div class="task-label">Task 4</div>
+                <p style="font-size:.875rem; margin:0;">Run Beam Search with <code>w = 1</code>, <code>w = 2</code>, <code>w = 3</code>. Add a <strong>line chart</strong> showing how path cost changes as <code>w</code> increases.</p>
+            </div>
+
+            <div class="q-box">
+                <div class="q-label">Questions — answer in a Markdown cell</div>
+                <div class="q-list">
+                    <div class="q-item"><span class="q-num">3.1</span>What happens to Beam Search when <code>w = 1</code>? Why?</div>
+                    <div class="q-item"><span class="q-num">3.2</span>Which algorithm expands the fewest nodes? Is that always a good thing?</div>
+                    <div class="q-item"><span class="q-num">3.3</span>From the <code>w</code> experiment: at what width does Beam Search first find the optimal path (cost = 11)?</div>
+                </div>
+            </div>
+        </div><!-- /P3 -->
+
+    </div><!-- /part2 -->
+
+</main>
+
+<script>
+function showPart(part) {
+    ['part1', 'part2'].forEach(p => {
+        document.getElementById(p + '-content').classList.remove('active');
+        document.getElementById('tab-' + p).classList.remove('active');
+    });
+    document.getElementById(part + '-content').classList.add('active');
+    document.getElementById('tab-' + part).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>
