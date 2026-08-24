@@ -680,6 +680,18 @@ No action required. Next update warranted when content changes.
 To add future quizzes: drop `quizz/QuizzN.html` and reference it from the
 appropriate week in `lectures.yml` — no other changes needed.
 
+### 2026-08-24 — Week 4 Local Search Lab Linked
+
+- **New file:** `quizz/dfs_vs_hill_climbing_lab.html` — interactive DFS vs
+  hill-climbing / local-search lab for Week 4 practice.
+- **`src/data/lectures.yml`:** Week 4 materials now include:
+  - `{ "Local search": "quizz/dfs_vs_hill_climbing_lab.html" }`
+- **Source commit:** `609cc00` — "Add Week 4 Local search lab to lecture materials."
+- **Deployment:** shallow `gh-pages` deploy published commit `609cc00`
+  (`gh-pages` HEAD `e396b63`). `quizz/` already shipped via `build.sh`.
+- **Live URL:**
+  - https://nghianguyen7171.github.io/Intro_to_AI/quizz/dfs_vs_hill_climbing_lab.html
+
 ### 2026-08-21 — Week 3 Quizzes Deployed
 
 - **New files:** `quizz/heuristic_search_visualizer_lab.html`,
@@ -718,7 +730,7 @@ appropriate week in `lectures.yml` — no other changes needed.
 
 ---
 
-**Last Updated:** 2026-08-21 (Week 3 quizzes deployed and verified live: Heuristic Search Visualizer Lab, Scenario Heuristic Search Lab)  
+**Last Updated:** 2026-08-24 (Week 4 Local search lab linked and deployed)  
 **AI Readiness:** 100%
 
 *This document serves as a comprehensive backup context for the Introduction to AI course website project. It contains all essential information needed to understand, maintain, and continue development of the project.*
