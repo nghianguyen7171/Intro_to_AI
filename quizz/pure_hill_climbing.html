@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pure Hill Climbing — Introduction to AI</title>
-  <meta name="description" content="Instructional note on pure hill climbing: local search without an OPEN list, a worked example, and how it differs from modern / lecture-slide hill climbing.">
+  <title>Hill Climbing — Intro to AI</title>
+  <meta name="description" content="Ôn tập chuyên sâu về Hill Climbing: ý tưởng cốt lõi, cách giải bằng bảng, so sánh với Greedy Best-First, và phân biệt HC thuần túy với HC hiện đại trong slide.">
   <link rel="stylesheet" href="../assets/css/main.css">
   <link rel="icon" href="../favicon.ico" type="image/vnd.microsoft.icon">
   <style>
-    /* Page-local extensions on top of the course template */
     .article-hero {
       padding: 2.75rem 0 2rem;
       border-bottom: 1px solid var(--border);
@@ -25,7 +24,6 @@
     .article-hero h1 {
       margin: 0 0 .75rem;
       font-size: clamp(1.7rem, 3.8vw, 2.45rem);
-      max-width: 22ch;
     }
     .article-hero .lede {
       margin: 0;
@@ -54,153 +52,6 @@
       font-weight: 600;
       font-size: .92rem;
     }
-    .toc {
-      margin: 0 0 2rem;
-      padding: 1rem 1.15rem;
-      background: var(--bg-alt);
-      border: 1px solid var(--border);
-      border-radius: 3px;
-      max-width: 72ch;
-    }
-    .toc-title {
-      margin: 0 0 .55rem;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      font-size: .7rem;
-      font-weight: 700;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      color: var(--text-soft);
-    }
-    .toc ol {
-      margin: 0;
-      padding-left: 1.2rem;
-    }
-    .toc li { margin: .25rem 0; font-size: .93rem; }
-    .callout {
-      margin: 1.35rem 0;
-      padding: .9rem 1.15rem;
-      border: 1px solid var(--border);
-      border-left: 4px solid var(--accent);
-      border-radius: 3px;
-      background: var(--accent-tint);
-      max-width: 72ch;
-    }
-    .callout p:last-child { margin-bottom: 0; }
-    .callout-label {
-      margin: 0 0 .4rem;
-      font-size: .7rem;
-      font-weight: 700;
-      letter-spacing: .09em;
-      text-transform: uppercase;
-      color: var(--accent);
-    }
-    .algo-box {
-      margin: 1.25rem 0;
-      padding: 1rem 1.15rem;
-      background: var(--bg-tint);
-      border: 1px solid var(--border);
-      border-radius: 3px;
-      max-width: 72ch;
-    }
-    .algo-box ol { margin: .5rem 0 0; padding-left: 1.25rem; }
-    .algo-box li { margin: .35rem 0; }
-    .graph-panel {
-      margin: 1.5rem 0;
-      padding: 1.25rem;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 3px;
-      max-width: 72ch;
-    }
-    .graph-panel figcaption {
-      margin: .85rem 0 0;
-      font-size: .85rem;
-      color: var(--text-soft);
-    }
-    .graph-svg {
-      width: 100%;
-      height: auto;
-      display: block;
-      background: var(--bg-alt);
-      border-radius: 2px;
-    }
-    .trace {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: .88rem;
-      margin: 1rem 0 1.5rem;
-    }
-    .trace th, .trace td {
-      text-align: left;
-      vertical-align: top;
-      padding: .55rem .65rem;
-      border-bottom: 1px solid var(--border);
-    }
-    .trace thead th {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      font-size: .68rem;
-      font-weight: 700;
-      letter-spacing: .07em;
-      text-transform: uppercase;
-      color: var(--text-soft);
-      border-bottom: 2px solid var(--text);
-      white-space: nowrap;
-    }
-    .trace tbody tr:nth-child(even) { background: var(--bg-tint); }
-    .trace .stop {
-      color: var(--accent);
-      font-weight: 700;
-    }
-    .compare {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: .9rem;
-      margin: 1.25rem 0;
-      display: block;
-      overflow-x: auto;
-    }
-    .compare table { width: 100%; border-collapse: collapse; }
-    .compare th, .compare td {
-      text-align: left;
-      vertical-align: top;
-      padding: .65rem .7rem;
-      border-bottom: 1px solid var(--border);
-    }
-    .compare thead th {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      font-size: .68rem;
-      font-weight: 700;
-      letter-spacing: .07em;
-      text-transform: uppercase;
-      color: var(--text-soft);
-      border-bottom: 2px solid var(--text);
-    }
-    .two-col {
-      display: grid;
-      gap: 1rem;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      margin: 1.25rem 0;
-      max-width: 72ch;
-    }
-    .card {
-      border: 1px solid var(--border);
-      border-radius: 3px;
-      padding: 1rem 1.1rem;
-      background: var(--bg);
-    }
-    .card h3 {
-      margin: 0 0 .5rem;
-      font-size: 1.05rem;
-    }
-    .card p:last-child { margin-bottom: 0; }
-    .refs { font-size: .9rem; color: var(--text-soft); max-width: 72ch; }
-    .refs li { margin: .35rem 0; }
-    .back-link {
-      display: inline-block;
-      margin-top: 2rem;
-      font-size: .92rem;
-    }
-    /* Center reading column inside the site wrap */
     .article-hero .wrap,
     #article .wrap {
       display: flex;
@@ -214,9 +65,161 @@
       margin-left: auto;
       margin-right: auto;
     }
-    .article-hero h1 {
-      max-width: none;
+    .toc {
+      margin: 0 0 2rem;
+      padding: 1rem 1.15rem;
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: 3px;
     }
+    .toc-title {
+      margin: 0 0 .55rem;
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+    }
+    .toc ol { margin: 0; padding-left: 1.2rem; }
+    .toc li { margin: .25rem 0; font-size: .93rem; }
+    .callout {
+      margin: 1.35rem 0;
+      padding: .9rem 1.15rem;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 3px;
+      background: var(--accent-tint);
+    }
+    .callout p:last-child { margin-bottom: 0; }
+    .callout-label {
+      margin: 0 0 .4rem;
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .callout-warn {
+      border-left-color: #f59e0b;
+      background: #fffbeb;
+    }
+    .callout-warn .callout-label { color: #92400e; }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .callout-warn {
+        background: #1c1a10;
+      }
+    }
+    :root[data-theme="dark"] .callout-warn { background: #1c1a10; }
+    .algo-box {
+      margin: 1.25rem 0;
+      padding: 1rem 1.15rem;
+      background: var(--bg-tint);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+    }
+    .algo-box ol { margin: .5rem 0 0; padding-left: 1.25rem; }
+    .algo-box li { margin: .35rem 0; }
+    .graph-panel {
+      margin: 1.5rem 0;
+      padding: 1.25rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+    }
+    .graph-panel figcaption {
+      margin: .85rem 0 0;
+      font-size: .85rem;
+      color: var(--text-soft);
+    }
+    .graph-svg {
+      width: 100%;
+      max-width: 420px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+    .table-scroll { overflow-x: auto; }
+    .trace {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .88rem;
+      margin: 1rem 0 1.5rem;
+    }
+    .trace th, .trace td {
+      text-align: left;
+      vertical-align: top;
+      padding: .55rem .65rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .trace thead th {
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+      border-bottom: 2px solid var(--text);
+      white-space: nowrap;
+    }
+    .trace tbody tr:nth-child(even) { background: var(--bg-tint); }
+    .trace .stop { color: #ef4444; font-weight: 700; }
+    .trace .goal { color: #10b981; font-weight: 700; }
+    .trace .hl { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+    .compare-wrap { overflow-x: auto; margin: 1.25rem 0; }
+    .compare {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .9rem;
+      min-width: 520px;
+    }
+    .compare th, .compare td {
+      text-align: left;
+      vertical-align: top;
+      padding: .6rem .7rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .compare thead th {
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+      border-bottom: 2px solid var(--text);
+    }
+    .two-col {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      margin: 1.25rem 0;
+    }
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 1rem 1.1rem;
+      background: var(--bg);
+    }
+    .card h3 { margin: 0 0 .5rem; font-size: 1.05rem; }
+    .card p:last-child { margin-bottom: 0; }
+    .refs { font-size: .9rem; color: var(--text-soft); }
+    .refs li { margin: .35rem 0; }
+    .back-link {
+      display: inline-block;
+      margin-top: 2rem;
+      font-size: .92rem;
+    }
+    .tag {
+      display: inline-block;
+      padding: .15rem .55rem;
+      border-radius: 3px;
+      font-size: .75rem;
+      font-weight: 700;
+      background: var(--accent);
+      color: #fff;
+      vertical-align: middle;
+      margin-left: .3rem;
+    }
+    .tag-red { background: #ef4444; }
+    .tag-green { background: #10b981; }
+    .tag-amber { background: #f59e0b; color: #1c1917; }
   </style>
 </head>
 <body>
@@ -243,25 +246,23 @@
 
   <header class="article-hero">
     <div class="wrap">
-      <p class="eyebrow">Week 4 · Local search</p>
-      <h1>Pure Hill Climbing</h1>
+      <p class="eyebrow">Tuần 4 · Tìm kiếm cục bộ</p>
+      <h1>Hill Climbing — Ôn tập chuyên sâu</h1>
       <p class="lede">
-        A short instructional note on the local-search form of hill climbing:
-        what it does, where it fails, and how it differs from the
-        modern (OPEN-list) hill climbing used in many lecture notes —
-        including this course’s Week&nbsp;3 slides.
+        Ý tưởng cốt lõi, 6 bước thực hiện, giải từng bước bằng bảng, so sánh với Greedy Best-First,
+        và phân biệt HC thuần túy (AIMA) với HC hiện đại được dạy trong slide môn học.
       </p>
       <dl class="article-meta">
         <div>
-          <dt>Audience</dt>
-          <dd>Students who have seen heuristic search</dd>
+          <dt>Đối tượng</dt>
+          <dd>Sinh viên đã học tìm kiếm heuristic</dd>
         </div>
         <div>
-          <dt>Related lab</dt>
-          <dd><a href="dfs_vs_hill_climbing_lab.html">DFS vs Pure Hill Climbing</a></dd>
+          <dt>Bài lab liên quan</dt>
+          <dd><a href="week4_lab.html">Lab Tuần 4 — Search Algorithms</a></dd>
         </div>
         <div>
-          <dt>Primary textbook</dt>
+          <dt>Sách tham khảo chính</dt>
           <dd>Russell &amp; Norvig, AIMA</dd>
         </div>
       </dl>
@@ -272,417 +273,553 @@
     <div class="wrap prose">
 
       <nav class="toc" aria-label="On this page">
-        <p class="toc-title">On this page</p>
+        <p class="toc-title">Nội dung</p>
         <ol>
-          <li><a href="#idea">The idea</a></li>
-          <li><a href="#algorithm">The algorithm</a></li>
-          <li><a href="#example">Worked example: the Trap</a></li>
-          <li><a href="#compare">Pure vs modern hill climbing</a></li>
-          <li><a href="#takeaways">What to remember</a></li>
+          <li><a href="#idea">Ý tưởng cốt lõi</a></li>
+          <li><a href="#algorithm">Quy tắc thực hiện (6 bước)</a></li>
+          <li><a href="#properties">Tính chất</a></li>
+          <li><a href="#graph">Đồ thị minh họa</a></li>
+          <li><a href="#hc-trace">Giải Hill Climbing — phương pháp kẻ bảng</a></li>
+          <li><a href="#greedy-trace">So sánh: Greedy Best-First trên cùng đồ thị</a></li>
+          <li><a href="#compare">HC thuần túy vs HC hiện đại (slide)</a></li>
+          <li><a href="#takeaways">Điểm mấu chốt cần nhớ</a></li>
+          <li><a href="#pitfalls">Bẫy thường gặp khi làm bài</a></li>
         </ol>
       </nav>
 
-      <h2 id="idea">The idea</h2>
+      <!-- ── 1. Ý TƯỞNG ── -->
+      <h2 id="idea">1. Ý tưởng cốt lõi</h2>
       <p>
-        <strong>Pure hill climbing</strong> (also called
-        <em>steepest-ascent</em> or <em>greedy local</em> hill climbing)
-        is a <strong>local search</strong> method. At every step it looks
-        only at the <strong>current state</strong> and that state’s
-        immediate neighbors. It moves to the neighbor that looks best
-        according to a heuristic <code>h(n)</code>, and it
-        <strong>forgets every alternative</strong> it did not take.
-      </p>
-      <p>
-        There is no fringe, no OPEN list, and no backtracking.
-        The algorithm is therefore extremely cheap in memory —
-        but it can stop forever at a <strong>local minimum</strong>
-        even when a path to the goal still exists elsewhere in the graph.
+        <strong>Hill Climbing (Leo đồi)</strong> là thuật toán <strong>tìm kiếm cục bộ</strong>:
+        tại mỗi bước, nó chỉ nhìn vào các nút kề ngay lập tức và chuyển sang nút có
+        <strong>h(n) thấp nhất</strong> — không lưu lịch sử, không quay lui.
       </p>
 
-      <div class="callout">
-        <p class="callout-label">Core message</p>
+      <div class="callout callout-warn">
+        <p class="callout-label">Hình ảnh trực quan</p>
         <p>
-          A heuristic can point you toward improvement; it cannot
-          invent memory. Pure hill climbing trades completeness for
-          simplicity: if the next step does not look better, it stops.
+          Hãy tưởng tượng bạn đứng trên một bề mặt đồi núi trong sương mù. Bạn không nhìn thấy toàn cảnh
+          — chỉ biết độ dốc ngay dưới chân. Bạn luôn bước xuống chỗ thấp hơn, cho đến khi không còn
+          chỗ nào thấp hơn xung quanh. Đó là <strong>cực tiểu cục bộ</strong> — dù toàn cục có thể
+          còn thấp hơn nữa.
         </p>
       </div>
 
-      <h2 id="algorithm">The algorithm</h2>
-      <p>
-        Assume we are <em>minimizing</em> <code>h(n)</code>
-        (estimated remaining cost to the goal; goal has <code>h = 0</code>).
-      </p>
+      <!-- ── 2. QUY TẮC ── -->
+      <h2 id="algorithm">2. Quy tắc thực hiện (6 bước)</h2>
+
       <div class="algo-box">
-        <strong>Pure Hill Climbing (steepest ascent / descent)</strong>
+        <strong>Hill Climbing — Steepest Ascent (tối giản hóa h)</strong>
         <ol>
-          <li>Set <code>current ←</code> start state.</li>
-          <li>Generate all neighbors of <code>current</code>.</li>
-          <li>Let <code>best</code> be the neighbor with the lowest <code>h</code>.</li>
-          <li>If <code>h(best) &lt; h(current)</code>, move:
-              <code>current ← best</code>, and repeat from step&nbsp;2.</li>
-          <li>Otherwise <strong>stop</strong>.
-              If <code>current</code> is the goal, succeed;
-              else report failure at a local minimum.</li>
+          <li>Bắt đầu tại nút khởi đầu. Đây là <strong>nút hiện tại</strong>.</li>
+          <li>Sinh tất cả <strong>nút kề</strong> (các nút có thể đến từ nút hiện tại).</li>
+          <li>Chọn nút kề có <strong>h(n) nhỏ nhất</strong>. Nếu hòa → chọn theo thứ tự bảng chữ cái.</li>
+          <li>Nếu h(nút kề tốt nhất) <strong>&lt; h(nút hiện tại)</strong> → <strong>di chuyển</strong> đến đó.</li>
+          <li>Nếu <strong>không có nút kề nào cải thiện</strong> (h ≥ h hiện tại) → <strong>dừng</strong> (cực tiểu cục bộ).</li>
+          <li>Lặp lại từ bước 2 cho đến khi đến đích hoặc dừng.</li>
         </ol>
       </div>
-      <p>
-        Important consequences of this rule:
-      </p>
-      <ul>
-        <li>Only one node is stored as “current.”</li>
-        <li>Siblings that looked slightly worse are discarded immediately.</li>
-        <li>The algorithm never revisits an earlier fork in the road.</li>
-        <li>It does <em>not</em> track path cost <code>g(n)</code> —
-            only the local heuristic signal.</li>
-      </ul>
 
-      <h2 id="example">Worked example: the Trap</h2>
+      <!-- ── 3. TÍNH CHẤT ── -->
+      <h2 id="properties">3. Tính chất</h2>
+
+      <div class="table-scroll">
+        <table class="trace">
+          <thead>
+            <tr>
+              <th>Tính chất</th>
+              <th>Hill Climbing</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Dùng h(n)?</td><td>✓ Có</td></tr>
+            <tr><td>Theo dõi g(n) (chi phí đường đi)?</td><td>✗ Không</td></tr>
+            <tr><td>Có danh sách OPEN?</td><td>✗ Không</td></tr>
+            <tr><td>Có thể quay lui?</td><td>✗ Không</td></tr>
+            <tr><td>Đảm bảo tìm được đích?</td><td>✗ Không</td></tr>
+            <tr><td>Đảm bảo tối ưu?</td><td>✗ Không</td></tr>
+            <tr><td>Độ phức tạp bộ nhớ</td><td>O(1) — chỉ lưu nút hiện tại</td></tr>
+          </tbody>
+        </table>
+      </div>
+
       <p>
-        Consider the state-space graph below (the same shape used in the
-        <a href="dfs_vs_hill_climbing_lab.html">Week&nbsp;4 local-search lab</a>).
-        Numbers on nodes are heuristic values <code>h(n)</code>.
-        The goal lies on the <strong>right</strong> branch;
-        the left branch looks attractive early, then collapses into a trap.
+        <strong>Kết luận:</strong> Hill Climbing nhanh và tiết kiệm bộ nhớ, nhưng
+        <strong>không đầy đủ</strong> và <strong>không tối ưu</strong>. Nó có thể bị kẹt tại
+        <strong>cực tiểu cục bộ</strong> — nút có h nhỏ hơn tất cả các nút kề, nhưng chưa phải đích.
+      </p>
+
+      <!-- ── 4. ĐỒ THỊ ── -->
+      <h2 id="graph">4. Đồ thị minh họa</h2>
+      <p>
+        Đồ thị có hướng 6 nút dưới đây. Số trong khung vàng là giá trị heuristic
+        <code>h(n)</code> — ước lượng khoảng cách còn lại đến đích T. Số trên cạnh là chi phí di chuyển.
       </p>
 
       <figure class="graph-panel">
-        <svg class="graph-svg" viewBox="0 0 560 420" role="img" aria-label="State space graph with a local minimum at Trap and Goal on the right branch">
+        <svg class="graph-svg" viewBox="0 0 490 545" xmlns="http://www.w3.org/2000/svg"
+             font-family="'Inter','Segoe UI',sans-serif" role="img"
+             aria-label="Đồ thị 6 nút S,A,B,C,D,T. HC bị kẹt tại C (cực tiểu cục bộ h=3).">
           <defs>
-            <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-              <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+            <marker id="arr" viewBox="0 0 10 7" markerWidth="9" markerHeight="7"
+                    refX="9" refY="3.5" orient="auto">
+              <polygon points="0 0,10 3.5,0 7" fill="#64748b"/>
+            </marker>
+            <marker id="arr-hl" viewBox="0 0 10 7" markerWidth="9" markerHeight="7"
+                    refX="9" refY="3.5" orient="auto">
+              <polygon points="0 0,10 3.5,0 7" fill="#6366f1"/>
             </marker>
           </defs>
-          <!-- edges -->
-          <g stroke="#94a3b8" stroke-width="1.6" fill="none" marker-end="url(#arrow)">
-            <line x1="280" y1="42" x2="160" y2="95"/>
-            <line x1="280" y1="42" x2="400" y2="95"/>
-            <line x1="150" y1="118" x2="95" y2="168"/>
-            <line x1="150" y1="118" x2="195" y2="168"/>
-            <line x1="90" y1="195" x2="70" y2="248"/>
-            <line x1="90" y1="195" x2="145" y2="248"/>
-            <line x1="70" y1="275" x2="70" y2="318"/>
-            <line x1="70" y1="350" x2="35" y2="388"/>
-            <line x1="70" y1="350" x2="105" y2="388"/>
-            <line x1="400" y1="118" x2="400" y2="168"/>
-            <line x1="400" y1="195" x2="400" y2="248"/>
-            <line x1="400" y1="275" x2="400" y2="330"/>
-          </g>
-          <!-- nodes: [cx, cy, label, h, fill, stroke] -->
-          <!-- S -->
-          <rect x="248" y="18" width="64" height="40" rx="4" fill="#fecdd3" stroke="#e11d48" stroke-width="2"/>
-          <text x="280" y="36" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="700" fill="#111827">S</text>
-          <text x="280" y="50" text-anchor="middle" font-family="ui-monospace, monospace" font-size="11" fill="#57606a">h=20</text>
-          <!-- A -->
-          <rect x="118" y="95" width="64" height="40" rx="4" fill="#fff" stroke="#94a3b8" stroke-width="1.5"/>
-          <text x="150" y="113" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="700" fill="#111827">A</text>
-          <text x="150" y="127" text-anchor="middle" font-family="ui-monospace, monospace" font-size="11" fill="#57606a">h=15</text>
-          <!-- K -->
-          <rect x="368" y="95" width="64" height="40" rx="4" fill="#fff" stroke="#94a3b8" stroke-width="1.5"/>
-          <text x="400" y="113" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="700" fill="#111827">K</text>
-          <text x="400" y="127" text-anchor="middle" font-family="ui-monospace, monospace" font-size="11" fill="#57606a">h=18</text>
-          <!-- B -->
-          <rect x="58" y="172" width="64" height="40" rx="4" fill="#fff" stroke="#94a3b8" stroke-width="1.5"/>
-          <text x="90" y="190" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="700" fill="#111827">B</text>
-          <text x="90" y="204" text-anchor="middle" font-family="ui-monospace, monospace" font-size="11" fill="#57606a">h=10</text>
-          <!-- C -->
-          <rect x="163" y="172" width="64" height="40" rx="4" fill="#fff" stroke="#94a3b8" stroke-width="1.5"/>
-          <text x="195" y="190" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="700" fill="#111827">C</text>
-          <text x="195" y="204" text-anchor="middle" font-family="ui-monospace, monospace" font-size="11" fill="#57606a">h=12</text>
-          <!-- L -->
-          <rect x="368" y="172" width="64" height="40" rx="4" fill="#fff" stroke="#94a3b8" stroke-width="1.5"/>
-          <text x="400" y="190" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="700" fill="#111827">L</text>
-          <text x="400" y="204" text-anchor="middle" font-family="ui-monospace, monospace" font-size="11" fill="#57606a">h=14</text>
-          <!-- D -->
-          <rect x="38" y="252" width="64" height="40" rx="4" fill="#fff" stroke="#94a3b8" stroke-width="1.5"/>
-          <text x="70" y="270" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="700" fill="#111827">D</text>
-          <text x="70" y="284" text-anchor="middle" font-family="ui-monospace, monospace" font-size="11" fill="#57606a">h=4</text>
-          <!-- E -->
-          <rect x="113" y="252" width="64" height="40" rx="4" fill="#fff" stroke="#94a3b8" stroke-width="1.5"/>
-          <text x="145" y="270" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="700" fill="#111827">E</text>
-          <text x="145" y="284" text-anchor="middle" font-family="ui-monospace, monospace" font-size="11" fill="#57606a">h=8</text>
-          <!-- M -->
-          <rect x="368" y="252" width="64" height="40" rx="4" fill="#fff" stroke="#94a3b8" stroke-width="1.5"/>
-          <text x="400" y="270" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="700" fill="#111827">M</text>
-          <text x="400" y="284" text-anchor="middle" font-family="ui-monospace, monospace" font-size="11" fill="#57606a">h=7</text>
-          <!-- Trap -->
-          <rect x="30" y="325" width="80" height="40" rx="4" fill="#fee2e2" stroke="#ef4444" stroke-width="2"/>
-          <text x="70" y="343" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="700" fill="#111827">Trap</text>
-          <text x="70" y="357" text-anchor="middle" font-family="ui-monospace, monospace" font-size="11" fill="#57606a">h=2</text>
-          <!-- Goal -->
-          <rect x="360" y="335" width="80" height="40" rx="4" fill="#a7f3d0" stroke="#059669" stroke-width="2.5"/>
-          <text x="400" y="353" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="700" fill="#111827">Goal</text>
-          <text x="400" y="367" text-anchor="middle" font-family="ui-monospace, monospace" font-size="11" fill="#57606a">h=0</text>
-          <!-- F G -->
-          <rect x="5" y="385" width="55" height="28" rx="3" fill="#fff" stroke="#94a3b8"/>
-          <text x="32" y="403" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-weight="700" fill="#111827">F · 6</text>
-          <rect x="80" y="385" width="55" height="28" rx="3" fill="#fff" stroke="#94a3b8"/>
-          <text x="107" y="403" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-weight="700" fill="#111827">G · 5</text>
+
+          <!-- REGULAR EDGES -->
+          <!-- B → D (cost 2) -->
+          <line x1="360" y1="106" x2="360" y2="224"
+                stroke="#94a3b8" stroke-width="2" marker-end="url(#arr)"/>
+          <rect x="336" y="153" width="26" height="18" rx="9" fill="#475569"/>
+          <text x="349" y="162" fill="white" font-size="11" font-weight="700"
+                text-anchor="middle" dominant-baseline="central">2</text>
+
+          <!-- B → T (cost 9, arc) -->
+          <path d="M 375,96 C 460,160 460,360 375,404"
+                stroke="#94a3b8" stroke-width="2" fill="none" marker-end="url(#arr)"/>
+          <rect x="426" y="235" width="26" height="18" rx="9" fill="#475569"/>
+          <text x="439" y="244" fill="white" font-size="11" font-weight="700"
+                text-anchor="middle" dominant-baseline="central">9</text>
+
+          <!-- A → D (cost 4) -->
+          <line x1="116" y1="250" x2="334" y2="250"
+                stroke="#94a3b8" stroke-width="2" marker-end="url(#arr)"/>
+          <rect x="206" y="238" width="26" height="18" rx="9" fill="#475569"/>
+          <text x="219" y="247" fill="white" font-size="11" font-weight="700"
+                text-anchor="middle" dominant-baseline="central">4</text>
+
+          <!-- S → B (cost 5) -->
+          <line x1="116" y1="80" x2="334" y2="80"
+                stroke="#94a3b8" stroke-width="2" marker-end="url(#arr)"/>
+          <rect x="206" y="68" width="26" height="18" rx="9" fill="#475569"/>
+          <text x="219" y="77" fill="white" font-size="11" font-weight="700"
+                text-anchor="middle" dominant-baseline="central">5</text>
+
+          <!-- D → T (cost 6) -->
+          <line x1="360" y1="276" x2="360" y2="394"
+                stroke="#94a3b8" stroke-width="2" marker-end="url(#arr)"/>
+          <rect x="336" y="323" width="26" height="18" rx="9" fill="#475569"/>
+          <text x="349" y="332" fill="white" font-size="11" font-weight="700"
+                text-anchor="middle" dominant-baseline="central">6</text>
+
+          <!-- C → D (cost 3, diagonal) -->
+          <line x1="112" y1="406" x2="338" y2="264"
+                stroke="#94a3b8" stroke-width="2" marker-end="url(#arr)"/>
+          <rect x="195" y="323" width="26" height="18" rx="9" fill="#475569"/>
+          <text x="208" y="332" fill="white" font-size="11" font-weight="700"
+                text-anchor="middle" dominant-baseline="central">3</text>
+
+          <!-- HC PATH (indigo) -->
+          <!-- S → A (cost 2) -->
+          <line x1="90" y1="106" x2="90" y2="224"
+                stroke="#6366f1" stroke-width="3" marker-end="url(#arr-hl)"/>
+          <rect x="56" y="153" width="26" height="18" rx="9" fill="#6366f1"/>
+          <text x="69" y="162" fill="white" font-size="11" font-weight="700"
+                text-anchor="middle" dominant-baseline="central">2</text>
+
+          <!-- A → C (cost 1) -->
+          <line x1="90" y1="276" x2="90" y2="394"
+                stroke="#6366f1" stroke-width="3" marker-end="url(#arr-hl)"/>
+          <rect x="56" y="323" width="26" height="18" rx="9" fill="#6366f1"/>
+          <text x="69" y="332" fill="white" font-size="11" font-weight="700"
+                text-anchor="middle" dominant-baseline="central">1</text>
+
+          <!-- NODES -->
+          <circle cx="90" cy="80" r="26" fill="#6366f1" stroke="#4338ca" stroke-width="2.5"/>
+          <text x="90" y="80" fill="white" font-size="18" font-weight="800"
+                text-anchor="middle" dominant-baseline="central">S</text>
+          <rect x="103" y="54" width="34" height="19" rx="9"
+                fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+          <text x="120" y="64" fill="#78350f" font-size="11" font-weight="700"
+                text-anchor="middle" dominant-baseline="central">h=9</text>
+
+          <circle cx="90" cy="250" r="26" fill="#6366f1" stroke="#4338ca" stroke-width="2.5"/>
+          <text x="90" y="250" fill="white" font-size="18" font-weight="800"
+                text-anchor="middle" dominant-baseline="central">A</text>
+          <rect x="103" y="224" width="34" height="19" rx="9"
+                fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+          <text x="120" y="234" fill="#78350f" font-size="11" font-weight="700"
+                text-anchor="middle" dominant-baseline="central">h=5</text>
+
+          <!-- C — LOCAL MINIMUM (red) -->
+          <circle cx="90" cy="420" r="26" fill="#ef4444" stroke="#b91c1c" stroke-width="2.5"/>
+          <text x="90" y="420" fill="white" font-size="18" font-weight="800"
+                text-anchor="middle" dominant-baseline="central">C</text>
+          <rect x="103" y="394" width="34" height="19" rx="9"
+                fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+          <text x="120" y="404" fill="#78350f" font-size="11" font-weight="700"
+                text-anchor="middle" dominant-baseline="central">h=3</text>
+          <text x="90" y="458" fill="#b91c1c" font-size="11" font-weight="700"
+                text-anchor="middle">⚑ cực tiểu cục bộ</text>
+
+          <circle cx="360" cy="80" r="26" fill="#3b82f6" stroke="#1d4ed8" stroke-width="2"/>
+          <text x="360" y="80" fill="white" font-size="18" font-weight="800"
+                text-anchor="middle" dominant-baseline="central">B</text>
+          <rect x="328" y="54" width="34" height="19" rx="9"
+                fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+          <text x="345" y="64" fill="#78350f" font-size="11" font-weight="700"
+                text-anchor="middle" dominant-baseline="central">h=7</text>
+
+          <circle cx="360" cy="250" r="26" fill="#3b82f6" stroke="#1d4ed8" stroke-width="2"/>
+          <text x="360" y="250" fill="white" font-size="18" font-weight="800"
+                text-anchor="middle" dominant-baseline="central">D</text>
+          <rect x="328" y="224" width="34" height="19" rx="9"
+                fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+          <text x="345" y="234" fill="#78350f" font-size="11" font-weight="700"
+                text-anchor="middle" dominant-baseline="central">h=4</text>
+
+          <!-- T — goal (green) -->
+          <circle cx="360" cy="420" r="26" fill="#10b981" stroke="#047857" stroke-width="2.5"/>
+          <text x="360" y="420" fill="white" font-size="18" font-weight="800"
+                text-anchor="middle" dominant-baseline="central">T</text>
+          <rect x="328" y="394" width="34" height="19" rx="9"
+                fill="#d1fae5" stroke="#10b981" stroke-width="1.5"/>
+          <text x="345" y="404" fill="#065f46" font-size="11" font-weight="700"
+                text-anchor="middle" dominant-baseline="central">h=0</text>
+
+          <!-- LEGEND -->
+          <rect x="10" y="490" width="470" height="48" rx="8"
+                fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+          <circle cx="32" cy="514" r="9" fill="#6366f1"/>
+          <text x="45" y="518" font-size="11" fill="#475569">Đường HC đi (S→A→C)</text>
+          <circle cx="178" cy="514" r="9" fill="#ef4444"/>
+          <text x="191" y="518" font-size="11" fill="#475569">Cực tiểu cục bộ</text>
+          <circle cx="300" cy="514" r="9" fill="#10b981"/>
+          <text x="313" y="518" font-size="11" fill="#475569">Đích (T)</text>
+          <rect x="380" y="507" width="18" height="14" rx="7"
+                fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+          <text x="402" y="518" font-size="11" fill="#475569">h(n)</text>
         </svg>
         <figcaption>
-          Figure 1. Goal is reachable via <code>S → K → L → M → Goal</code>,
-          but the left branch offers steadily decreasing <code>h</code> values
-          until Trap.
+          <strong>Dữ liệu đồ thị:</strong>
+          Cạnh: S→A(2), S→B(5), A→C(1), A→D(4), B→D(2), B→T(9), C→D(3), D→T(6).
+          Heuristic: h(S)=9, h(A)=5, h(B)=7, h(C)=3, h(D)=4, h(T)=0.
+          Đường đi HC được tô màu tím; C (đỏ) là cực tiểu cục bộ.
         </figcaption>
       </figure>
 
-      <h3>Trace of pure hill climbing</h3>
+      <!-- ── 5. GIẢI HC ── -->
+      <h2 id="hc-trace">5. Giải Hill Climbing — phương pháp kẻ bảng</h2>
       <p>
-        Start at <code>S</code> (<code>h = 20</code>). At each step, choose
-        the neighbor with strictly smaller <code>h</code>, and discard the rest.
+        Mỗi hàng là một bước. Cột <strong>Quyết định</strong> giải thích vì sao chọn hoặc dừng.
       </p>
 
       <div class="table-scroll">
         <table class="trace">
           <thead>
             <tr>
-              <th>Step</th>
-              <th>Current</th>
-              <th>Neighbors (h)</th>
-              <th>Best neighbor</th>
-              <th>Decision</th>
+              <th>Bước</th>
+              <th>Nút hiện tại</th>
+              <th>h(hiện tại)</th>
+              <th>Nút kề</th>
+              <th>h(kề)</th>
+              <th>Quyết định</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="hl">
+              <td>1</td>
+              <td><strong>S</strong></td>
+              <td>9</td>
+              <td>A, B</td>
+              <td>5, 7</td>
+              <td>h(A)=5 &lt; 9 → chọn A</td>
+            </tr>
+            <tr class="hl">
+              <td>2</td>
+              <td><strong>A</strong></td>
+              <td>5</td>
+              <td>C, D</td>
+              <td>3, 4</td>
+              <td>h(C)=3 &lt; 5 → chọn C</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td><strong>C</strong></td>
+              <td>3</td>
+              <td>D</td>
+              <td>4</td>
+              <td class="stop">h(D)=4 &gt; 3 → DỪNG ⚑</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout">
+        <p class="callout-label">Kết quả</p>
+        <p>
+          Hill Climbing bị kẹt tại <strong>C</strong> (cực tiểu cục bộ). Không tìm được đường đến T.
+        </p>
+      </div>
+
+      <p>
+        <strong>Tại sao C là cực tiểu cục bộ?</strong>
+        C chỉ có một nút kề là D với h(D)=4. Vì 4 &gt; 3 = h(C), Hill Climbing không thể tiến thêm.
+        Dù có thể đến T qua C→D→T, thuật toán không biết điều này — nó không nhìn xa hơn một bước
+        và không có bộ nhớ nào lưu lại nhánh B đã bỏ qua ở bước 1.
+      </p>
+
+      <!-- ── 6. GREEDY ── -->
+      <h2 id="greedy-trace">6. So sánh: Greedy Best-First trên cùng đồ thị</h2>
+      <p>
+        Greedy Best-First cũng dùng h(n), nhưng duy trì <strong>danh sách OPEN</strong>
+        và xét toàn bộ nút đã thấy — không bao giờ "quên" một nhánh.
+      </p>
+
+      <div class="table-scroll">
+        <table class="trace">
+          <thead>
+            <tr>
+              <th>Bước</th>
+              <th>OPEN (nút, h)</th>
+              <th>Mở rộng</th>
+              <th>Thêm vào OPEN</th>
+              <th>Ghi chú</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>0</td>
-              <td>—</td>
-              <td>—</td>
-              <td>—</td>
-              <td>Begin at S (20)</td>
+              <td>{(S,9)}</td>
+              <td>S</td>
+              <td>A(5), B(7)</td>
+              <td>Bắt đầu</td>
             </tr>
             <tr>
               <td>1</td>
-              <td>S (20)</td>
-              <td>A(15), K(18)</td>
-              <td>A (15)</td>
-              <td>15 &lt; 20 → move to A<br><em>K is forgotten</em></td>
+              <td>{(A,5),(B,7)}</td>
+              <td>A</td>
+              <td>C(3), D(4)</td>
+              <td>h(A)=5 nhỏ nhất</td>
             </tr>
             <tr>
               <td>2</td>
-              <td>A (15)</td>
-              <td>B(10), C(12)</td>
-              <td>B (10)</td>
-              <td>10 &lt; 15 → move to B</td>
+              <td>{(C,3),(D,4),(B,7)}</td>
+              <td>C</td>
+              <td>D(4)*</td>
+              <td>h(C)=3 nhỏ nhất</td>
             </tr>
             <tr>
               <td>3</td>
-              <td>B (10)</td>
-              <td>D(4), E(8)</td>
-              <td>D (4)</td>
-              <td>4 &lt; 10 → move to D</td>
+              <td>{(D,4),(B,7)}</td>
+              <td>D</td>
+              <td>T(0)</td>
+              <td>D đã trong OPEN; chỉ thêm T</td>
             </tr>
-            <tr>
+            <tr class="hl">
               <td>4</td>
-              <td>D (4)</td>
-              <td>Trap(2)</td>
-              <td>Trap (2)</td>
-              <td>2 &lt; 4 → move to Trap</td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td>Trap (2)</td>
-              <td>F(6), G(5)</td>
-              <td>G (5)</td>
-              <td class="stop">5 &gt; 2 → STOP<br>local minimum</td>
+              <td>{(T,0),(B,7)}</td>
+              <td><strong>T</strong></td>
+              <td>—</td>
+              <td class="goal">h(T)=0 → ĐẾN ĐÍCH ✓</td>
             </tr>
           </tbody>
         </table>
       </div>
-
-      <p>
-        At Trap, every neighbor has a <em>worse</em> heuristic.
-        Pure hill climbing has no OPEN list left to consult, so it
-        reports failure — even though Goal is still in the graph,
-        waiting behind the discarded branch through <code>K</code>.
+      <p style="font-size:.85rem;color:var(--text-soft);margin-top:-.5rem">
+        *D đã có trong OPEN với h=4; không thêm lại.
       </p>
 
-      <div class="callout">
-        <p class="callout-label">Local minimum</p>
-        <p>
-          A node whose heuristic is better than (or equal to) all of its
-          neighbors. Pure hill climbing cannot leave such a node:
-          by definition, no improving move exists, and no alternative
-          path is stored.
-        </p>
+      <p>
+        <strong>Đường đi Greedy:</strong> S → A → C → D → T<br>
+        <strong>Chi phí:</strong> g = 2 + 1 + 3 + 6 = <strong>12</strong>
+      </p>
+
+      <div class="table-scroll" style="margin-top:1.25rem">
+        <table class="trace">
+          <thead>
+            <tr><th>Tiêu chí</th><th>Hill Climbing</th><th>Greedy Best-First</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Danh sách OPEN</td><td>✗</td><td>✓</td></tr>
+            <tr><td>Quay lui / thử lại</td><td>✗</td><td>✓ (qua OPEN)</td></tr>
+            <tr><td>Bộ nhớ</td><td>O(1)</td><td>O(b·d)</td></tr>
+            <tr><td>Tìm được đích?</td><td>✗ (kẹt tại C)</td><td>✓</td></tr>
+            <tr><td>Chi phí đường đi</td><td>—</td><td>12 (không tối ưu)</td></tr>
+            <tr><td>Tối ưu?</td><td>✗</td><td>✗</td></tr>
+          </tbody>
+        </table>
       </div>
 
-      <h2 id="compare">Pure vs modern hill climbing</h2>
+      <!-- ── 7. PURE vs MODERN ── -->
+      <h2 id="compare">7. HC thuần túy vs HC hiện đại (slide)</h2>
       <p>
-        The name “hill climbing” is used in two related but different ways
-        in AI courses. This section separates them so the Week&nbsp;3 slides
-        and the Week&nbsp;4 local-search labs do not contradict each other.
+        Tên "Hill Climbing" được dùng theo <strong>hai nghĩa khác nhau</strong> trong tài liệu AI.
+        Phân biệt rõ để không nhầm lẫn giữa slide tuần 3 và bài lab tuần 4.
       </p>
 
       <div class="two-col">
         <div class="card">
-          <h3>Pure hill climbing</h3>
+          <h3>HC thuần túy <span class="tag tag-red">AIMA</span></h3>
           <p>
-            Local search. Keep only the current node.
-            Move to a strictly better neighbor or stop.
-            This is the definition in
-            <cite>Artificial Intelligence: A Modern Approach</cite>
-            (Russell &amp; Norvig), Chapter&nbsp;4.
+            <strong>Tìm kiếm cục bộ.</strong> Chỉ lưu nút hiện tại.
+            Di chuyển đến nút kề tốt hơn hoặc dừng. Không có OPEN list.
+            Đây là định nghĩa trong <em>Artificial Intelligence: A Modern Approach</em>
+            (Russell &amp; Norvig, chương 4).
           </p>
         </div>
         <div class="card">
-          <h3>Modern / lecture-slide hill climbing</h3>
+          <h3>HC hiện đại <span class="tag">Slide</span></h3>
           <p>
-            Heuristic depth-first search: keep an <strong>OPEN</strong> list,
-            sort a node’s children by <code>h</code>, and push that sorted
-            list onto the <em>front</em> of OPEN. This is the procedure in
-            <code>slides/2.Searching_2.pdf</code>, and the classical Winston /
-            MIT&nbsp;6.034 formulation (“hill climbing with backup”).
+            <strong>DFS có hướng dẫn bởi heuristic.</strong> Giữ một danh sách OPEN,
+            sắp xếp nút con theo h, đẩy vào <em>đầu</em> OPEN.
+            Đây là thủ tục trong <code>slides/2.Searching_2.pdf</code>
+            và cách Winston / MIT&nbsp;6.034 dạy ("HC có backup").
           </p>
         </div>
       </div>
 
-      <p>
-        In this course we call the OPEN-list version
-        <strong>modern hill climbing</strong> because it is the form
-        presented in the heuristic-search lecture
-        (and in many older university notes that teach
-        “Best-First = BFS + h” and “Hill Climbing = DFS + h”).
-        Pure hill climbing is the stricter local-search rule used when
-        we study <em>why local search fails</em>.
-      </p>
-
-      <div class="compare">
-        <table>
+      <div class="compare-wrap">
+        <table class="compare">
           <thead>
             <tr>
-              <th>Property</th>
-              <th>Pure hill climbing</th>
-              <th>Modern hill climbing (slides)</th>
+              <th>Tính chất</th>
+              <th>HC thuần túy (AIMA)</th>
+              <th>HC hiện đại (slide)</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Uses <code>h(n)</code>?</td>
-              <td>Yes</td>
-              <td>Yes</td>
+              <td>Dùng h(n)?</td>
+              <td>Có</td>
+              <td>Có</td>
             </tr>
             <tr>
-              <td>Maintains OPEN / fringe?</td>
-              <td><strong>No</strong> — current node only</td>
-              <td><strong>Yes</strong> — stack-like OPEN</td>
+              <td>Có OPEN / fringe?</td>
+              <td><strong>Không</strong> — chỉ lưu nút hiện tại</td>
+              <td><strong>Có</strong> — ngăn xếp sắp xếp theo h</td>
             </tr>
             <tr>
-              <td>How children are used</td>
-              <td>Keep only the best improving neighbor</td>
-              <td>Sort all children by <code>h</code>, insert at front of OPEN</td>
+              <td>Xử lý nút con</td>
+              <td>Chỉ giữ nút kề tốt nhất (cải thiện h)</td>
+              <td>Sắp xếp toàn bộ theo h, đẩy vào đầu OPEN</td>
             </tr>
             <tr>
-              <td>Can backtrack?</td>
-              <td>No</td>
-              <td>Yes (via remaining OPEN entries)</td>
+              <td>Có thể quay lui?</td>
+              <td>Không</td>
+              <td>Có (qua các mục còn lại trong OPEN)</td>
             </tr>
             <tr>
-              <td>On the Trap example</td>
-              <td>Stops at Trap; misses Goal</td>
-              <td>Can later expand K and still reach Goal</td>
+              <td>Trên đồ thị ví dụ</td>
+              <td>Kẹt tại C — bỏ lỡ T</td>
+              <td>Có thể tìm T qua OPEN</td>
             </tr>
             <tr>
-              <td>Memory</td>
-              <td>Minimal (O(1) beyond the path itself)</td>
-              <td>Like DFS — fringe can grow with branching</td>
+              <td>Bộ nhớ</td>
+              <td>O(1)</td>
+              <td>Như DFS — tỷ lệ với độ sâu × nhánh</td>
             </tr>
             <tr>
-              <td>Guaranteed to find a goal?</td>
-              <td>No — local minima / plateaus</td>
-              <td>No — same incompleteness risks as DFS, but not “stuck with empty memory”</td>
+              <td>Đảm bảo tìm đích?</td>
+              <td>Không — kẹt tại cực tiểu cục bộ</td>
+              <td>Không — rủi ro như DFS, nhưng không mất bộ nhớ</td>
             </tr>
             <tr>
-              <td>Closest textbook name</td>
-              <td>AIMA “hill-climbing search”</td>
-              <td>Heuristic DFS / Winston hill climbing</td>
+              <td>Tên sách giáo khoa</td>
+              <td>AIMA "hill-climbing search"</td>
+              <td>Winston HC; Poole gọi là <em>heuristic depth-first search</em></td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <h3>Same graph, different outcomes</h3>
-      <p>
-        On Figure&nbsp;1, both methods prefer the left branch early
-        because <code>h(A) = 15 &lt; h(K) = 18</code>. The difference appears
-        only after Trap:
-      </p>
-      <ul>
-        <li>
-          <strong>Pure:</strong> neighbors F and G look worse → stop.
-          Branch <code>K</code> was never stored.
-        </li>
-        <li>
-          <strong>Modern (slides):</strong> after exploring the left dead-end,
-          OPEN still holds earlier alternatives (for example <code>K</code>).
-          The search can continue and find Goal.
-        </li>
-      </ul>
-      <p>
-        So the modern method is “hill climbing” only in the weak sense that
-        it <em>prefers</em> the locally best child first. It is really
-        <strong>DFS guided by a heuristic</strong>, not pure local search.
-      </p>
-
-      <div class="callout">
-        <p class="callout-label">Naming note</p>
+      <div class="callout callout-warn">
+        <p class="callout-label">Lưu ý đặt tên</p>
         <p>
-          AIMA reserves the name “hill climbing” for the pure local version.
-          Poole &amp; Mackworth call the OPEN-list version
-          <em>heuristic depth-first search</em>.
-          Both names are historically published; what matters for exams
-          is which <em>rule</em> you are asked to apply.
+          AIMA giữ tên "hill climbing" cho dạng cục bộ thuần túy.
+          Poole &amp; Mackworth gọi dạng OPEN-list là <em>heuristic depth-first search</em>.
+          Cả hai tên đều có cơ sở trong tài liệu. Điều quan trọng khi làm bài là xác định
+          <strong>quy tắc nào</strong> được yêu cầu áp dụng.
         </p>
       </div>
 
-      <h2 id="takeaways">What to remember</h2>
+      <!-- ── 8. TAKEAWAYS ── -->
+      <h2 id="takeaways">8. Điểm mấu chốt cần nhớ</h2>
       <ol>
         <li>
-          Pure hill climbing = <strong>local improvement only</strong>.
-          No OPEN list, no backtracking.
+          <strong>Hill Climbing không có bộ nhớ</strong> — khi đến C, nó đã "quên" S và A.
+          Không có cách nào quay lại nhánh B.
         </li>
         <li>
-          Its characteristic failure mode is the
-          <strong>local minimum</strong> (as at Trap).
+          <strong>Cực tiểu cục bộ ≠ cực tiểu toàn cục</strong> — h(C)=3 nhỏ hơn mọi nút kề,
+          nhưng T (h=0) mới là đích thực sự.
         </li>
         <li>
-          Modern / lecture-slide hill climbing =
-          <strong>DFS + sort children by <code>h</code> into OPEN</strong>.
-          It can recover from a bad branch.
+          <strong>Greedy thoát được</strong> vì OPEN list đã lưu D từ bước 2
+          — khi C mở rộng ra D, D đã sẵn sàng trong hàng đợi.
         </li>
         <li>
-          When a question says “hill climbing,” check the context:
-          Week&nbsp;3 slides → modern (OPEN) form;
-          Week&nbsp;4 local-search labs → pure form.
+          <strong>Cả hai không tối ưu</strong> — chúng không theo dõi g(n), chỉ dùng h(n).
+          Muốn tối ưu cần A*.
+        </li>
+        <li>
+          <strong>HC thuần túy (tuần 4)</strong> ≠ <strong>HC hiện đại (slide tuần 3)</strong>:
+          dạng slide là DFS hướng dẫn bởi h và có OPEN list, không phải local search.
         </li>
       </ol>
 
-      <p>
-        Next step: open the interactive comparison and verify the Trap
-        trace yourself —
-        <a href="dfs_vs_hill_climbing_lab.html">DFS vs Pure Hill Climbing</a>.
-      </p>
+      <!-- ── 9. PITFALLS ── -->
+      <h2 id="pitfalls">9. Bẫy thường gặp khi làm bài</h2>
 
-      <h2>References</h2>
+      <div class="table-scroll">
+        <table class="trace">
+          <thead>
+            <tr><th>Lỗi sai</th><th>Đúng</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>HC tiếp tục dù h(kề) = h(hiện tại)</td>
+              <td>HC <strong>dừng</strong> khi không có kề nào <em>tốt hơn nghiêm ngặt</em> (h &lt; h hiện tại)</td>
+            </tr>
+            <tr>
+              <td>Greedy không thêm D vào OPEN vì "đã thấy"</td>
+              <td>Greedy thêm vào OPEN khi <strong>chưa có</strong>; nếu đã có thì giữ, không thêm lại</td>
+            </tr>
+            <tr>
+              <td>Tính chi phí Greedy theo số bước</td>
+              <td>Chi phí = <strong>tổng trọng số cạnh</strong>, không phải số bước</td>
+            </tr>
+            <tr>
+              <td>Nhầm h(n) với g(n)</td>
+              <td>h(n) = ước lượng còn lại đến đích; g(n) = chi phí đã đi từ đầu</td>
+            </tr>
+            <tr>
+              <td>Dùng quy tắc HC "hiện đại" (OPEN list) khi bài yêu cầu HC thuần túy</td>
+              <td>Đọc kỹ đề — nếu yêu cầu "local search" hoặc "không có OPEN" thì dùng HC thuần túy</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ── REFERENCES ── -->
+      <h2>Tài liệu tham khảo</h2>
       <ul class="refs">
         <li>
-          Russell, S. &amp; Norvig, P. <cite>Artificial Intelligence: A Modern Approach</cite>.
-          Hill-climbing search as local search (no fringe).
+          <strong>Russell, S. &amp; Norvig, P.</strong> —
+          <cite>Artificial Intelligence: A Modern Approach</cite>.
+          Hill-climbing search là tìm kiếm cục bộ không có fringe (chương 4).
         </li>
         <li>
-          Winston, P. MIT 6.034. Hill climbing as depth-first search with
-          children sorted by heuristic and enqueued at the front of the queue.
+          <strong>Winston, P.</strong> — MIT 6.034.
+          Hill climbing là DFS với nút con sắp xếp theo heuristic và đẩy vào đầu hàng đợi.
         </li>
         <li>
-          Poole, D. &amp; Mackworth, A. <cite>Artificial Intelligence: Foundations of Computational Agents</cite>.
-          Heuristic depth-first search.
+          <strong>Poole, D. &amp; Mackworth, A.</strong> —
+          <cite>Artificial Intelligence: Foundations of Computational Agents</cite>.
+          Dạng OPEN-list được gọi là <em>heuristic depth-first search</em>.
         </li>
         <li>
-          Course slides: <code>slides/2.Searching_2.pdf</code> (modern / OPEN-list hill climbing).
+          <strong>Slide môn học:</strong> <code>slides/2.Searching_2.pdf</code>
+          — Hill climbing dạng hiện đại (OPEN-list).
         </li>
       </ul>
 
-      <a class="back-link" href="../index.html#lectures">← Back to Lectures</a>
+      <a class="back-link" href="week4_lab.html">← Về Lab Tuần 4</a>
     </div>
   </main>
 
