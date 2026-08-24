@@ -74,6 +74,7 @@ lectures:
     materials:
       - "Coding exercises"
       - "Performance comparison notebooks"
+      - { "Local search": "quizz/dfs_vs_hill_climbing_lab.html" }
 
   - week: 5
     date: "2024-10-01"

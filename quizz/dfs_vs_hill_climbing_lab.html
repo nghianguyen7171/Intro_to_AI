@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DFS vs Pure Hill Climbing Visualizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        #network-graph { width: 100%; height: 100%; background-color: white; border-radius: 0.5rem; }
+        
+        .algo-btn.active { background-color: #fef3c7; color: #d97706; border-color: #f59e0b; font-weight: 600; }
+        .algo-btn { background-color: white; color: #6b7280; border-color: #e5e7eb; transition: all 0.2s; border-width: 1px; }
+        .algo-btn:hover:not(.active) { background-color: #f9fafb; }
+
+        .table-container::-webkit-scrollbar { height: 8px; width: 8px; }
+        .table-container::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        .table-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        
+        .glass-overlay {
+            background: rgba(248, 250, 252, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden">
+
+    <header class="bg-amber-900 text-white p-4 shadow-md z-10 flex justify-between items-center shrink-0">
+        <div>
+            <h1 class="text-xl font-bold tracking-wide">⛰️ DFS vs Pure Hill Climbing</h1>
+            <p class="text-sm text-amber-200">Bài 6: Cực tiểu cục bộ (Local Minimum) và Sức mạnh của Backtracking</p>
+        </div>
+    </header>
+
+    <main class="flex-1 flex overflow-hidden p-4 gap-4">
+        
+        <!-- Left Panel: Graph -->
+        <div class="w-5/12 flex flex-col h-full bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="p-3 border-b border-slate-200 bg-slate-50 shrink-0">
+                <h2 class="font-semibold text-slate-800">Đồ thị Không gian trạng thái</h2>
+                <p class="text-xs text-slate-500 mt-1">Các đỉnh chứa thông tin Heuristic <span class="font-bold">h(n)</span>. Đích (Goal) nằm ở nhánh phải.</p>
+            </div>
+            <div class="flex-1 p-2 relative">
+                <div id="network-graph" class="absolute inset-0"></div>
+            </div>
+        </div>
+
+        <!-- Right Panel: Trace Table & Explanation -->
+        <div class="w-7/12 flex flex-col h-full bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden relative">
+            <div class="p-3 border-b border-slate-200 bg-slate-50 shrink-0 flex flex-col gap-3">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="font-bold text-slate-800">Khu vực phân tích Thuật toán</h2>
+                        <p class="text-xs text-slate-500 mt-1">So sánh hành vi giữa DFS (Dùng Stack) và Pure Hill Climbing (Bản gốc, không dùng OPEN).</p>
+                    </div>
+                    <button id="toggle-answer-btn" onclick="toggleAnswer()" class="px-5 py-2 bg-amber-500 hover:bg-amber-600 text-white text-sm font-bold rounded-lg shadow-md transition-all">
+                        <span id="toggle-btn-text">Hiện đáp án</span>
+                    </button>
+                </div>
+                
+                <!-- Algorithm Selectors -->
+                <div class="flex gap-2">
+                    <button onclick="selectAlgo('dfs')" id="btn-dfs" class="algo-btn active flex-1 py-2 rounded-md text-sm text-center shadow-sm">Depth-First Search (DFS)</button>
+                    <button onclick="selectAlgo('hc')" id="btn-hc" class="algo-btn flex-1 py-2 rounded-md text-sm text-center shadow-sm">Pure Hill Climbing (Bản gốc)</button>
+                </div>
+            </div>
+            
+            <div id="hidden-placeholder" class="absolute inset-0 top-[132px] z-20 flex flex-col items-center justify-center text-slate-500 p-6 text-center glass-overlay transition-opacity duration-300">
+                <svg class="w-16 h-16 mb-4 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                <p class="text-lg font-bold text-slate-700">Đang ẩn bảng Trace Table</p>
+                <p class="text-sm mt-2 max-w-md text-slate-500">Hãy thử đoán xem Pure Hill Climbing sẽ bị mắc kẹt ở đỉnh nào? Bấm "Hiện đáp án" để xem diễn biến chi tiết.</p>
+            </div>
+
+            <div id="trace-table-container" class="flex-1 overflow-auto table-container p-0">
+                <table class="w-full text-sm text-left text-slate-700">
+                    <thead id="table-head" class="text-xs text-slate-700 uppercase bg-slate-100 sticky top-0 z-10 shadow-sm">
+                        <!-- Injected via JS -->
+                    </thead>
+                    <tbody id="trace-body" class="divide-y divide-slate-100">
+                        <!-- Injected via JS -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id="result-container" class="p-4 border-t border-amber-200 bg-amber-50 shrink-0">
+                <h3 class="font-bold text-amber-900 text-sm mb-1 flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    Phân tích kết quả:
+                </h3>
+                <p id="ex-result" class="text-sm text-amber-800 leading-relaxed"></p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Definition of the graph and answers
+        const scenarioData = {
+            nodes: [
+                { id: 'S', label: '<b>S</b>\n<i>h=20</i>', h: 20, level: 0, color: { background: '#fecdd3', border: '#e11d48' }, borderWidth: 2 },
+                { id: 'A', label: '<b>A</b>\n<i>h=15</i>', h: 15, level: 1 },
+                { id: 'K', label: '<b>K</b>\n<i>h=18</i>', h: 18, level: 1 },
+                
+                { id: 'B', label: '<b>B</b>\n<i>h=10</i>', h: 10, level: 2 },
+                { id: 'C', label: '<b>C</b>\n<i>h=12</i>', h: 12, level: 2 },
+                { id: 'L', label: '<b>L</b>\n<i>h=14</i>', h: 14, level: 2 },
+                
+                { id: 'D', label: '<b>D</b>\n<i>h=4</i>', h: 4, level: 3 },
+                { id: 'E', label: '<b>E</b>\n<i>h=8</i>', h: 8, level: 3 },
+                { id: 'M', label: '<b>M</b>\n<i>h=7</i>', h: 7, level: 3 },
+                
+                { id: 'Trap', label: '<b>Trap</b>\n<i>h=2</i>', h: 2, level: 4, color: {background: '#fee2e2', border: '#ef4444'} },
+                { id: 'Goal', label: '<b>Goal</b>\n<i>h=0</i>', h: 0, level: 4, color: { background: '#a7f3d0', border: '#059669' }, borderWidth: 3 },
+                
+                { id: 'F', label: '<b>F</b>\n<i>h=6</i>', h: 6, level: 5 },
+                { id: 'G', label: '<b>G</b>\n<i>h=5</i>', h: 5, level: 5 }
+            ],
+            edges: [
+                { from: 'S', to: 'A' }, { from: 'S', to: 'K' },
+                { from: 'A', to: 'B' }, { from: 'A', to: 'C' },
+                { from: 'B', to: 'D' }, { from: 'B', to: 'E' },
+                { from: 'D', to: 'Trap' },
+                { from: 'Trap', to: 'F' }, { from: 'Trap', to: 'G' },
+                { from: 'K', to: 'L' },
+                { from: 'L', to: 'M' },
+                { from: 'M', to: 'Goal' }
+            ],
+            solutions: {
+                dfs: {
+                    headers: `
+                        <tr>
+                            <th scope="col" class="px-4 py-3 font-semibold border-b border-r w-16">Step</th>
+                            <th scope="col" class="px-4 py-3 font-semibold border-b border-r text-amber-600 w-24">u (Pop)</th>
+                            <th scope="col" class="px-4 py-3 font-semibold border-b border-r">edge(u)</th>
+                            <th scope="col" class="px-4 py-3 font-semibold border-b text-rose-600">OPEN (Stack LIFO)</th>
+                        </tr>
+                    `,
+                    trace: [
+                        { step: 0, u: '-', edges: '-', open: 'S' },
+                        { step: 1, u: 'S', edges: 'A, K', open: 'A, K' },
+                        { step: 2, u: 'A', edges: 'B, C', open: 'B, C, K' },
+                        { step: 3, u: 'B', edges: 'D, E', open: 'D, E, C, K' },
+                        { step: 4, u: 'D', edges: 'Trap', open: 'Trap, E, C, K' },
+                        { step: 5, u: 'Trap', edges: 'F, G', open: 'F, G, E, C, K' },
+                        { step: 6, u: 'F', edges: '- (Cụt)', open: 'G, E, C, K' },
+                        { step: 7, u: 'G', edges: '- (Cụt)', open: 'E, C, K' },
+                        { step: 8, u: '<span class="text-slate-400">... (Backtrack)</span>', edges: '...', open: 'K' },
+                        { step: 9, u: 'K', edges: 'L', open: 'L' },
+                        { step: 10, u: 'L', edges: 'M', open: 'M' },
+                        { step: 11, u: 'M', edges: 'Goal', open: 'Goal' },
+                        { step: 12, u: '<span class="font-bold text-emerald-600">Goal</span>', edges: '-', open: '<span class="font-bold text-emerald-600">(Đích - Dừng)</span>' }
+                    ],
+                    result: "Bằng cơ chế Stack (Vào sau ra trước), DFS mù quáng đi sâu vào nhánh trái và rơi vào Trap. Tuy nhiên, khi chạm đáy (F, G), nó lần lượt thực hiện <strong>Quay lui (Backtrack)</strong>. Nhờ có danh sách OPEN lưu giữ các ngã rẽ cũ, nó rút được đỉnh <strong>K</strong> ra duyệt, đi sang nhánh phải và tìm thấy đích!"
+                },
+                hc: {
+                    headers: `
+                        <tr>
+                            <th scope="col" class="px-4 py-3 font-semibold border-b border-r w-12">Step</th>
+                            <th scope="col" class="px-4 py-3 font-semibold border-b border-r text-amber-600 w-24">Current State</th>
+                            <th scope="col" class="px-4 py-3 font-semibold border-b border-r">Neighbors (h)</th>
+                            <th scope="col" class="px-4 py-3 font-semibold border-b border-r text-indigo-600">Best Neighbor</th>
+                            <th scope="col" class="px-4 py-3 font-semibold border-b text-rose-600">Decision / Status</th>
+                        </tr>
+                    `,
+                    trace: [
+                        { step: 0, u: '-', neighbors: '-', best: '-', decision: 'Bắt đầu tại S (20)' },
+                        { step: 1, u: 'S (20)', neighbors: 'A(15), K(18)', best: 'A (15)', decision: '15 < 20 &rarr; Move to A' },
+                        { step: 2, u: 'A (15)', neighbors: 'B(10), C(12)', best: 'B (10)', decision: '10 < 15 &rarr; Move to B' },
+                        { step: 3, u: 'B (10)', neighbors: 'D(4), E(8)', best: 'D (4)', decision: '4 < 10 &rarr; Move to D' },
+                        { step: 4, u: 'D (4)', neighbors: 'Trap(2)', best: 'Trap (2)', decision: '2 < 4 &rarr; Move to Trap' },
+                        { step: 5, u: '<span class="font-bold text-rose-600">Trap (2)</span>', neighbors: 'F(6), G(5)', best: 'G (5)', decision: '<span class="font-bold text-rose-600">5 > 2 &rarr; STOP! (Bị kẹt)</span>' }
+                    ],
+                    result: "<strong>HILL CLIMBING BẢN GỐC THẤT BẠI!</strong> Thuật toán <strong>không có danh sách OPEN</strong> và hoàn toàn không ghi nhớ các ngã rẽ (như K, C, E). Tại đỉnh Trap (h=2), mọi đỉnh kề (F, G) đều có h(n) xấu hơn (tăng lên). Vì chỉ biết tiến lên mà không biết lùi, thuật toán lập tức dừng lại, mắc kẹt vĩnh viễn ở <strong>Cực tiểu cục bộ (Local Minimum)</strong> và bỏ lỡ Goal."
+                }
+            }
+        };
+
+        let network = null;
+        let currentAlgo = 'dfs';
+        let isAnswerVisible = false;
+
+        function toggleAnswer() {
+            isAnswerVisible = !isAnswerVisible;
+            const placeholder = document.getElementById('hidden-placeholder');
+            const btnText = document.getElementById('toggle-btn-text');
+            const toggleBtn = document.getElementById('toggle-answer-btn');
+
+            if (isAnswerVisible) {
+                placeholder.classList.add('opacity-0', 'pointer-events-none');
+                btnText.textContent = 'Ẩn đáp án';
+                toggleBtn.classList.replace('bg-amber-500', 'bg-slate-500');
+                toggleBtn.classList.replace('hover:bg-amber-600', 'hover:bg-slate-600');
+            } else {
+                placeholder.classList.remove('opacity-0', 'pointer-events-none');
+                btnText.textContent = 'Hiện đáp án';
+                toggleBtn.classList.replace('bg-slate-500', 'bg-amber-500');
+                toggleBtn.classList.replace('hover:bg-slate-600', 'hover:bg-amber-600');
+            }
+        }
+
+        function renderTable(algoKey) {
+            const tbody = document.getElementById('trace-body');
+            const thead = document.getElementById('table-head');
+            tbody.innerHTML = '';
+            
+            const solution = scenarioData.solutions[algoKey];
+            thead.innerHTML = solution.headers;
+            document.getElementById('ex-result').innerHTML = solution.result;
+
+            if (algoKey === 'dfs') {
+                solution.trace.forEach(row => {
+                    const tr = document.createElement('tr');
+                    tr.className = "hover:bg-amber-50/50 transition-colors";
+                    tr.innerHTML = `
+                        <td class="px-4 py-3 border-b border-r border-slate-200 text-slate-500 font-medium">${row.step}</td>
+                        <td class="px-4 py-3 border-b border-r border-slate-200 font-bold text-amber-700 bg-amber-50/30">${row.u}</td>
+                        <td class="px-4 py-3 border-b border-r border-slate-200 text-slate-600">${row.edges}</td>
+                        <td class="px-4 py-3 border-b border-slate-200 font-mono tracking-tight text-rose-700">${row.open}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } else {
+                solution.trace.forEach(row => {
+                    const tr = document.createElement('tr');
+                    tr.className = "hover:bg-amber-50/50 transition-colors";
+                    tr.innerHTML = `
+                        <td class="px-4 py-3 border-b border-r border-slate-200 text-slate-500 font-medium">${row.step}</td>
+                        <td class="px-4 py-3 border-b border-r border-slate-200 font-bold text-amber-700 bg-amber-50/30">${row.u}</td>
+                        <td class="px-4 py-3 border-b border-r border-slate-200 text-slate-600">${row.neighbors}</td>
+                        <td class="px-4 py-3 border-b border-r border-slate-200 font-medium text-indigo-600">${row.best}</td>
+                        <td class="px-4 py-3 border-b border-slate-200 text-slate-700 tracking-tight">${row.decision}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+        }
+
+        function selectAlgo(algoId) {
+            currentAlgo = algoId;
+            document.querySelectorAll('.algo-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-' + algoId).classList.add('active');
+            renderTable(algoId);
+        }
+
+        function renderGraph(nodesArray, edgesArray) {
+            const container = document.getElementById('network-graph');
+            const data = {
+                nodes: new vis.DataSet(nodesArray.map(n => ({
+                    ...n, 
+                    shape: 'box',
+                    font: { size: 14, color: '#1f2937', face: 'Inter', multi: 'html' },
+                    color: n.color || { background: 'white', border: '#94a3b8', highlight: { background: '#fef3c7', border: '#f59e0b' } },
+                    margin: 10,
+                    shapeProperties: { borderRadius: 6 }
+                }))),
+                edges: new vis.DataSet(edgesArray.map(e => ({
+                    ...e,
+                    arrows: 'to',
+                    color: { color: '#9ca3af', highlight: '#f59e0b' },
+                    smooth: { type: 'cubicBezier', forceDirection: 'vertical', roundness: 0.4 }
+                })))
+            };
+
+            const options = {
+                layout: {
+                    hierarchical: {
+                        direction: 'UD',
+                        sortMethod: 'directed',
+                        levelSeparation: 90,
+                        nodeSpacing: 100
+                    }
+                },
+                interaction: { hover: true, tooltipDelay: 200, zoomView: true },
+                physics: false
+            };
+
+            if (network !== null) { network.destroy(); }
+            network = new vis.Network(container, data, options);
+            
+            network.once("afterDrawing", function() {
+                network.fit({ animation: { duration: 500 } });
+            });
+        }
+
+        function loadExercise() {
+            isAnswerVisible = false;
+            const placeholder = document.getElementById('hidden-placeholder');
+            placeholder.classList.remove('opacity-0', 'pointer-events-none');
+            document.getElementById('toggle-btn-text').textContent = 'Hiện đáp án';
+            document.getElementById('toggle-answer-btn').classList.replace('bg-slate-500', 'bg-amber-500');
+
+            renderGraph(scenarioData.nodes, scenarioData.edges);
+            selectAlgo('dfs');
+        }
+
+        window.onload = () => loadExercise();
+    </script>
+</body>
+</html>
