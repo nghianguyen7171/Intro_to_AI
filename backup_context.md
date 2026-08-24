@@ -744,7 +744,7 @@ appropriate week in `lectures.yml` — no other changes needed.
 
 ---
 
-**Last Updated:** 2026-08-24 (Pure Hill Climbing instructional article added and deployed)  
+**Last Updated:** 2026-08-24 (Pure Hill Climbing article reading column centered)  
 **AI Readiness:** 100%
 
 *This document serves as a comprehensive backup context for the Introduction to AI course website project. It contains all essential information needed to understand, maintain, and continue development of the project.*
