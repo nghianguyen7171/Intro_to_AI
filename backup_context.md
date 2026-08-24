@@ -680,6 +680,20 @@ No action required. Next update warranted when content changes.
 To add future quizzes: drop `quizz/QuizzN.html` and reference it from the
 appropriate week in `lectures.yml` — no other changes needed.
 
+### 2026-08-24 — Pure Hill Climbing Article
+
+- **New file:** `quizz/pure_hill_climbing.html` — instructional article matching
+  the course site template (`assets/css/main.css`, NEU/FDA header, Georgia
+  headings, accent `#8c1d1d`).
+- **Content:** Pure (AIMA local-search) hill climbing with the Trap worked
+  example; comparison vs modern / lecture-slide hill climbing (Winston OPEN-list
+  / heuristic DFS from `slides/2.Searching_2.pdf`).
+- **`src/data/lectures.yml`:** Week 4 materials add
+  `{ "Pure Hill Climbing (article)": "quizz/pure_hill_climbing.html" }`.
+- **Source commit:** `d1d320e`. **Deployed** to `gh-pages` (`c9857b5`).
+- **Live URL:**
+  - https://nghianguyen7171.github.io/Intro_to_AI/quizz/pure_hill_climbing.html
+
 ### 2026-08-24 — Week 4 Local Search Lab Linked
 
 - **New file:** `quizz/dfs_vs_hill_climbing_lab.html` — interactive DFS vs
@@ -730,7 +744,7 @@ appropriate week in `lectures.yml` — no other changes needed.
 
 ---
 
-**Last Updated:** 2026-08-24 (Week 4 Local search lab linked and deployed)  
+**Last Updated:** 2026-08-24 (Pure Hill Climbing instructional article added and deployed)  
 **AI Readiness:** 100%
 
 *This document serves as a comprehensive backup context for the Introduction to AI course website project. It contains all essential information needed to understand, maintain, and continue development of the project.*
