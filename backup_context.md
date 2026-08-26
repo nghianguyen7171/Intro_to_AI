@@ -744,7 +744,21 @@ appropriate week in `lectures.yml` — no other changes needed.
 
 ---
 
-**Last Updated:** 2026-08-24 (Pure Hill Climbing article reading column centered)  
+### 2026-08-26 — Hide Week 4 Lab Links in Pure Hill Climbing Article
+
+- **File edited:** `quizz/pure_hill_climbing.html`.
+- **Change:** Both references to `week4_lab.html` are now wrapped in HTML
+  comments (not deleted) so they can be restored by uncommenting:
+  1. The "Bài lab liên quan" entry in the header `<dl class="article-meta">`.
+  2. The `← Về Lab Tuần 4` back-link at the bottom of `<main>`.
+- **Rationale:** The Week 4 lab page is not part of the public site right now;
+  the article should not advertise it.
+- **Deploy:** No build needed (article is hand-authored HTML, not generated).
+  Run `./deploy.sh` after committing to publish.
+
+---
+
+**Last Updated:** 2026-08-26 (Week 4 lab links hidden in pure_hill_climbing.html)  
 **AI Readiness:** 100%
 
 *This document serves as a comprehensive backup context for the Introduction to AI course website project. It contains all essential information needed to understand, maintain, and continue development of the project.*
