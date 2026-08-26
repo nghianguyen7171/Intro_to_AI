@@ -680,6 +680,15 @@ No action required. Next update warranted when content changes.
 To add future quizzes: drop `quizz/QuizzN.html` and reference it from the
 appropriate week in `lectures.yml` — no other changes needed.
 
+### 2026-08-26 — Hide Week 4 Lab from Pure HC Article
+
+- https://nghianguyen7171.github.io/Intro_to_AI/quizz/pure_hill_climbing.html
+  no longer links to or mentions `week4_lab.html` (meta “Bài lab liên quan”
+  and “← Về Lab Tuần 4” back-link removed entirely, not just commented).
+- `main` `7718ebb`; `gh-pages` `1edf903`.
+- Note: `quizz/week4_lab.html` may still exist on `gh-pages` by direct URL;
+  it is simply unreachable from the Pure HC article and lecture materials.
+
 ### 2026-08-24 — Pure Hill Climbing Article
 
 - **New file:** `quizz/pure_hill_climbing.html` — instructional article matching
