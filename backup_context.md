@@ -680,6 +680,12 @@ No action required. Next update warranted when content changes.
 To add future quizzes: drop `quizz/QuizzN.html` and reference it from the
 appropriate week in `lectures.yml` — no other changes needed.
 
+### 2026-08-28 — Week 4 Lab Published
+
+- Linked `quizz/week4_lab.html` from Week 4 materials as **Week 4 Lab**.
+- Source commit `e8b1e2e`; `gh-pages` `37d4c62`.
+- Live: https://nghianguyen7171.github.io/Intro_to_AI/quizz/week4_lab.html
+
 ### 2026-08-26 — Hide Week 4 Lab from Pure HC Article
 
 - https://nghianguyen7171.github.io/Intro_to_AI/quizz/pure_hill_climbing.html
@@ -767,7 +773,7 @@ appropriate week in `lectures.yml` — no other changes needed.
 
 ---
 
-**Last Updated:** 2026-08-26 (Week 4 lab links hidden in pure_hill_climbing.html)  
+**Last Updated:** 2026-08-28 (Week 4 Lab published to course site)  
 **AI Readiness:** 100%
 
 *This document serves as a comprehensive backup context for the Introduction to AI course website project. It contains all essential information needed to understand, maintain, and continue development of the project.*
