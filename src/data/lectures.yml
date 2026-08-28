@@ -74,6 +74,7 @@ lectures:
     materials:
       - "Coding exercises"
       - "Performance comparison notebooks"
+      - { "Week 4 Lab": "quizz/week4_lab.html" }
       - { "Local search": "quizz/dfs_vs_hill_climbing_lab.html" }
       - { "Pure Hill Climbing (article)": "quizz/pure_hill_climbing.html" }
 
