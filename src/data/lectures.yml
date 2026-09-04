@@ -89,7 +89,7 @@ lectures:
     materials:
       - "Chapter 4, slides on heuristic functions and optimality"
       - { "Week 4 Lab Key — Part I": "quizz/week4_lab_key.html" }
-      - { "Week 4 Lab Key — Part II (notebook)": "quizz/week4_lab_key_part2.ipynb" }
+      - { "Week 4 Lab Key — Part II (notebook)": "quizz/week4_lab_key_part2.html" }
 
   - week: 6
     date: "2024-10-08"
