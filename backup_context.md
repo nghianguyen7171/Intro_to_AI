@@ -680,6 +680,14 @@ No action required. Next update warranted when content changes.
 To add future quizzes: drop `quizz/QuizzN.html` and reference it from the
 appropriate week in `lectures.yml` — no other changes needed.
 
+### 2026-09-04 — Part II Notebook Downloads as .ipynb
+
+- Week 5 material “Part II (notebook)” now points to
+  `quizz/week4_lab_key_part2.html`, which fetches the notebook as a blob and
+  triggers a file download named `week4_lab_key_part2.ipynb` (avoids GitHub
+  Pages opening raw `application/x-ipynb+json`).
+- Source `173f958`; `gh-pages` `add159e`.
+
 ### 2026-09-04 — Week 4 Lab Keys Published (Week 5)
 
 - Copied from `idea/` into deployable `quizz/`:
@@ -784,7 +792,7 @@ appropriate week in `lectures.yml` — no other changes needed.
 
 ---
 
-**Last Updated:** 2026-08-28 (Week 4 Lab published to course site)  
+**Last Updated:** 2026-09-04 (Part II notebook forced to download as .ipynb)  
 **AI Readiness:** 100%
 
 *This document serves as a comprehensive backup context for the Introduction to AI course website project. It contains all essential information needed to understand, maintain, and continue development of the project.*
