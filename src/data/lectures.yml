@@ -88,6 +88,8 @@ lectures:
       - { "Optimal Search": "slides/3.Optimal_search.pdf" }
     materials:
       - "Chapter 4, slides on heuristic functions and optimality"
+      - { "Week 4 Lab Key — Part I": "quizz/week4_lab_key.html" }
+      - { "Week 4 Lab Key — Part II (notebook)": "quizz/week4_lab_key_part2.ipynb" }
 
   - week: 6
     date: "2024-10-08"
