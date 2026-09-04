@@ -680,6 +680,17 @@ No action required. Next update warranted when content changes.
 To add future quizzes: drop `quizz/QuizzN.html` and reference it from the
 appropriate week in `lectures.yml` — no other changes needed.
 
+### 2026-09-04 — Week 4 Lab Keys Published (Week 5)
+
+- Copied from `idea/` into deployable `quizz/`:
+  - `quizz/week4_lab_key.html` — Part I
+  - `quizz/week4_lab_key_part2.ipynb` — Part II
+- **`src/data/lectures.yml`:** Week 5 materials add both key links.
+- Source `c8f39f2`; `gh-pages` `d33b752`.
+- Live:
+  - https://nghianguyen7171.github.io/Intro_to_AI/quizz/week4_lab_key.html
+  - https://nghianguyen7171.github.io/Intro_to_AI/quizz/week4_lab_key_part2.ipynb
+
 ### 2026-08-28 — Week 4 Lab Published
 
 - Linked `quizz/week4_lab.html` from Week 4 materials as **Week 4 Lab**.
