@@ -680,6 +680,12 @@ No action required. Next update warranted when content changes.
 To add future quizzes: drop `quizz/QuizzN.html` and reference it from the
 appropriate week in `lectures.yml` — no other changes needed.
 
+### 2026-09-07 — A* Example PDF on Week 5
+
+- `slides/AStar_example.pdf` linked as **A\* Example** under Week 5 materials
+  (already on `main` as `27c7c51`); deployed to `gh-pages` as `c09147a`.
+- Live: https://nghianguyen7171.github.io/Intro_to_AI/slides/AStar_example.pdf
+
 ### 2026-09-04 — Part II Notebook Downloads as .ipynb
 
 - Week 5 material “Part II (notebook)” now points to
@@ -792,7 +798,7 @@ appropriate week in `lectures.yml` — no other changes needed.
 
 ---
 
-**Last Updated:** 2026-09-04 (Part II notebook forced to download as .ipynb)  
+**Last Updated:** 2026-09-07 (A* Example PDF deployed as Week 5 material)  
 **AI Readiness:** 100%
 
 *This document serves as a comprehensive backup context for the Introduction to AI course website project. It contains all essential information needed to understand, maintain, and continue development of the project.*
