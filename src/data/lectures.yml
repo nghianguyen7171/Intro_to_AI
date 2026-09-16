@@ -91,7 +91,6 @@ lectures:
       - { "A* Example": "slides/AStar_example.pdf" }
       - { "Week 4 Lab Key — Part I": "quizz/week4_lab_key.html" }
       - { "Week 4 Lab Key — Part II (notebook)": "quizz/week4_lab_key_part2.html" }
-      - { "Week 5 Lab": "quizz/week5_lab.html" }
 
   - week: 6
     date: "2024-10-08"
@@ -104,6 +103,7 @@ lectures:
     materials:
       - "Python code templates"
       - "Problem sets"
+      - { "Week 5 Lab": "quizz/week5_lab.html" }
 
   - week: 7
     date: "2024-10-15"
