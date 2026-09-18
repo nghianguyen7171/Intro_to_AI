@@ -104,6 +104,7 @@ lectures:
       - "Python code templates"
       - "Problem sets"
       - { "Week 5 Lab": "quizz/week5_lab.html" }
+      - { "Week 5 Lab Key": "quizz/week5_lab_key.html" }
 
   - week: 7
     date: "2024-10-15"
