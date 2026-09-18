@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 4 Lab — Answer Key</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+/* ── Design tokens ── */
+:root {
+  --bg:          #f1f5f9;
+  --surface:     #ffffff;
+  --surface-2:   #f8fafc;
+  --border:      #e2e8f0;
+  --text:        #0f172a;
+  --text-2:      #475569;
+  --text-3:      #94a3b8;
+  --accent:      #6366f1;
+  --accent-lt:   #eef2ff;
+  --accent-bd:   #c7d2fe;
+  --code-bg:     #1e293b;
+  --code-text:   #e2e8f0;
+  --warn-bg:     #fff1f2;
+  --warn-bd:     #fecdd3;
+  --warn-text:   #9f1239;
+
+  /* SVG graph tokens — M&C tree */
+  --n-fill:      #ffffff;
+  --n-stroke:    #64748b;
+  --n-text:      #1e293b;
+  --n-hval:      #64748b;
+  --start-fill:  #fffbeb;
+  --start-stroke:#b45309;
+  --start-text:  #78350f;
+  --goal-fill:   #ecfdf5;
+  --goal-stroke: #047857;
+  --goal-text:   #064e3b;
+  --sol-fill:    #eef2ff;
+  --sol-stroke:  #4338ca;
+  --sol-text:    #1e1b4b;
+  --dead-fill:   #f1f5f9;
+  --dead-stroke: #94a3b8;
+  --dead-text:   #94a3b8;
+  --e-normal:    #94a3b8;
+  --e-sol:       #4338ca;
+  --lvl-color:   #8a98ac;
+  /* SVG graph tokens — Ex4 */
+  --s-fill:      #fffbeb;
+  --s-stroke:    #b45309;
+  --s-text:      #78350f;
+  --t-fill:      #ecfdf5;
+  --t-stroke:    #047857;
+  --t-text:      #064e3b;
+  --e-col:       #64748b;
+  --e-lbl:       #475569;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:          #0f172a;
+    --surface:     #1e293b;
+    --surface-2:   #162032;
+    --border:      #334155;
+    --text:        #f1f5f9;
+    --text-2:      #94a3b8;
+    --text-3:      #64748b;
+    --accent:      #818cf8;
+    --accent-lt:   #1e1b4b;
+    --accent-bd:   #3730a3;
+    --code-bg:     #090e1a;
+    --code-text:   #e2e8f0;
+    --warn-bg:     #1c0a0e;
+    --warn-bd:     #7f1d1d;
+    --warn-text:   #fca5a5;
+
+    --n-fill:      #1e293b;
+    --n-stroke:    #4d6a8a;
+    --n-text:      #b0c8e0;
+    --n-hval:      #4d6a8a;
+    --start-fill:  #2a1500;
+    --start-stroke:#f59e0b;
+    --start-text:  #fcd34d;
+    --goal-fill:   #002318;
+    --goal-stroke: #10b981;
+    --goal-text:   #34d399;
+    --sol-fill:    #12155a;
+    --sol-stroke:  #818cf8;
+    --sol-text:    #c7d2fe;
+    --dead-fill:   #0f172a;
+    --dead-stroke: #2d3f55;
+    --dead-text:   #2d3f55;
+    --e-normal:    #2d3f55;
+    --e-sol:       #6366f1;
+    --lvl-color:   #3d5470;
+    --s-fill:      #2a1500;
+    --s-stroke:    #f59e0b;
+    --s-text:      #fcd34d;
+    --t-fill:      #002318;
+    --t-stroke:    #10b981;
+    --t-text:      #34d399;
+    --e-col:       #3d5870;
+    --e-lbl:       #4d6a8a;
+  }
+}
+:root[data-theme="dark"] {
+  --bg:          #0f172a;
+  --surface:     #1e293b;
+  --surface-2:   #162032;
+  --border:      #334155;
+  --text:        #f1f5f9;
+  --text-2:      #94a3b8;
+  --text-3:      #64748b;
+  --accent:      #818cf8;
+  --accent-lt:   #1e1b4b;
+  --accent-bd:   #3730a3;
+  --code-bg:     #090e1a;
+  --code-text:   #e2e8f0;
+  --warn-bg:     #1c0a0e;
+  --warn-bd:     #7f1d1d;
+  --warn-text:   #fca5a5;
+  --n-fill:      #1e293b;
+  --n-stroke:    #4d6a8a;
+  --n-text:      #b0c8e0;
+  --n-hval:      #4d6a8a;
+  --start-fill:  #2a1500;
+  --start-stroke:#f59e0b;
+  --start-text:  #fcd34d;
+  --goal-fill:   #002318;
+  --goal-stroke: #10b981;
+  --goal-text:   #34d399;
+  --sol-fill:    #12155a;
+  --sol-stroke:  #818cf8;
+  --sol-text:    #c7d2fe;
+  --dead-fill:   #0f172a;
+  --dead-stroke: #2d3f55;
+  --dead-text:   #2d3f55;
+  --e-normal:    #2d3f55;
+  --e-sol:       #6366f1;
+  --lvl-color:   #3d5470;
+  --s-fill:      #2a1500;
+  --s-stroke:    #f59e0b;
+  --s-text:      #fcd34d;
+  --t-fill:      #002318;
+  --t-stroke:    #10b981;
+  --t-text:      #34d399;
+  --e-col:       #3d5870;
+  --e-lbl:       #4d6a8a;
+}
+
+/* ── Base ── */
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.65;
+  margin: 0;
+}
+p { margin: 0 0 .7rem; }
+p:last-child { margin-bottom: 0; }
+strong { font-weight: 700; }
+em { font-style: italic; }
+code, .mono { font-family: 'JetBrains Mono', monospace; }
+
+/* ── Header ── */
+#site-header {
+  background: #0f172a;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  border-bottom: 1px solid #1e293b;
+}
+.header-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .9rem 0 .55rem;
+}
+.header-eyebrow {
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #818cf8;
+  margin-bottom: .15rem;
+}
+.header-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.25;
+}
+.header-sub {
+  font-size: .75rem;
+  color: #94a3b8;
+  margin-top: .1rem;
+}
+.badge-pill {
+  background: #7f1d1d;
+  border: 1px solid #991b1b;
+  color: #fca5a5;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  padding: .25rem .75rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+/* ── Warn banner ── */
+.warn-banner {
+  background: var(--warn-bg);
+  border-bottom: 2px solid var(--warn-bd);
+  padding: .7rem 1.5rem;
+  text-align: center;
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--warn-text);
+  letter-spacing: .02em;
+}
+
+/* ── Main ── */
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.75rem 1.5rem 5rem;
+}
+
+/* ── Section header ── */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: .9rem;
+  margin: 2.5rem 0 1.5rem;
+  padding-bottom: .75rem;
+  border-bottom: 2px solid var(--border);
+}
+.section-badge {
+  background: var(--accent);
+  color: #fff;
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .07em;
+  padding: .22rem .75rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+.section-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text);
+}
+
+/* ── Algorithm subsection ── */
+.algo-section {
+  margin-bottom: 1.75rem;
+}
+.algo-heading {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  font-size: .95rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: .75rem;
+}
+.algo-heading .bar {
+  width: 4px;
+  height: 18px;
+  background: var(--accent);
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+/* ── Algorithm trace table ── */
+.tbl-wrap {
+  overflow-x: auto;
+  margin: .5rem 0 .75rem;
+  border-radius: 6px;
+}
+.algo-tbl {
+  border-collapse: collapse;
+  font-size: .82rem;
+  width: 100%;
+  min-width: 460px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.algo-tbl th {
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: .5rem .9rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.algo-tbl td {
+  padding: .42rem .9rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  color: var(--text);
+}
+.algo-tbl tr:last-child td { border-bottom: none; }
+.algo-tbl .step-cell {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .78rem;
+  color: var(--text-3);
+  text-align: center;
+  width: 3.5rem;
+  white-space: nowrap;
+}
+.algo-tbl .node-cell {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .82rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.algo-tbl .edge-cell {
+  font-size: .8rem;
+  color: var(--text-2);
+}
+.algo-tbl .open-cell {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .78rem;
+  color: var(--text-2);
+}
+.algo-tbl .goal-row td {
+  background: var(--accent-lt);
+  color: var(--accent);
+  font-weight: 700;
+}
+.algo-tbl .skip { color: var(--text-3); font-style: italic; }
+.algo-tbl sup { font-size: .65em; vertical-align: super; }
+
+/* ── Beam table (wider columns) ── */
+.beam-tbl { min-width: 550px; }
+.beam-tbl th, .beam-tbl td { padding: .45rem 1rem; }
+.beam-tbl .beam-cell { font-family: 'JetBrains Mono', monospace; font-size: .78rem; }
+
+/* ── Path result box ── */
+.result-box {
+  background: var(--accent-lt);
+  border: 1px solid var(--accent-bd);
+  border-radius: 8px;
+  padding: .65rem 1.2rem;
+  margin: .75rem 0;
+  font-size: .85rem;
+}
+.result-box strong { color: var(--accent); }
+
+/* ── Note block ── */
+.note {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--text-3);
+  border-radius: 0 6px 6px 0;
+  padding: .6rem 1rem;
+  font-size: .82rem;
+  color: var(--text-2);
+  margin: .65rem 0;
+}
+
+/* ── Warn note ── */
+.warn-note {
+  background: var(--warn-bg);
+  border: 1px solid var(--warn-bd);
+  border-radius: 6px;
+  padding: .6rem 1rem;
+  font-size: .82rem;
+  color: var(--warn-text);
+  margin: .65rem 0;
+}
+
+/* ── Q&A section ── */
+.qa-wrap {
+  background: #fefce8;
+  border-left: 3px solid #eab308;
+  border-radius: 0 6px 6px 0;
+  padding: 1rem 1.25rem;
+  margin-top: 1.25rem;
+}
+.qa-label {
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: #854d0e;
+  margin-bottom: .75rem;
+}
+.qa-item { margin-bottom: .85rem; }
+.qa-item:last-child { margin-bottom: 0; }
+.qa-q {
+  font-weight: 700;
+  color: #78350f;
+  margin-bottom: .3rem;
+  font-size: .85rem;
+}
+.qa-a {
+  font-size: .83rem;
+  color: #92400e;
+  line-height: 1.6;
+}
+.qa-a sup { font-size: .65em; }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .qa-wrap {
+    background: #2d2508;
+    border-left-color: #713f12;
+  }
+  :root:not([data-theme="light"]) .qa-label { color: #f59e0b; }
+  :root:not([data-theme="light"]) .qa-q { color: #fcd34d; }
+  :root:not([data-theme="light"]) .qa-a { color: #fde68a; }
+}
+:root[data-theme="dark"] .qa-wrap {
+  background: #2d2508;
+  border-left-color: #713f12;
+}
+:root[data-theme="dark"] .qa-label { color: #f59e0b; }
+:root[data-theme="dark"] .qa-q { color: #fcd34d; }
+:root[data-theme="dark"] .qa-a { color: #fde68a; }
+
+/* ── Optimal table ── */
+.opt-tbl {
+  border-collapse: collapse;
+  font-size: .82rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  width: 100%;
+  margin: .6rem 0;
+}
+.opt-tbl th {
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: .45rem .9rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.opt-tbl td { padding: .4rem .9rem; border-bottom: 1px solid var(--border); }
+.opt-tbl tr:last-child td { border-bottom: none; }
+.opt-tbl .cost-cell { text-align: center; font-family: 'JetBrains Mono', monospace; font-weight: 600; color: var(--accent); }
+
+/* ── IDDFS table ── */
+.iddfs-tbl { min-width: 340px; }
+
+/* ── Graph wrapper ── */
+.graph-wrap {
+  overflow-x: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem .75rem .75rem;
+  margin: .75rem 0 .5rem;
+}
+.graph-wrap svg { display: block; margin: 0 auto; }
+
+/* ── SVG CSS — M&C tree nodes ── */
+.node-normal .ring { fill: var(--n-fill);     stroke: var(--n-stroke);     stroke-width: 1.5; }
+.node-normal .lbl  { fill: var(--n-text);     font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:500; }
+.node-start  .ring { fill: var(--start-fill); stroke: var(--start-stroke); stroke-width: 2.5; }
+.node-start  .lbl  { fill: var(--start-text); font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; }
+.node-goal   .ring { fill: var(--goal-fill);  stroke: var(--goal-stroke);  stroke-width: 2.5; }
+.node-goal   .lbl  { fill: var(--goal-text);  font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; }
+.node-sol    .ring { fill: var(--sol-fill);   stroke: var(--sol-stroke);   stroke-width: 2; }
+.node-sol    .lbl  { fill: var(--sol-text);   font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:500; }
+.node-dead   .ring { fill: var(--dead-fill);  stroke: var(--dead-stroke);  stroke-width: 1.5; stroke-dasharray:4 2; }
+.node-dead   .lbl  { fill: var(--dead-text);  font-family:'JetBrains Mono',monospace; font-size:11px; }
+.node-dead   .dead-x { fill: var(--dead-stroke); font-family:'Inter',sans-serif; font-size:13px; font-weight:700; }
+.node-goal   .badge  { fill: var(--goal-stroke); font-family:'Inter',sans-serif; font-size:12px; font-weight:700; }
+.edge-sol  { stroke: var(--e-sol);    stroke-width:2; }
+.edge-norm { stroke: var(--e-normal); stroke-width:1.5; }
+.elabel-sol  { fill: var(--e-sol);    font-family:'JetBrains Mono',monospace; font-size:9.5px; font-weight:600; }
+.elabel-norm { fill: var(--e-normal); font-family:'JetBrains Mono',monospace; font-size:9px;   font-weight:400; }
+.lvl-label   { fill: var(--lvl-color); font-family:'Inter',sans-serif; font-size:9.5px; font-weight:600; letter-spacing:.03em; }
+
+/* ── SVG CSS — Ex4 graph nodes ── */
+.gn-normal circle { fill: var(--n-fill);  stroke: var(--n-stroke); stroke-width:1.8; }
+.gn-normal .lbl   { fill: var(--n-text);  font-family:'Inter',sans-serif; font-size:14px; font-weight:700; }
+.gn-normal .hval  { fill: var(--n-hval);  font-family:'JetBrains Mono',monospace; font-size:9px; }
+.gn-start  circle { fill: var(--s-fill);  stroke: var(--s-stroke); stroke-width:2.5; }
+.gn-start  .lbl   { fill: var(--s-text);  font-family:'Inter',sans-serif; font-size:14px; font-weight:700; }
+.gn-start  .hval  { fill: var(--s-stroke); font-family:'JetBrains Mono',monospace; font-size:9px; }
+.gn-goal   circle { fill: var(--t-fill);  stroke: var(--t-stroke); stroke-width:2.5; }
+.gn-goal   .lbl   { fill: var(--t-text);  font-family:'Inter',sans-serif; font-size:14px; font-weight:700; }
+.gn-goal   .hval  { fill: var(--t-stroke); font-family:'JetBrains Mono',monospace; font-size:9px; }
+.g-edge        { stroke: var(--e-col); stroke-width:1.6; fill:none; }
+.g-edge-label  { fill: var(--e-lbl);  font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; dominant-baseline:middle; text-anchor:middle; }
+
+/* ── Graph legend ── */
+.graph-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1.25rem;
+  justify-content: center;
+  margin: .75rem 0 .25rem;
+  font-size: .78rem;
+  color: var(--text-2);
+}
+.graph-legend .li { display: flex; align-items: center; gap: .4rem; }
+.ldot {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  border: 2px solid;
+  flex-shrink: 0;
+}
+
+/* ── Solution path strip ── */
+.path-strip {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .78rem;
+  color: var(--sol-text);
+  background: var(--sol-fill);
+  border: 1px solid var(--sol-stroke);
+  border-radius: 6px;
+  padding: .55rem 1rem;
+  text-align: center;
+  overflow-x: auto;
+  white-space: nowrap;
+  margin: .6rem 0;
+}
+
+/* ── Solution trace table (M&C path) ── */
+.path-tbl {
+  border-collapse: collapse;
+  font-size: .8rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin: .6rem 0;
+  min-width: 360px;
+}
+.path-tbl th {
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  padding: .4rem .9rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.path-tbl td {
+  padding: .38rem .9rem;
+  border-bottom: 1px solid var(--border);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .79rem;
+}
+.path-tbl tr:last-child td { border-bottom: none; }
+.path-tbl .goal-row td { background: var(--goal-fill); color: var(--goal-text); font-weight: 700; }
+.path-tbl .start-row td { background: var(--start-fill); color: var(--start-text); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<header id="site-header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div>
+        <div class="header-eyebrow">NEU · Khoa Công nghệ Thông tin · FDA</div>
+        <div class="header-title">Nhập môn Trí tuệ Nhân tạo — Lab Tuần 4</div>
+        <div class="header-sub">Các phương pháp tìm kiếm: BFS, DFS, Greedy, Beam, Hill Climbing</div>
+      </div>
+      <div class="badge-pill">Instructor Only</div>
+    </div>
+  </div>
+</header>
+
+<div class="warn-banner">
+  ⚠ DÀNH CHO GIẢNG VIÊN — Không phát tài liệu này cho sinh viên. / INSTRUCTOR USE ONLY — Do not distribute to students.
+</div>
+
+<main>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- EXERCISE 1                                              -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="section-header">
+  <div class="section-badge">Bài 1</div>
+  <div class="section-title">Đồ thị G — 7 thuật toán tìm kiếm</div>
+</div>
+
+<p style="font-size:.85rem;color:var(--text-2);margin-bottom:1rem;">
+  <strong>h(n):</strong> S=11, A=9, B=8, C=3, D=8, E=6, F=4, G=4, H=5, I=3, J=5, T=0 &nbsp;|&nbsp;
+  <strong>Quy tắc hoà:</strong> alphabet &nbsp;|&nbsp;
+  Cạnh: S→A:2, S→B:7, S→C:1, A→D:4, A→E:2, B→E:1, B→F:5, C→G:3, C→F:9, D→H:8, D→E:1, E→H:6, E→I:3, F→I:2, F→J:8, G→F:3, G→J:2, H→I:2, H→T:5, I→T:4, I→J:2, J→T:6
+</p>
+
+<!-- 1.1 BFS -->
+<div class="algo-section">
+  <div class="algo-heading"><div class="bar"></div>1. BFS (Breadth-First Search)</div>
+  <p style="font-size:.83rem;color:var(--text-2)">OPEN = hàng đợi FIFO. Bỏ qua nút đã có trong OPEN hoặc CLOSED khi mở rộng.</p>
+  <div class="tbl-wrap">
+    <table class="algo-tbl">
+      <thead><tr><th>Step</th><th>u</th><th>Edge(u)</th><th>OPEN (đầu → cuối)</th></tr></thead>
+      <tbody>
+        <tr><td class="step-cell">0</td><td class="node-cell">—</td><td class="edge-cell">—</td><td class="open-cell">S</td></tr>
+        <tr><td class="step-cell">1</td><td class="node-cell">S</td><td class="edge-cell">A, B, C</td><td class="open-cell">A, B, C</td></tr>
+        <tr><td class="step-cell">2</td><td class="node-cell">A</td><td class="edge-cell">D, E</td><td class="open-cell">B, C, D, E</td></tr>
+        <tr><td class="step-cell">3</td><td class="node-cell">B</td><td class="edge-cell">F <span class="skip">(skip: E∈OPEN)</span></td><td class="open-cell">C, D, E, F</td></tr>
+        <tr><td class="step-cell">4</td><td class="node-cell">C</td><td class="edge-cell">G <span class="skip">(skip: F∈OPEN)</span></td><td class="open-cell">D, E, F, G</td></tr>
+        <tr><td class="step-cell">5</td><td class="node-cell">D</td><td class="edge-cell">H <span class="skip">(skip: E∈OPEN)</span></td><td class="open-cell">E, F, G, H</td></tr>
+        <tr><td class="step-cell">6</td><td class="node-cell">E</td><td class="edge-cell">I <span class="skip">(skip: H∈OPEN)</span></td><td class="open-cell">F, G, H, I</td></tr>
+        <tr><td class="step-cell">7</td><td class="node-cell">F</td><td class="edge-cell">J <span class="skip">(skip: I∈OPEN)</span></td><td class="open-cell">G, H, I, J</td></tr>
+        <tr><td class="step-cell">8</td><td class="node-cell">G</td><td class="edge-cell"><span class="skip">(skip: F∈CLOSED, J∈OPEN)</span></td><td class="open-cell">H, I, J</td></tr>
+        <tr><td class="step-cell">9</td><td class="node-cell">H</td><td class="edge-cell">T <span class="skip">(skip: I∈OPEN)</span></td><td class="open-cell">I, J, T</td></tr>
+        <tr><td class="step-cell">10</td><td class="node-cell">I</td><td class="edge-cell"><span class="skip">(skip: J∈OPEN, T∈OPEN)</span></td><td class="open-cell">J, T</td></tr>
+        <tr><td class="step-cell">11</td><td class="node-cell">J</td><td class="edge-cell"><span class="skip">(skip: T∈OPEN)</span></td><td class="open-cell">T</td></tr>
+        <tr class="goal-row"><td class="step-cell">12</td><td class="node-cell">T</td><td class="edge-cell">GOAL ✓</td><td class="open-cell">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="result-box">Đường đi: <strong>S → A → D → H → T</strong> &nbsp;|&nbsp; Chi phí: 2+4+8+5 = <strong>19</strong> &nbsp;|&nbsp; 12 nút mở rộng</div>
+</div>
+
+<!-- 1.2 DFS -->
+<div class="algo-section">
+  <div class="algo-heading"><div class="bar"></div>2. DFS (Depth-First Search)</div>
+  <p style="font-size:.83rem;color:var(--text-2)">OPEN = ngăn xếp LIFO (top = trái). Đẩy con theo thứ tự đảo ngược alphabet. Cho phép trùng lặp; bỏ qua khi pop nếu đã ở CLOSED. Dấu <code>*</code> = bản sao trong OPEN.</p>
+  <div class="tbl-wrap">
+    <table class="algo-tbl">
+      <thead><tr><th>Step</th><th>u</th><th>Edge(u) đẩy vào stack</th><th>OPEN (top →)</th></tr></thead>
+      <tbody>
+        <tr><td class="step-cell">0</td><td class="node-cell">—</td><td class="edge-cell">—</td><td class="open-cell">S</td></tr>
+        <tr><td class="step-cell">1</td><td class="node-cell">S</td><td class="edge-cell">A, B, C</td><td class="open-cell">A, B, C</td></tr>
+        <tr><td class="step-cell">2</td><td class="node-cell">A</td><td class="edge-cell">D, E</td><td class="open-cell">D, E, B, C</td></tr>
+        <tr><td class="step-cell">3</td><td class="node-cell">D</td><td class="edge-cell">H, E*</td><td class="open-cell">E, H, E, B, C</td></tr>
+        <tr><td class="step-cell">4</td><td class="node-cell">E</td><td class="edge-cell">H, I</td><td class="open-cell">H, I, H, E, B, C</td></tr>
+        <tr><td class="step-cell">5</td><td class="node-cell">H</td><td class="edge-cell">I*, T</td><td class="open-cell">I, T, I, H, E, B, C</td></tr>
+        <tr><td class="step-cell">6</td><td class="node-cell">I</td><td class="edge-cell">J, T*</td><td class="open-cell">J, T, T, I, H, E, B, C</td></tr>
+        <tr><td class="step-cell">7</td><td class="node-cell">J</td><td class="edge-cell">T*</td><td class="open-cell">T, T, T, I, H, E, B, C</td></tr>
+        <tr class="goal-row"><td class="step-cell">8</td><td class="node-cell">T</td><td class="edge-cell">GOAL ✓</td><td class="open-cell">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="result-box">Đường đi: <strong>S → A → D → E → H → I → J → T</strong> &nbsp;|&nbsp; Chi phí: 2+4+1+6+2+2+6 = <strong>23</strong> &nbsp;|&nbsp; 8 nút mở rộng</div>
+</div>
+
+<!-- 1.3 DL-DFS -->
+<div class="algo-section">
+  <div class="algo-heading"><div class="bar"></div>3. Depth-Limited DFS (L = 4)</div>
+  <p style="font-size:.83rem;color:var(--text-2)">Chạy như DFS nhưng không mở rộng nút có độ sâu = L. Không dùng CLOSED toàn cục — chỉ tránh lặp trên đường đi hiện tại.</p>
+  <div class="tbl-wrap" style="font-family:'JetBrains Mono',monospace;font-size:.8rem;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.85rem 1.1rem;color:var(--text-2);line-height:1.7;min-width:340px;">
+S (d=0)<br>
+└─ A (d=1)<br>
+&nbsp;&nbsp; ├─ D (d=2)<br>
+&nbsp;&nbsp; │&nbsp; ├─ E (d=3)<br>
+&nbsp;&nbsp; │&nbsp; │&nbsp; ├─ H (d=4) ← giới hạn, không phải đích → quay lui<br>
+&nbsp;&nbsp; │&nbsp; │&nbsp; └─ I (d=4) ← giới hạn, không phải đích → quay lui<br>
+&nbsp;&nbsp; │&nbsp; └─ H (d=3)<br>
+&nbsp;&nbsp; │&nbsp;&nbsp;&nbsp;&nbsp; ├─ I (d=4) ← giới hạn, không phải đích → quay lui<br>
+&nbsp;&nbsp; │&nbsp;&nbsp;&nbsp;&nbsp; └─ <strong>T (d=4) ← ĐÍCH ✓</strong>
+  </div>
+  <div class="result-box">Đường đi: <strong>S → A → D → H → T</strong> &nbsp;|&nbsp; Chi phí: <strong>19</strong></div>
+</div>
+
+<!-- 1.4 IDDFS -->
+<div class="algo-section">
+  <div class="algo-heading"><div class="bar"></div>4. Iterative Deepening DFS (IDDFS)</div>
+  <div class="tbl-wrap">
+    <table class="algo-tbl iddfs-tbl">
+      <thead><tr><th>Lần lặp</th><th>Giới hạn L</th><th>Kết quả</th></tr></thead>
+      <tbody>
+        <tr><td class="step-cell">1</td><td class="node-cell">0</td><td>Chỉ xét S — không phải đích → Thất bại</td></tr>
+        <tr><td class="step-cell">2</td><td class="node-cell">1</td><td>Xét S, A, B, C — không phải đích → Thất bại</td></tr>
+        <tr><td class="step-cell">3</td><td class="node-cell">2</td><td>Xét đến độ sâu 2 — T chưa đến được → Thất bại</td></tr>
+        <tr><td class="step-cell">4</td><td class="node-cell">3</td><td>Xét đến độ sâu 3 — T ở sâu nhất d=4 → Thất bại</td></tr>
+        <tr class="goal-row"><td class="step-cell">5</td><td class="node-cell">4</td><td>Tìm thấy T theo DL-DFS(L=4) → Thành công ✓</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="result-box">Đường đi: <strong>S → A → D → H → T</strong> (giống DL-DFS với L=4) &nbsp;|&nbsp; Chi phí: <strong>19</strong></div>
+</div>
+
+<!-- 1.5 Greedy -->
+<div class="algo-section">
+  <div class="algo-heading"><div class="bar"></div>5. Greedy Best-First Search</div>
+  <p style="font-size:.83rem;color:var(--text-2)">OPEN = hàng đợi ưu tiên sắp xếp tăng dần theo h(n). Ký hiệu: X<sup>h</sup> = nút X với h(X) = h.</p>
+  <div class="tbl-wrap">
+    <table class="algo-tbl">
+      <thead><tr><th>Step</th><th>u</th><th>Edge(u)</th><th>OPEN (h↑)</th></tr></thead>
+      <tbody>
+        <tr><td class="step-cell">0</td><td class="node-cell">—</td><td class="edge-cell">—</td><td class="open-cell">S<sup>11</sup></td></tr>
+        <tr><td class="step-cell">1</td><td class="node-cell">S</td><td class="edge-cell">C<sup>3</sup>, B<sup>8</sup>, A<sup>9</sup></td><td class="open-cell">C<sup>3</sup>, B<sup>8</sup>, A<sup>9</sup></td></tr>
+        <tr><td class="step-cell">2</td><td class="node-cell">C</td><td class="edge-cell">F<sup>4</sup>, G<sup>4</sup></td><td class="open-cell">F<sup>4</sup>, G<sup>4</sup>, B<sup>8</sup>, A<sup>9</sup></td></tr>
+        <tr><td class="step-cell">3</td><td class="node-cell">F</td><td class="edge-cell">I<sup>3</sup>, J<sup>5</sup></td><td class="open-cell">I<sup>3</sup>, G<sup>4</sup>, J<sup>5</sup>, B<sup>8</sup>, A<sup>9</sup></td></tr>
+        <tr><td class="step-cell">4</td><td class="node-cell">I</td><td class="edge-cell">T<sup>0</sup> <span class="skip">(skip: J∈OPEN)</span></td><td class="open-cell">T<sup>0</sup>, G<sup>4</sup>, J<sup>5</sup>, B<sup>8</sup>, A<sup>9</sup></td></tr>
+        <tr class="goal-row"><td class="step-cell">5</td><td class="node-cell">T</td><td class="edge-cell">GOAL ✓</td><td class="open-cell">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note">Bước 2: C→F(h=4) và C→G(h=4) cùng h → alphabet: F trước G. h(C)=3 thấp nhất con của S — Greedy bị hút vào C ngay, chọn đoạn C→F tốn 9 mà không nhận ra vì không theo dõi g(n).</div>
+  <div class="result-box">Đường đi: <strong>S → C → F → I → T</strong> &nbsp;|&nbsp; Chi phí: 1+9+2+4 = <strong>16</strong> &nbsp;|&nbsp; 5 nút mở rộng</div>
+</div>
+
+<!-- 1.6 Beam -->
+<div class="algo-section">
+  <div class="algo-heading"><div class="bar"></div>6. Beam Search (w = 2)</div>
+  <p style="font-size:.83rem;color:var(--text-2)">Mỗi bước giữ lại w = 2 nút có h nhỏ nhất từ toàn bộ con của các nút trong beam. Mở rộng đồng thời tất cả nút trong beam.</p>
+  <div class="tbl-wrap">
+    <table class="algo-tbl beam-tbl">
+      <thead><tr><th>Step</th><th>Beam hiện tại</th><th>Mở rộng → con (h)</th><th>Beam mới (top‑2)</th></tr></thead>
+      <tbody>
+        <tr><td class="step-cell">0</td><td class="beam-cell">{ S(11) }</td><td>A(9), B(8), <strong>C(3)</strong></td><td class="beam-cell">{ C(3), B(8) }</td></tr>
+        <tr><td class="step-cell">1</td><td class="beam-cell">{ C(3), B(8) }</td><td>C→G(4),F(4) ; B→E(6),F(4)</td><td class="beam-cell">{ F(4), G(4) }</td></tr>
+        <tr><td class="step-cell">2</td><td class="beam-cell">{ F(4), G(4) }</td><td>F→I(3),J(5) ; G→J(5)</td><td class="beam-cell">{ I(3), J(5) }</td></tr>
+        <tr class="goal-row"><td class="step-cell">3</td><td class="beam-cell">{ I(3), J(5) }</td><td>I→T(0) ; J→T(0)</td><td class="beam-cell">T tìm thấy! ✓</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note">Bước 1: F xuất hiện từ cả C và B → giữ một (cha = C vì h(C) &lt; h(B)). E(6) bị loại vì đứng thứ 3.</div>
+  <div class="result-box">Đường đi: <strong>S → C → F → I → T</strong> &nbsp;|&nbsp; Chi phí: <strong>16</strong> &nbsp;|&nbsp; Cùng kết quả với Greedy</div>
+</div>
+
+<!-- 1.7 HC -->
+<div class="algo-section">
+  <div class="algo-heading"><div class="bar"></div>7. Hill Climbing (Steepest Ascent)</div>
+  <p style="font-size:.83rem;color:var(--text-2)">Tại mỗi bước, di chuyển đến nút con có h nhỏ nhất. Dừng nếu không có con nào cải thiện h. Không có OPEN list, không backtrack.</p>
+  <div class="tbl-wrap">
+    <table class="algo-tbl">
+      <thead><tr><th>Step</th><th>Nút hiện tại</th><th>h</th><th>Các nút con (h)</th><th>Quyết định</th></tr></thead>
+      <tbody>
+        <tr><td class="step-cell">0</td><td class="node-cell">S</td><td>11</td><td>A(9), B(8), <strong>C(3)</strong></td><td>→ C</td></tr>
+        <tr class="goal-row"><td class="step-cell">1</td><td class="node-cell">C</td><td>3</td><td>G(4), F(4) — đều > 3</td><td>KẸT ⚑</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="warn-note">⚠ Hill Climbing không tìm được T. C là cực tiểu địa phương: h(C)=3 &lt; h của mọi con. HC không có OPEN list để quay lui.</div>
+</div>
+
+<!-- Q&A 1 -->
+<div class="qa-wrap">
+  <div class="qa-label">Câu hỏi — Đáp án</div>
+  <div class="qa-item">
+    <div class="qa-q">Câu 1. So sánh kết quả của 7 thuật toán.</div>
+    <div class="qa-a">Greedy và Beam tìm chi phí 16 (thấp hơn BFS/DFS/DL-DFS/IDDFS là 19 hoặc 23) nhờ dùng h(n) định hướng về đích. Tuy nhiên cả hai đều không tối ưu (tối ưu = 11). HC không tìm được lời giải.</div>
+  </div>
+  <div class="qa-item">
+    <div class="qa-q">Câu 2. Giải thích tại sao Greedy chọn C→F→I→T dù C→F tốn 9.</div>
+    <div class="qa-a">Greedy chọn C vì h(C)=3 thấp nhất trong con của S. Từ C, Greedy tiếp tục F→I→T vì h giảm dần. Greedy <em>không theo dõi g(n)</em> nên không nhận ra C→F đắt. BFS bỏ qua h(n) hoàn toàn, khám phá theo lớp (số cạnh), không bị ảnh hưởng bởi h(C)=3.</div>
+  </div>
+  <div class="qa-item">
+    <div class="qa-q">Câu 3. Đường tối ưu là gì? Thuật toán nào đảm bảo tìm được?</div>
+    <div class="qa-a">Đường tối ưu: <strong>S → A → E → I → T</strong>, chi phí = 2+2+3+4 = <strong>11</strong>. Không thuật toán nào trong 7 phương pháp trên tìm được. Cần <strong>A*</strong> (kết hợp g(n)+h(n)) mới đảm bảo tối ưu với heuristic chấp nhận được.</div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- EXERCISE 2                                              -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="section-header" style="margin-top:3rem;">
+  <div class="section-badge">Bài 2</div>
+  <div class="section-title">Đồ thị G2 — Hill Climbing &amp; Beam Search</div>
+</div>
+
+<p style="font-size:.85rem;color:var(--text-2);margin-bottom:1rem;">
+  <strong>h(n):</strong> S=14, A=10, B=11, C=5, D=8, E=7, F=9, G=9, H=4, T=0 &nbsp;|&nbsp;
+  Cạnh: S→A:4, S→B:2, A→C:3, A→D:5, B→E:6, B→F:3, C→G:2, D→G:4, D→H:2, E→H:5, F→H:1, G→T:11, H→T:3
+</p>
+
+<!-- 2.1 HC -->
+<div class="algo-section">
+  <div class="algo-heading"><div class="bar"></div>1. Hill Climbing (Steepest Ascent)</div>
+  <div class="tbl-wrap">
+    <table class="algo-tbl">
+      <thead><tr><th>Step</th><th>Nút hiện tại</th><th>h</th><th>Các nút con (h)</th><th>Quyết định</th></tr></thead>
+      <tbody>
+        <tr><td class="step-cell">0</td><td class="node-cell">S</td><td>14</td><td>A(10), B(11)</td><td>→ A (10 &lt; 11)</td></tr>
+        <tr><td class="step-cell">1</td><td class="node-cell">A</td><td>10</td><td>C(5), D(8)</td><td>→ C (5 &lt; 8)</td></tr>
+        <tr class="goal-row"><td class="step-cell">2</td><td class="node-cell">C</td><td>5</td><td>G(9) — 9 > 5</td><td>KẸT ⚑</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="warn-note">⚠ HC dừng tại C (h=5). G là con duy nhất của C với h(G)=9 > 5. Không tìm được T.</div>
+</div>
+
+<!-- 2.2 Beam -->
+<div class="algo-section">
+  <div class="algo-heading"><div class="bar"></div>2. Beam Search (w = 2)</div>
+  <div class="tbl-wrap">
+    <table class="algo-tbl beam-tbl">
+      <thead><tr><th>Step</th><th>Beam hiện tại</th><th>Mở rộng → con (h)</th><th>Beam mới (top‑2)</th></tr></thead>
+      <tbody>
+        <tr><td class="step-cell">0</td><td class="beam-cell">{ S(14) }</td><td>A(10), B(11)</td><td class="beam-cell">{ A(10), B(11) }</td></tr>
+        <tr><td class="step-cell">1</td><td class="beam-cell">{ A(10), B(11) }</td><td>A→C(5),D(8) ; B→E(7),F(9)</td><td class="beam-cell">{ C(5), E(7) }</td></tr>
+        <tr><td class="step-cell">2</td><td class="beam-cell">{ C(5), E(7) }</td><td>C→G(9) ; E→H(4)</td><td class="beam-cell">{ H(4), G(9) }</td></tr>
+        <tr class="goal-row"><td class="step-cell">3</td><td class="beam-cell">{ H(4), G(9) }</td><td>H→T(0) ; G→T(0)</td><td class="beam-cell">T tìm thấy! ✓</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note">Bước 1: D(8) và F(9) bị loại vì đứng thứ 3 và 4. H(4) đến từ nhánh B (qua E) — nhánh mà HC đã bỏ qua ngay bước đầu.</div>
+  <div class="result-box">Đường đi: <strong>S → B → E → H → T</strong> &nbsp;|&nbsp; Chi phí: 2+6+5+3 = <strong>16</strong></div>
+</div>
+
+<!-- Q&A 2 -->
+<div class="qa-wrap">
+  <div class="qa-label">Câu hỏi — Đáp án</div>
+  <div class="qa-item">
+    <div class="qa-q">Câu 1. Tại sao HC dừng tại C?</div>
+    <div class="qa-a">C chỉ có một con là G với h(G)=9 > h(C)=5. Không có con nào cải thiện h nên HC dừng — không tìm được lời giải.</div>
+  </div>
+  <div class="qa-item">
+    <div class="qa-q">Câu 2. Beam Search thoát được vì sao?</div>
+    <div class="qa-a">Ở bước 0, Beam giữ lại cả <strong>A(10)</strong> và <strong>B(11)</strong> cùng lúc. HC bỏ qua B vì h(B)=11 > h(A)=10. Khi A dẫn đến C (ngõ cụt), nhánh B đã đến H(h=4) rồi T. Chiều rộng w=2 cho phép khám phá song song, tránh bẫy cực tiểu địa phương.</div>
+  </div>
+  <div class="qa-item">
+    <div class="qa-q">Câu 3. Đường tối ưu là gì? Beam Search có tìm được không?</div>
+    <div class="qa-a">Đường tối ưu: <strong>S → B → F → H → T</strong>, chi phí = 2+3+1+3 = <strong>9</strong>. Beam bỏ F(h=9) ở bước 1 vì E(h=7) &lt; F(h=9), không khám phá nhánh B→F→H→T. Cần <strong>A*</strong> để đảm bảo tối ưu.</div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- EXERCISE 3                                              -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="section-header" style="margin-top:3rem;">
+  <div class="section-badge">Bài 3</div>
+  <div class="section-title">Truyền giáo &amp; Người ăn thịt người — BFS &amp; Hill Climbing</div>
+</div>
+
+<p style="font-size:.85rem;color:var(--text-2);margin-bottom:.75rem;">
+  <strong>Trạng thái:</strong> (ML, CL, b) — ML/CL = số người bờ trái, b = vị trí thuyền (L/R). &nbsp;
+  <strong>Xuất phát:</strong> (3,3,L). &nbsp; <strong>Đích:</strong> (0,0,R). &nbsp;
+  Hợp lệ: (ML=0 hoặc ML≥CL) <em>và</em> (MR=0 hoặc MR≥CR). &nbsp;
+  Nước đi: thuyền chở 1–2 người.
+</p>
+
+<!-- M&C tree SVG -->
+<div class="algo-section">
+  <div class="algo-heading"><div class="bar"></div>Không gian trạng thái — BFS Tree</div>
+  <p style="font-size:.83rem;color:var(--text-2)">Nút indigo = thuộc đường giải BFS. Nút xám đứt = ngõ cụt [×]. Tie-breaking: ML↑ trước, CL↑ sau.</p>
+  <div class="graph-wrap">
+    <svg id="mc-tree-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+  </div>
+  <div class="graph-legend">
+    <div class="li"><div class="ldot" style="background:var(--start-fill);border-color:var(--start-stroke);"></div> Xuất phát</div>
+    <div class="li"><div class="ldot" style="background:var(--goal-fill);border-color:var(--goal-stroke);"></div> Đích ✓</div>
+    <div class="li"><div class="ldot" style="background:var(--sol-fill);border-color:var(--sol-stroke);"></div> Đường giải BFS</div>
+    <div class="li"><div class="ldot" style="background:var(--dead-fill);border-color:var(--dead-stroke);"></div> Ngõ cụt [×]</div>
+    <div class="li"><div class="ldot" style="background:var(--n-fill);border-color:var(--n-stroke);"></div> Được khám phá</div>
+  </div>
+  <div class="path-strip">(3,3,L) → (2,2,R) → (3,2,L) → (3,0,R) → (3,1,L) → (1,1,R) → (2,2,L) → (0,2,R) → (0,3,L) → (0,1,R) → (0,2,L) → (0,0,R) ✓</div>
+</div>
+
+<!-- BFS expansion table -->
+<div class="algo-section">
+  <div class="algo-heading"><div class="bar"></div>BFS — Bảng khai triển</div>
+  <div class="tbl-wrap">
+    <table class="algo-tbl">
+      <thead><tr><th>Step</th><th>u</th><th>Edge(u)</th><th>OPEN (đầu → cuối)</th></tr></thead>
+      <tbody>
+        <tr><td class="step-cell">0</td><td class="node-cell">—</td><td class="edge-cell">—</td><td class="open-cell">(3,3,L)</td></tr>
+        <tr><td class="step-cell">1</td><td class="node-cell">(3,3,L)</td><td class="edge-cell">(2,2,R), (3,1,R), (3,2,R)</td><td class="open-cell">(2,2,R), (3,1,R), (3,2,R)</td></tr>
+        <tr><td class="step-cell">2</td><td class="node-cell">(2,2,R)</td><td class="edge-cell">(3,2,L)</td><td class="open-cell">(3,1,R), (3,2,R), (3,2,L)</td></tr>
+        <tr><td class="step-cell">3</td><td class="node-cell">(3,1,R)</td><td class="edge-cell"><span class="skip">→(3,2,L)∈OPEN ; →(3,3,L) đã thăm</span></td><td class="open-cell">(3,2,R), (3,2,L)</td></tr>
+        <tr><td class="step-cell">4</td><td class="node-cell">(3,2,R)</td><td class="edge-cell"><span class="skip">→(3,3,L) đã thăm — ngõ cụt</span></td><td class="open-cell">(3,2,L)</td></tr>
+        <tr><td class="step-cell">5</td><td class="node-cell">(3,2,L)</td><td class="edge-cell">(3,0,R)</td><td class="open-cell">(3,0,R)</td></tr>
+        <tr><td class="step-cell">6</td><td class="node-cell">(3,0,R)</td><td class="edge-cell">(3,1,L)</td><td class="open-cell">(3,1,L)</td></tr>
+        <tr><td class="step-cell">7</td><td class="node-cell">(3,1,L)</td><td class="edge-cell">(1,1,R)</td><td class="open-cell">(1,1,R)</td></tr>
+        <tr><td class="step-cell">8</td><td class="node-cell">(1,1,R)</td><td class="edge-cell">(2,2,L)</td><td class="open-cell">(2,2,L)</td></tr>
+        <tr><td class="step-cell">9</td><td class="node-cell">(2,2,L)</td><td class="edge-cell">(0,2,R)</td><td class="open-cell">(0,2,R)</td></tr>
+        <tr><td class="step-cell">10</td><td class="node-cell">(0,2,R)</td><td class="edge-cell">(0,3,L)</td><td class="open-cell">(0,3,L)</td></tr>
+        <tr><td class="step-cell">11</td><td class="node-cell">(0,3,L)</td><td class="edge-cell">(0,1,R)</td><td class="open-cell">(0,1,R)</td></tr>
+        <tr><td class="step-cell">12</td><td class="node-cell">(0,1,R)</td><td class="edge-cell">(0,2,L), (1,1,L)</td><td class="open-cell">(0,2,L), (1,1,L)</td></tr>
+        <tr class="goal-row"><td class="step-cell">13</td><td class="node-cell">(0,2,L)</td><td class="edge-cell">(0,0,R) ✓</td><td class="open-cell">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="result-box"><strong>11 bước</strong> (6 lượt sang phải, 5 lượt về trái). <strong>13 nút</strong> được mở rộng.</div>
+
+  <!-- Path table -->
+  <div class="tbl-wrap" style="margin-top:.75rem;">
+    <table class="path-tbl">
+      <thead><tr><th>Bước</th><th>Trạng thái</th><th>Hành động</th></tr></thead>
+      <tbody>
+        <tr class="start-row"><td>0</td><td>(3,3,L)</td><td>Xuất phát</td></tr>
+        <tr><td>1</td><td>(2,2,R)</td><td>→1M1C</td></tr>
+        <tr><td>2</td><td>(3,2,L)</td><td>←1M</td></tr>
+        <tr><td>3</td><td>(3,0,R)</td><td>→2C</td></tr>
+        <tr><td>4</td><td>(3,1,L)</td><td>←1C</td></tr>
+        <tr><td>5</td><td>(1,1,R)</td><td>→2M</td></tr>
+        <tr><td>6</td><td>(2,2,L)</td><td>←1M1C</td></tr>
+        <tr><td>7</td><td>(0,2,R)</td><td>→2M</td></tr>
+        <tr><td>8</td><td>(0,3,L)</td><td>←1C</td></tr>
+        <tr><td>9</td><td>(0,1,R)</td><td>→2C</td></tr>
+        <tr><td>10</td><td>(0,2,L)</td><td>←1C</td></tr>
+        <tr class="goal-row"><td>11</td><td>(0,0,R)</td><td>→2C → ĐÍCH ✓</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- HC M&C -->
+<div class="algo-section">
+  <div class="algo-heading"><div class="bar"></div>Hill Climbing — h(ML, CL, b) = ML + CL</div>
+  <div class="tbl-wrap">
+    <table class="algo-tbl">
+      <thead><tr><th>Step</th><th>Trạng thái</th><th>h</th><th>Kề hợp lệ (h)</th><th>Quyết định</th></tr></thead>
+      <tbody>
+        <tr><td class="step-cell">0</td><td class="node-cell">(3,3,L)</td><td>6</td><td>(2,2,R):4, (3,1,R):4, (3,2,R):5</td><td>→(2,2,R)</td></tr>
+        <tr class="goal-row"><td class="step-cell">1</td><td class="node-cell">(2,2,R)</td><td>4</td><td>(3,2,L):5 — 5 > 4</td><td>DỪNG ⚑</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="warn-note">⚠ HC dừng tại (2,2,R). Để tiếp tục phải đưa thuyền trở về (h tăng) — HC từ chối và không có OPEN list để thử hướng khác.</div>
+</div>
+
+<!-- Q&A 3 -->
+<div class="qa-wrap">
+  <div class="qa-label">Câu hỏi — Đáp án</div>
+  <div class="qa-item">
+    <div class="qa-q">Câu 1. BFS cần bao nhiêu bước? Bao nhiêu trạng thái duyệt?</div>
+    <div class="qa-a">BFS cần <strong>11 bước</strong> để đến đích, duyệt qua <strong>13 trạng thái</strong>. Đây là lời giải ít bước nhất vì BFS đảm bảo tìm đường ngắn nhất theo số bước.</div>
+  </div>
+  <div class="qa-item">
+    <div class="qa-q">Câu 2. HC dừng ở đâu? Tại sao?</div>
+    <div class="qa-a">HC dừng tại <strong>(2,2,R) (h=4)</strong>. Để tiếp tục phải đưa thuyền ngược về làm h tăng lên 5 — HC từ chối. HC không có OPEN list để thử hướng khác.</div>
+  </div>
+  <div class="qa-item">
+    <div class="qa-q">Câu 3. Tại sao HC đặc biệt không phù hợp cho bài toán này?</div>
+    <div class="qa-a">Bài toán <em>bắt buộc</em> có bước đưa thuyền ngược chiều (h tạm thời tăng) để tiếp tục vận chuyển — đây là dấu hiệu của bề mặt heuristic có <strong>cực tiểu địa phương không phải cực tiểu toàn cục</strong>. HC từ chối những bước "xấu hơn" đó; BFS không bị ảnh hưởng vì không dùng heuristic để định hướng.</div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- EXERCISE 4                                              -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="section-header" style="margin-top:3rem;">
+  <div class="section-badge">Bài 4</div>
+  <div class="section-title">Lập kế hoạch Cứu trợ Lũ lụt — Hill Climbing &amp; Greedy</div>
+</div>
+
+<p style="font-size:.85rem;color:var(--text-2);margin-bottom:.75rem;">
+  <strong>h(n):</strong> S=9, A=5, B=7, C=6, D=3, E=6, F=5, G=4, H=4, I=2, T=0 &nbsp;|&nbsp;
+  Cạnh: S→A:2, S→B:3, S→C:4, A→D:1, A→E:3, B→E:2, B→F:4, C→F:2, C→G:5, D→H:6, D→G:7, E→G:3, E→H:2, F→H:3, F→I:4, G→I:2, G→T:4, H→T:5, I→T:2
+</p>
+
+<!-- Ex4 location table -->
+<div class="tbl-wrap" style="margin-bottom:1rem;">
+  <table class="algo-tbl" style="min-width:360px;">
+    <thead><tr><th>Ký hiệu</th><th>Địa điểm</th></tr></thead>
+    <tbody>
+      <tr><td class="node-cell">S</td><td>Trung tâm Điều phối <em>(Xuất phát)</em></td></tr>
+      <tr><td class="node-cell">A</td><td>Thị trấn Phố Cũ</td></tr>
+      <tr><td class="node-cell">B</td><td>Đồn Biên phòng Bắc</td></tr>
+      <tr><td class="node-cell">C</td><td>Bến Xe Liên Tỉnh</td></tr>
+      <tr><td class="node-cell">D</td><td>Cầu Ngập Khe Đá <em>(cực tiểu địa phương)</em></td></tr>
+      <tr><td class="node-cell">E</td><td>Trường THPT Hòa Bình</td></tr>
+      <tr><td class="node-cell">F</td><td>Điểm Tiếp tế Nam</td></tr>
+      <tr><td class="node-cell">G</td><td>Ngã Tư Bản Đồng</td></tr>
+      <tr><td class="node-cell">H</td><td>Trạm Y tế Vùng Cao</td></tr>
+      <tr><td class="node-cell">I</td><td>Chốt Kiểm soát Lũ</td></tr>
+      <tr><td class="node-cell">T</td><td>Xã Bị Cô Lập <em>(Đích)</em></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Ex4 graph SVG -->
+<div class="algo-section">
+  <div class="algo-heading"><div class="bar"></div>Đồ thị bài toán (có hướng, trọng số = giờ)</div>
+  <div class="graph-wrap">
+    <svg id="g4-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+  </div>
+  <div class="graph-legend">
+    <div class="li"><div class="ldot" style="background:var(--s-fill);border-color:var(--s-stroke);"></div> S — Xuất phát (h=9)</div>
+    <div class="li"><div class="ldot" style="background:var(--t-fill);border-color:var(--t-stroke);"></div> T — Đích (h=0)</div>
+    <div class="li"><div class="ldot" style="background:var(--n-fill);border-color:var(--n-stroke);"></div> Nút trung gian — số trên cạnh = giờ</div>
+  </div>
+</div>
+
+<!-- 4.1 HC -->
+<div class="algo-section">
+  <div class="algo-heading"><div class="bar"></div>1. Hill Climbing (Steepest Ascent)</div>
+  <div class="tbl-wrap">
+    <table class="algo-tbl">
+      <thead><tr><th>Step</th><th>Nút hiện tại</th><th>h</th><th>Các nút con (h)</th><th>Quyết định</th></tr></thead>
+      <tbody>
+        <tr><td class="step-cell">0</td><td class="node-cell">S</td><td>9</td><td>A(5), B(7), C(6)</td><td>→ A (h=5)</td></tr>
+        <tr><td class="step-cell">1</td><td class="node-cell">A</td><td>5</td><td>D(3), E(6)</td><td>→ D (h=3)</td></tr>
+        <tr class="goal-row"><td class="step-cell">2</td><td class="node-cell">D</td><td>3</td><td>G(4), H(4) — đều > 3</td><td>KẸT ⚑</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="warn-note">⚠ HC không tìm được đường đến T. <strong>Cầu Ngập Khe Đá (D, h=3)</strong> là cực tiểu địa phương: tuy D gần đích theo đường chim bay, đường bộ vượt cầu ngập tốn 6–7 giờ. HC không có OPEN list để backtrack.</div>
+</div>
+
+<!-- 4.2 Greedy -->
+<div class="algo-section">
+  <div class="algo-heading"><div class="bar"></div>2. Greedy Best-First Search</div>
+  <p style="font-size:.83rem;color:var(--text-2)">OPEN = hàng đợi ưu tiên sắp xếp tăng dần theo h(n). Ký hiệu: X<sup>h</sup> = nút X với h(X) = h.</p>
+  <div class="tbl-wrap">
+    <table class="algo-tbl">
+      <thead><tr><th>Step</th><th>u</th><th>Edge(u)</th><th>OPEN (h↑)</th></tr></thead>
+      <tbody>
+        <tr><td class="step-cell">0</td><td class="node-cell">—</td><td class="edge-cell">—</td><td class="open-cell">S<sup>9</sup></td></tr>
+        <tr><td class="step-cell">1</td><td class="node-cell">S</td><td class="edge-cell">A<sup>5</sup>, C<sup>6</sup>, B<sup>7</sup></td><td class="open-cell">A<sup>5</sup>, C<sup>6</sup>, B<sup>7</sup></td></tr>
+        <tr><td class="step-cell">2</td><td class="node-cell">A</td><td class="edge-cell">D<sup>3</sup>, E<sup>6</sup></td><td class="open-cell">D<sup>3</sup>, C<sup>6</sup>, E<sup>6</sup>, B<sup>7</sup></td></tr>
+        <tr><td class="step-cell">3</td><td class="node-cell">D</td><td class="edge-cell">G<sup>4</sup>, H<sup>4</sup></td><td class="open-cell">G<sup>4</sup>, H<sup>4</sup>, C<sup>6</sup>, E<sup>6</sup>, B<sup>7</sup></td></tr>
+        <tr><td class="step-cell">4</td><td class="node-cell">G</td><td class="edge-cell">I<sup>2</sup>, T<sup>0</sup></td><td class="open-cell">T<sup>0</sup>, I<sup>2</sup>, H<sup>4</sup>, C<sup>6</sup>, E<sup>6</sup>, B<sup>7</sup></td></tr>
+        <tr class="goal-row"><td class="step-cell">5</td><td class="node-cell">T</td><td class="edge-cell">GOAL ✓</td><td class="open-cell">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note">Bước 3: G và H cùng h=4 → G trước H (alphabet). Greedy cũng bị h(D)=3 thu hút nhưng khác HC — Greedy có OPEN list nên mở rộng tiếp sang G→T. Đoạn D→G tốn 7 giờ (đắt nhất đồ thị) khiến tổng đường đi xa hơn tối ưu nhiều.</div>
+  <div class="result-box">Đường đi: <strong>S → A → D → G → T</strong> &nbsp;|&nbsp; Thời gian: 2+1+7+4 = <strong>14 giờ</strong> <em>(không tối ưu)</em></div>
+</div>
+
+<!-- Q&A 4 -->
+<div class="qa-wrap">
+  <div class="qa-label">Câu hỏi — Đáp án</div>
+  <div class="qa-item">
+    <div class="qa-q">Câu 1. Hill Climbing kẹt ở đâu? Tại sao không tìm được đường?</div>
+    <div class="qa-a">HC dừng tại <strong>Cầu Ngập Khe Đá (D, h=3)</strong>. Tất cả con của D (G và H, đều h=4) có h cao hơn h(D)=3. HC không có cơ chế backtrack — bị tắc tại cực tiểu địa phương do heuristic deceptive: D trông gần đích theo đường chim bay nhưng thực tế đường bộ bị lầy hoàn toàn.</div>
+  </div>
+  <div class="qa-item">
+    <div class="qa-q">Câu 2. Greedy tìm được đường nào? Đường đó tốt không?</div>
+    <div class="qa-a">Greedy tìm: <strong>S → A → D → G → T</strong>, tổng <strong>14 giờ</strong>. Đường này đi qua D→G tốn 7 giờ — đoạn đắt nhất đồ thị. Greedy không phải tối ưu.</div>
+  </div>
+  <div class="qa-item">
+    <div class="qa-q">Câu 3. Có bao nhiêu đường tối ưu? Cần thuật toán nào?</div>
+    <div class="qa-a">Có <strong>3 đường tối ưu</strong>, đều đạt <strong>12 giờ</strong>:
+      <div class="tbl-wrap" style="margin-top:.5rem;">
+        <table class="opt-tbl">
+          <thead><tr><th>Đường đi</th><th>Chi phí</th></tr></thead>
+          <tbody>
+            <tr><td>S → A → E → H → T</td><td class="cost-cell">2+3+2+5 = 12h</td></tr>
+            <tr><td>S → B → E → H → T</td><td class="cost-cell">3+2+2+5 = 12h</td></tr>
+            <tr><td>S → C → F → I → T</td><td class="cost-cell">4+2+4+2 = 12h</td></tr>
+          </tbody>
+        </table>
+      </div>
+      Cần <strong>A*</strong> (kết hợp g(n)+h(n)) để đảm bảo tối ưu và không bị cực tiểu địa phương đánh lừa.
+    </div>
+  </div>
+</div>
+
+</main>
+
+<script>
+/* ═══ M&C BFS State-Space Tree ═══ */
+(function () {
+  const R = 30;
+  const N = {
+    S:    { x: 370, y: 60,  lbl: '(3,3,L)', cls: 'node-start' },
+    L1a:  { x: 170, y: 148, lbl: '(2,2,R)', cls: 'node-sol'   },
+    L1b:  { x: 370, y: 148, lbl: '(3,1,R)', cls: 'node-normal'},
+    L1c:  { x: 570, y: 148, lbl: '(3,2,R)', cls: 'node-dead'  },
+    L2:   { x: 370, y: 245, lbl: '(3,2,L)', cls: 'node-sol'   },
+    L3:   { x: 370, y: 325, lbl: '(3,0,R)', cls: 'node-sol'   },
+    L4:   { x: 370, y: 405, lbl: '(3,1,L)', cls: 'node-sol'   },
+    L5:   { x: 370, y: 485, lbl: '(1,1,R)', cls: 'node-sol'   },
+    L6:   { x: 370, y: 565, lbl: '(2,2,L)', cls: 'node-sol'   },
+    L7:   { x: 370, y: 645, lbl: '(0,2,R)', cls: 'node-sol'   },
+    L8:   { x: 370, y: 725, lbl: '(0,3,L)', cls: 'node-sol'   },
+    L9:   { x: 370, y: 805, lbl: '(0,1,R)', cls: 'node-sol'   },
+    L10a: { x: 240, y: 888, lbl: '(0,2,L)', cls: 'node-sol'   },
+    L10b: { x: 500, y: 888, lbl: '(1,1,L)', cls: 'node-normal'},
+    L11a: { x: 240, y: 972, lbl: '(0,0,R)', cls: 'node-goal'  },
+    L11b: { x: 500, y: 972, lbl: '(0,0,R)', cls: 'node-goal'  },
+  };
+  const E = [
+    { f:'S',    t:'L1a',  lbl:'→1M1C', sol:true  },
+    { f:'S',    t:'L1b',  lbl:'→2C',   sol:false },
+    { f:'S',    t:'L1c',  lbl:'→1C',   sol:false },
+    { f:'L1a',  t:'L2',   lbl:'←1M',   sol:true  },
+    { f:'L1b',  t:'L2',   lbl:'←1C',   sol:false },
+    { f:'L2',   t:'L3',   lbl:'→2C',   sol:true  },
+    { f:'L3',   t:'L4',   lbl:'←1C',   sol:true  },
+    { f:'L4',   t:'L5',   lbl:'→2M',   sol:true  },
+    { f:'L5',   t:'L6',   lbl:'←1M1C', sol:true  },
+    { f:'L6',   t:'L7',   lbl:'→2M',   sol:true  },
+    { f:'L7',   t:'L8',   lbl:'←1C',   sol:true  },
+    { f:'L8',   t:'L9',   lbl:'→2C',   sol:true  },
+    { f:'L9',   t:'L10a', lbl:'←1C',   sol:true  },
+    { f:'L9',   t:'L10b', lbl:'←1M',   sol:false },
+    { f:'L10a', t:'L11a', lbl:'→2C',   sol:true  },
+    { f:'L10b', t:'L11b', lbl:'→1M1C', sol:false },
+  ];
+  const LEVELS = [
+    {y:60, txt:'Level 0'}, {y:148,txt:'Level 1'}, {y:245,txt:'Level 2'},
+    {y:325,txt:'Level 3'}, {y:405,txt:'Level 4'}, {y:485,txt:'Level 5'},
+    {y:565,txt:'Level 6'}, {y:645,txt:'Level 7'}, {y:725,txt:'Level 8'},
+    {y:805,txt:'Level 9'}, {y:888,txt:'Level 10'},{y:972,txt:'Level 11'},
+  ];
+  const W = 660, H = 1022;
+  const NS = 'http://www.w3.org/2000/svg';
+  const mk = (tag, attrs, cls) => {
+    const e = document.createElementNS(NS, tag);
+    if (cls) e.setAttribute('class', cls);
+    for (const [k,v] of Object.entries(attrs)) e.setAttribute(k, v);
+    return e;
+  };
+  const svg = document.getElementById('mc-tree-svg');
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.setAttribute('width', W);
+  svg.setAttribute('height', H);
+
+  const defs = mk('defs', {});
+  const m = mk('marker', {id:'arr-mc', markerWidth:7, markerHeight:5, refX:6.5, refY:2.5, orient:'auto'});
+  m.appendChild(mk('path', {d:'M0,0 L7,2.5 L0,5 Z', fill:'context-stroke'}));
+  defs.appendChild(m);
+  svg.appendChild(defs);
+
+  const lvlG = mk('g', {});
+  for (const {y, txt} of LEVELS) {
+    const el = mk('text', {x:6, y, 'text-anchor':'start', 'dominant-baseline':'middle'}, 'lvl-label');
+    el.textContent = txt;
+    lvlG.appendChild(el);
+  }
+  svg.appendChild(lvlG);
+
+  const LO = {'L1a-L2':[-14,8], 'L1b-L2':[16,0], 'L9-L10a':[-10,6], 'L9-L10b':[10,6]};
+  const edgeG = mk('g', {});
+  for (const edge of E) {
+    const n1 = N[edge.f], n2 = N[edge.t];
+    const dx = n2.x-n1.x, dy = n2.y-n1.y;
+    const dist = Math.hypot(dx,dy);
+    const ux = dx/dist, uy = dy/dist;
+    const x1 = n1.x+ux*R, y1 = n1.y+uy*R;
+    const x2 = n2.x-ux*(R+5), y2 = n2.y-uy*(R+5);
+    const line = mk('line', {x1,y1,x2,y2,'marker-end':'url(#arr-mc)'}, edge.sol?'edge-sol':'edge-norm');
+    edgeG.appendChild(line);
+    const mx = (n1.x+n2.x)/2, my = (n1.y+n2.y)/2;
+    const key = `${edge.f}-${edge.t}`;
+    let ox, oy;
+    if (LO[key]) { [ox,oy] = LO[key]; } else { ox=-uy*13; oy=ux*13; }
+    const lt = mk('text', {x:mx+ox, y:my+oy, 'text-anchor':'middle', 'dominant-baseline':'middle'},
+                  edge.sol?'elabel-sol':'elabel-norm');
+    lt.textContent = edge.lbl;
+    edgeG.appendChild(lt);
+  }
+  svg.appendChild(edgeG);
+
+  const nodeG = mk('g', {});
+  for (const [,node] of Object.entries(N)) {
+    const g = mk('g', {}, node.cls);
+    g.appendChild(mk('circle', {cx:node.x, cy:node.y, r:R}, 'ring'));
+    const lt = mk('text', {x:node.x, y:node.y, 'text-anchor':'middle', 'dominant-baseline':'middle'}, 'lbl');
+    lt.textContent = node.lbl;
+    g.appendChild(lt);
+    if (node.cls === 'node-dead') {
+      const bx = mk('text', {x:node.x+R-9, y:node.y-R+9, 'text-anchor':'middle','dominant-baseline':'middle'}, 'dead-x');
+      bx.textContent = '×';
+      g.appendChild(bx);
+    }
+    if (node.cls === 'node-goal') {
+      const bx = mk('text', {x:node.x+R-9, y:node.y-R+9, 'text-anchor':'middle','dominant-baseline':'middle'}, 'badge');
+      bx.textContent = '✓';
+      g.appendChild(bx);
+    }
+    nodeG.appendChild(g);
+  }
+  svg.appendChild(nodeG);
+
+  function fitMC() {
+    const ww = svg.parentElement.clientWidth - 24;
+    svg.setAttribute('width', ww < W ? W : Math.min(ww, W));
+  }
+  fitMC();
+  window.addEventListener('resize', fitMC);
+})();
+
+/* ═══ Exercise 4 — Flood Relief Graph ═══ */
+(function () {
+  const NS = 'http://www.w3.org/2000/svg';
+  const mk = (tag, attrs, cls) => {
+    const e = document.createElementNS(NS, tag);
+    if (cls) e.setAttribute('class', cls);
+    for (const [k,v] of Object.entries(attrs)) e.setAttribute(k, v);
+    return e;
+  };
+  const N = {
+    S:{x:330,y:52,  lbl:'S',h:9, cls:'gn-start' },
+    A:{x:130,y:162, lbl:'A',h:5, cls:'gn-normal'},
+    B:{x:330,y:162, lbl:'B',h:7, cls:'gn-normal'},
+    C:{x:530,y:162, lbl:'C',h:6, cls:'gn-normal'},
+    D:{x:72, y:285, lbl:'D',h:3, cls:'gn-normal'},
+    E:{x:232,y:285, lbl:'E',h:6, cls:'gn-normal'},
+    F:{x:392,y:285, lbl:'F',h:5, cls:'gn-normal'},
+    G:{x:558,y:285, lbl:'G',h:4, cls:'gn-normal'},
+    H:{x:162,y:402, lbl:'H',h:4, cls:'gn-normal'},
+    I:{x:458,y:402, lbl:'I',h:2, cls:'gn-normal'},
+    T:{x:316,y:498, lbl:'T',h:0, cls:'gn-goal'  },
+  };
+  const R = 26;
+  const E = [
+    {f:'S',t:'A',w:2},{f:'S',t:'B',w:3},{f:'S',t:'C',w:4},
+    {f:'A',t:'D',w:1},{f:'A',t:'E',w:3},
+    {f:'B',t:'E',w:2},{f:'B',t:'F',w:4},
+    {f:'C',t:'F',w:2},{f:'C',t:'G',w:5},
+    {f:'D',t:'H',w:6},{f:'D',t:'G',w:7,cp:[315,230]},
+    {f:'E',t:'G',w:3,cp:[395,248]},{f:'E',t:'H',w:2},
+    {f:'F',t:'H',w:3},{f:'F',t:'I',w:4},
+    {f:'G',t:'I',w:2},{f:'G',t:'T',w:4},
+    {f:'H',t:'T',w:5},{f:'I',t:'T',w:2},
+  ];
+  const W = 650, H = 555;
+  const svg = document.getElementById('g4-svg');
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.setAttribute('width', W);
+  svg.setAttribute('height', H);
+
+  const defs = mk('defs', {});
+  const marker = mk('marker', {id:'arr-g4', markerWidth:7, markerHeight:5, refX:6.5, refY:2.5, orient:'auto'});
+  marker.appendChild(mk('path', {d:'M0,0 L7,2.5 L0,5 Z', fill:'context-stroke'}));
+  defs.appendChild(marker);
+  svg.appendChild(defs);
+
+  const edgeG = mk('g', {});
+  for (const edge of E) {
+    const n1 = N[edge.f], n2 = N[edge.t];
+    const dx = n2.x-n1.x, dy = n2.y-n1.y;
+    const dist = Math.hypot(dx,dy);
+    const ux = dx/dist, uy = dy/dist;
+    const x1 = n1.x+ux*R, y1 = n1.y+uy*R;
+    const x2 = n2.x-ux*(R+5), y2 = n2.y-uy*(R+5);
+    let pathD, labelX, labelY;
+    if (edge.cp) {
+      const [cpx,cpy] = edge.cp;
+      pathD = `M ${x1} ${y1} Q ${cpx} ${cpy} ${x2} ${y2}`;
+      const t=0.5;
+      labelX = (1-t)*(1-t)*x1 + 2*(1-t)*t*cpx + t*t*x2;
+      labelY = (1-t)*(1-t)*y1 + 2*(1-t)*t*cpy + t*t*y2 - 8;
+    } else {
+      pathD = `M ${x1} ${y1} L ${x2} ${y2}`;
+      const mx=(n1.x+n2.x)/2, my=(n1.y+n2.y)/2;
+      labelX = mx + (-uy*11);
+      labelY = my + (ux*11);
+    }
+    edgeG.appendChild(mk('path', {d:pathD,'marker-end':'url(#arr-g4)'}, 'g-edge'));
+    const wlbl = mk('text', {x:labelX, y:labelY}, 'g-edge-label');
+    wlbl.textContent = edge.w;
+    edgeG.appendChild(wlbl);
+  }
+  svg.appendChild(edgeG);
+
+  const nodeG = mk('g', {});
+  for (const [,node] of Object.entries(N)) {
+    const g = mk('g', {}, node.cls);
+    g.appendChild(mk('circle', {cx:node.x, cy:node.y, r:R}));
+    const lt = mk('text', {x:node.x, y:node.y-3, 'text-anchor':'middle','dominant-baseline':'middle'}, 'lbl');
+    lt.textContent = node.lbl;
+    g.appendChild(lt);
+    const ht = mk('text', {x:node.x, y:node.y+R+12, 'text-anchor':'middle','dominant-baseline':'middle'}, 'hval');
+    ht.textContent = `h=${node.h}`;
+    g.appendChild(ht);
+    nodeG.appendChild(g);
+  }
+  svg.appendChild(nodeG);
+
+  function fitG4() {
+    const ww = svg.parentElement.clientWidth - 20;
+    svg.setAttribute('width', Math.min(ww, W));
+  }
+  fitG4();
+  window.addEventListener('resize', fitG4);
+})();
+</script>
+
+</body>
+</html>

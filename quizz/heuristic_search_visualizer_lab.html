@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informed & Uninformed Search Lab</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        #network-graph { width: 100%; height: 100%; background-color: white; border-radius: 0.5rem; }
+        /* Fix for ResizeObserver loop */
+        #network-graph canvas { outline: none; }
+        .vis-network { overflow: hidden; }
+
+        .tab-btn.active { background-color: #3b82f6; color: white; border-color: #3b82f6; }
+        .tab-btn { background-color: white; color: #4b5563; border-color: #d1d5db; transition: all 0.2s; }
+        .tab-btn:hover:not(.active) { background-color: #f3f4f6; }
+        
+        .algo-btn.active { background-color: #dbeafe; color: #1d4ed8; border-color: #60a5fa; font-weight: 600; }
+        .algo-btn { background-color: white; color: #6b7280; border-color: #e5e7eb; transition: all 0.2s; }
+        .algo-btn:hover:not(.active) { background-color: #f9fafb; }
+
+        .table-container::-webkit-scrollbar { height: 8px; width: 8px; }
+        .table-container::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        .table-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    </style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden">
+
+    <header class="bg-slate-900 text-white p-4 shadow-md z-10 flex justify-between items-center shrink-0">
+        <div>
+            <h1 class="text-xl font-bold tracking-wide">🧭 Search Algorithms Lab</h1>
+            <p class="text-sm text-slate-300">BFS, DFS, GBFS, Beam Search & Hill Climbing</p>
+        </div>
+        <div class="flex space-x-2" id="tabs">
+            <button onclick="loadExercise(0)" class="tab-btn active px-5 py-2 border rounded-md text-sm font-medium">Bài tập 1</button>
+            <button onclick="loadExercise(1)" class="tab-btn px-5 py-2 border rounded-md text-sm font-medium">Bài tập 2</button>
+            <button onclick="loadExercise(2)" class="tab-btn px-5 py-2 border rounded-md text-sm font-medium">Bài tập 3</button>
+            <button onclick="loadExercise(3)" class="tab-btn px-5 py-2 border rounded-md text-sm font-medium">Bài tập 4</button>
+        </div>
+    </header>
+
+    <main id="main-container" class="flex-1 flex overflow-hidden p-4">
+        
+        <div id="left-panel" class="flex flex-col h-full bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden shrink-0 relative" style="width: 50%;">
+            <div class="p-3 border-b border-gray-200 bg-gray-50 shrink-0">
+                <h2 id="ex-title" class="font-semibold text-gray-800">Sơ đồ không gian trạng thái</h2>
+                <p class="text-xs text-gray-500 mt-1">Các đỉnh hiển thị giá trị Heuristic <span class="font-bold">h(n)</span>. Các cạnh hiển thị chi phí <span class="font-bold">g(n)</span>.</p>
+                <div class="flex items-center gap-4 mt-2 text-xs">
+                    <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-pink-200 border border-pink-500 inline-block"></span> Start Node</span>
+                    <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-blue-200 border-2 border-blue-600 inline-block"></span> Goal Node (h=0)</span>
+                </div>
+            </div>
+            <div class="flex-1 p-0 relative">
+                <div id="network-graph"></div>
+            </div>
+        </div>
+
+        <!-- Thanh kéo (Resizer) -->
+        <div id="resizer" class="w-3 mx-1.5 cursor-col-resize flex items-center justify-center group shrink-0 relative z-10">
+            <div class="w-1 h-12 bg-gray-300 rounded-full group-hover:bg-blue-500 transition-colors duration-200"></div>
+        </div>
+
+        <div id="right-panel" class="flex-1 flex flex-col h-full bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="p-3 border-b border-gray-200 bg-gray-50 shrink-0 flex flex-col gap-3">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="font-semibold text-gray-800">Khu vực tự làm bài (Trace Table Workspace)</h2>
+                        <p class="text-xs text-gray-500 mt-1">Chọn một phương pháp tìm kiếm để xem hướng dẫn thực hiện.</p>
+                    </div>
+                </div>
+                
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="selectAlgo('bfs')" id="btn-bfs" class="algo-btn active px-3 py-1.5 border rounded text-sm">BFS</button>
+                    <button onclick="selectAlgo('dfs')" id="btn-dfs" class="algo-btn px-3 py-1.5 border rounded text-sm">DFS</button>
+                    <button onclick="selectAlgo('gbfs')" id="btn-gbfs" class="algo-btn px-3 py-1.5 border rounded text-sm">GBFS</button>
+                    <button onclick="selectAlgo('beam')" id="btn-beam" class="algo-btn px-3 py-1.5 border rounded text-sm">Beam Search</button>
+                    <button onclick="selectAlgo('hc')" id="btn-hc" class="algo-btn px-3 py-1.5 border rounded text-sm">Hill Climbing</button>
+                </div>
+                
+                <div id="algo-instruction" class="px-3 py-2 bg-blue-50 text-blue-800 text-sm border-l-4 border-blue-500 rounded-r">
+                    <!-- Dynamic Instruction injected by JS -->
+                </div>
+            </div>
+
+            <div class="flex-1 overflow-auto table-container p-0">
+                <table class="w-full text-sm text-left text-gray-700">
+                    <thead class="text-xs text-gray-700 uppercase bg-slate-100 sticky top-0 z-10 shadow-sm">
+                        <tr>
+                            <th scope="col" class="px-4 py-3 font-semibold border-b border-r w-16">Step</th>
+                            <th scope="col" class="px-4 py-3 font-semibold border-b border-r w-24">u</th>
+                            <th scope="col" class="px-4 py-3 font-semibold border-b border-r w-48">edge(u)</th>
+                            <th scope="col" class="px-4 py-3 font-semibold border-b">OPEN</th>
+                        </tr>
+                    </thead>
+                    <tbody id="trace-body" class="divide-y divide-gray-100 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8ZGVmcz4KPG1hdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CjxwYXRoIGQ9Ik0gNDAgMCBMIDAgMCAwIDQwIiBmaWxsPSJub25lIiBzdHJva2U9IiNmM2Y0ZjYiIHN0cm9rZS13aWR0aD0iMSIvPgo8L3BhdHRlcm4+CjwvZGVmcz4KPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPgo8L3N2Zz4=')]">
+                        <!-- Empty rows generated by JS to simulate paper -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="p-3 border-t border-gray-200 bg-gray-50 shrink-0 text-center">
+                <p class="text-sm font-medium text-gray-600">✍️ Sinh viên tự hoàn thiện bảng trên ra giấy nháp.</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const ALGO_INSTRUCTIONS = {
+            'bfs': "<strong>Breadth-First Search (BFS):</strong><br>Duyệt theo chiều ngang. Tập OPEN sử dụng cơ chế <strong>Hàng đợi (Queue - FIFO)</strong>. Khi lấy u ra duyệt, thêm các đỉnh kề của u chưa được duyệt vào <strong>CUỐI</strong> OPEN.",
+            'dfs': "<strong>Depth-First Search (DFS):</strong><br>Duyệt ưu tiên chiều sâu. Tập OPEN sử dụng cơ chế <strong>Ngăn xếp (Stack - LIFO)</strong>. Thêm các đỉnh kề của u chưa được duyệt vào <strong>ĐẦU</strong> OPEN.",
+            'gbfs': "<strong>Greedy Best-First Search (GBFS):</strong><br>Tìm kiếm kinh nghiệm tham lam. Cột edge(u) cần liệt kê các đỉnh kèm h(n). Tập OPEN luôn phải được <strong>Sắp xếp tăng dần theo giá trị Heuristic h(n)</strong> trước khi duyệt bước tiếp theo.",
+            'beam': "<strong>Beam Search:</strong><br>Tương tự BFS nhưng bị giới hạn không gian bộ nhớ. <span class='text-rose-600 font-bold'>Giả sử Beam Width (k) = 2</span>. Ở mỗi Step, OPEN chỉ giữ lại tối đa <strong>2 đỉnh có giá trị h(n) nhỏ nhất</strong>, các đỉnh còn lại bị cắt bỏ.",
+            'hc': "<strong>Hill Climbing (Leo đồi):</strong><br>Phiên bản DFS có thông tin. Khi lấy u ra duyệt, tạo một danh sách L chứa các đỉnh kề của u, <strong>sắp xếp L tăng dần theo h(n)</strong>, sau đó mới đẩy toàn bộ L vào <strong>ĐẦU</strong> của tập OPEN."
+        };
+
+        const defaultNodeOptions = {
+            shape: 'circle',
+            font: { size: 16, color: '#1f2937', face: 'Inter', multi: 'html' },
+            borderWidth: 2,
+            color: { background: 'white', border: '#94a3b8', highlight: { background: '#f8fafc', border: '#3b82f6' } },
+            margin: 10
+        };
+
+        const exercisesData = [
+            {
+                // GRAPH 1 - Precisely matching ex1.png
+                id: 0,
+                title: "Bài tập 1: Đồ thị ex1.png",
+                nodes: [
+                    { id: 'A', label: '<b>A</b>\n<i>24</i>', x: 250, y: 50, color: { background: '#fbcfe8', border: '#ec4899' } }, // Start
+                    { id: 'B', label: '<b>B</b>\n<i>15</i>', x: 100, y: 150 },
+                    { id: 'D', label: '<b>D</b>\n<i>7</i>', x: 400, y: 150 },
+                    { id: 'C', label: '<b>C</b>\n<i>8</i>', x: 250, y: 250 },
+                    { id: 'M', label: '<b>M</b>\n<i>17</i>', x: 500, y: 250 },
+                    { id: 'I', label: '<b>I</b>\n<i>6</i>', x: 0, y: 350 },
+                    { id: 'E', label: '<b>E</b>\n<i>9</i>', x: 250, y: 350 },
+                    { id: 'F', label: '<b>F</b>\n<i>8</i>', x: 400, y: 350 },
+                    { id: 'G', label: '<b>G</b>\n<i>10</i>', x: 150, y: 450 },
+                    { id: 'K', label: '<b>K</b>\n<i>0</i>', x: 350, y: 500, color: { background: '#bfdbfe', border: '#2563eb' }, borderWidth: 3 } // Goal
+                ],
+                edges: [
+                    { from: 'A', to: 'B', label: '19' },
+                    { from: 'A', to: 'C', label: '17' },
+                    { from: 'A', to: 'D', label: '20' },
+                    { from: 'B', to: 'I', label: '13' },
+                    { from: 'B', to: 'G', label: '15' },
+                    { from: 'D', to: 'C', label: '21' },
+                    { from: 'D', to: 'F', label: '9' },
+                    { from: 'D', to: 'M', label: '14' },
+                    { from: 'C', to: 'E', label: '14' },
+                    { from: 'C', to: 'F', label: '16' },
+                    { from: 'E', to: 'G', label: '4' },
+                    { from: 'E', to: 'K', label: '6' },
+                    { from: 'I', to: 'G', label: '9' },
+                    { from: 'G', to: 'K', label: '11' },
+                    { from: 'F', to: 'K', label: '5' }
+                ]
+            },
+            {
+                // GRAPH 2 - Precisely matching ex2.png
+                id: 1,
+                title: "Bài tập 2: Đồ thị ex2.png",
+                nodes: [
+                    { id: 'A', label: '<b>A</b>\n<i>45</i>', x: 0, y: 250, color: { background: '#fbcfe8', border: '#ec4899' } },
+                    { id: 'B', label: '<b>B</b>\n<i>35</i>', x: 150, y: 100 },
+                    { id: 'C', label: '<b>C</b>\n<i>32</i>', x: 150, y: 400 },
+                    { id: 'E', label: '<b>E</b>\n<i>29</i>', x: 350, y: 100 },
+                    { id: 'D', label: '<b>D</b>\n<i>27</i>', x: 300, y: 250 },
+                    { id: 'G', label: '<b>G</b>\n<i>25</i>', x: 350, y: 400 },
+                    { id: 'I', label: '<b>I</b>\n<i>15</i>', x: 550, y: 200 },
+                    { id: 'F', label: '<b>F</b>\n<i>6</i>', x: 450, y: 280 },
+                    { id: 'K', label: '<b>K</b>\n<i>0</i>', x: 550, y: 400, color: { background: '#bfdbfe', border: '#2563eb' }, borderWidth: 3 }
+                ],
+                edges: [
+                    { from: 'A', to: 'B', label: '50' },
+                    { from: 'A', to: 'C', label: '57' },
+                    { from: 'B', to: 'E', label: '25' },
+                    { from: 'B', to: 'D', label: '19' },
+                    { from: 'C', to: 'D', label: '24' },
+                    { from: 'C', to: 'G', label: '15' },
+                    { from: 'D', to: 'F', label: '20' },
+                    { from: 'D', to: 'K', label: '37' },
+                    { from: 'E', to: 'F', label: '22' },
+                    { from: 'E', to: 'I', label: '26' },
+                    { from: 'G', to: 'F', label: '13' },
+                    { from: 'G', to: 'K', label: '17' },
+                    { from: 'F', to: 'K', label: '4' },
+                    { from: 'I', to: 'K', label: '5' }
+                ]
+            },
+            {
+                // GRAPH 3 - Complex Converging Graph
+                id: 2,
+                title: "Bài tập 3: Đồ thị Hội tụ (Converging Graph)",
+                nodes: [
+                    { id: 'S', label: '<b>S</b>\n<i>25</i>', x: 50, y: 250, color: { background: '#fbcfe8', border: '#ec4899' } },
+                    { id: 'A', label: '<b>A</b>\n<i>20</i>', x: 200, y: 100 },
+                    { id: 'B', label: '<b>B</b>\n<i>15</i>', x: 200, y: 400 },
+                    { id: 'C', label: '<b>C</b>\n<i>18</i>', x: 350, y: 50 },
+                    { id: 'D', label: '<b>D</b>\n<i>12</i>', x: 350, y: 250 },
+                    { id: 'E', label: '<b>E</b>\n<i>10</i>', x: 350, y: 450 },
+                    { id: 'F', label: '<b>F</b>\n<i>5</i>', x: 500, y: 150 },
+                    { id: 'G', label: '<b>G</b>\n<i>8</i>', x: 500, y: 350 },
+                    { id: 'H', label: '<b>H</b>\n<i>4</i>', x: 500, y: 500 },
+                    { id: 'Goal', label: '<b>Goal</b>\n<i>0</i>', x: 650, y: 250, color: { background: '#bfdbfe', border: '#2563eb' }, borderWidth: 3 }
+                ],
+                edges: [
+                    { from: 'S', to: 'A', label: '5' },
+                    { from: 'S', to: 'B', label: '8' },
+                    { from: 'A', to: 'C', label: '6' },
+                    { from: 'A', to: 'D', label: '10' },
+                    { from: 'B', to: 'D', label: '7' },
+                    { from: 'B', to: 'E', label: '12' },
+                    { from: 'C', to: 'F', label: '15' },
+                    { from: 'D', to: 'F', label: '8' },
+                    { from: 'D', to: 'G', label: '5' },
+                    { from: 'E', to: 'G', label: '6' },
+                    { from: 'E', to: 'H', label: '4' },
+                    { from: 'F', to: 'Goal', label: '10' },
+                    { from: 'G', to: 'Goal', label: '14' },
+                    { from: 'H', to: 'Goal', label: '8' }
+                ]
+            },
+            {
+                // GRAPH 4 - Deep Mesh Graph
+                id: 3,
+                title: "Bài tập 4: Đồ thị Mạng lưới (Deep Mesh Graph)",
+                nodes: [
+                    { id: 'S', label: '<b>S</b>\n<i>40</i>', x: 50, y: 250, color: { background: '#fbcfe8', border: '#ec4899' } },
+                    { id: '1', label: '<b>1</b>\n<i>35</i>', x: 200, y: 100 },
+                    { id: '2', label: '<b>2</b>\n<i>30</i>', x: 200, y: 250 },
+                    { id: '3', label: '<b>3</b>\n<i>28</i>', x: 200, y: 400 },
+                    { id: '5', label: '<b>5</b>\n<i>25</i>', x: 350, y: 50 },
+                    { id: '4', label: '<b>4</b>\n<i>20</i>', x: 350, y: 150 },
+                    { id: '6', label: '<b>6</b>\n<i>15</i>', x: 350, y: 300 },
+                    { id: '8', label: '<b>8</b>\n<i>12</i>', x: 350, y: 450 },
+                    { id: '7', label: '<b>7</b>\n<i>10</i>', x: 500, y: 150 },
+                    { id: '9', label: '<b>9</b>\n<i>5</i>', x: 500, y: 400 },
+                    { id: 'Goal', label: '<b>Goal</b>\n<i>0</i>', x: 650, y: 250, color: { background: '#bfdbfe', border: '#2563eb' }, borderWidth: 3 }
+                ],
+                edges: [
+                    { from: 'S', to: '1', label: '12' },
+                    { from: 'S', to: '2', label: '15' },
+                    { from: 'S', to: '3', label: '20' },
+                    { from: '1', to: '5', label: '10' },
+                    { from: '1', to: '4', label: '18' },
+                    { from: '2', to: '4', label: '14' },
+                    { from: '2', to: '6', label: '22' },
+                    { from: '3', to: '6', label: '15' },
+                    { from: '3', to: '8', label: '11' },
+                    { from: '5', to: '7', label: '20' },
+                    { from: '4', to: '7', label: '16' },
+                    { from: '6', to: '7', label: '12' },
+                    { from: '6', to: '9', label: '14' },
+                    { from: '8', to: '9', label: '19' },
+                    { from: '7', to: 'Goal', label: '15' },
+                    { from: '9', to: 'Goal', label: '8' }
+                ]
+            }
+        ];
+
+        let network = null;
+        let currentExercise = 0;
+        let currentAlgo = 'bfs';
+
+        function renderEmptyTable() {
+            const tbody = document.getElementById('trace-body');
+            tbody.innerHTML = '';
+            // Generate 12 empty rows simulating paper lines
+            for (let i = 0; i < 12; i++) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="px-4 py-3 border-b border-r h-10 border-gray-200"></td>
+                    <td class="px-4 py-3 border-b border-r h-10 border-gray-200"></td>
+                    <td class="px-4 py-3 border-b border-r h-10 border-gray-200"></td>
+                    <td class="px-4 py-3 border-b h-10 border-gray-200"></td>
+                `;
+                tbody.appendChild(tr);
+            }
+        }
+
+        function selectAlgo(algoId) {
+            currentAlgo = algoId;
+            document.querySelectorAll('.algo-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-' + algoId).classList.add('active');
+            
+            // Display respective instruction
+            document.getElementById('algo-instruction').innerHTML = ALGO_INSTRUCTIONS[algoId];
+        }
+
+        function renderGraph(nodesArray, edgesArray) {
+            const container = document.getElementById('network-graph');
+            const data = {
+                nodes: new vis.DataSet(nodesArray.map(n => ({...defaultNodeOptions, ...n}))),
+                edges: new vis.DataSet(edgesArray.map(e => ({
+                    ...e,
+                    arrows: 'to', // Directed graph
+                    font: { align: 'top', size: 14, color: '#dc2626', strokeWidth: 3, strokeColor: '#ffffff' },
+                    color: { color: '#94a3b8', highlight: '#3b82f6' },
+                    smooth: { type: 'dynamic' }
+                })))
+            };
+
+            const options = {
+                interaction: { hover: true, tooltipDelay: 200, zoomView: true, dragView: true },
+                physics: false // Disabled physics to force exact layout matching the user's images
+            };
+
+            if (network !== null) { network.destroy(); }
+            network = new vis.Network(container, data, options);
+            
+            // Adjust zoom to fit perfectly
+            setTimeout(() => network.fit({ animation: { duration: 500 } }), 100);
+        }
+
+        function loadExercise(index) {
+            currentExercise = index;
+            document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+                if(i === index) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+
+            const ex = exercisesData[index];
+            renderGraph(ex.nodes, ex.edges);
+            renderEmptyTable();
+            
+            // Keep the selected algorithm instruction
+            selectAlgo(currentAlgo);
+        }
+
+        // Boot
+        window.onload = () => loadExercise(0);
+
+        const resizer = document.getElementById('resizer');
+        const leftPanel = document.getElementById('left-panel');
+        const mainContainer = document.getElementById('main-container');
+        let isResizing = false;
+
+        resizer.addEventListener('mousedown', (e) => {
+            isResizing = true;
+            document.body.style.cursor = 'col-resize';
+            // Ngăn chặn bôi đen text khi đang kéo
+            e.preventDefault(); 
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isResizing) return;
+
+            const containerRect = mainContainer.getBoundingClientRect();
+            // Tính toán % chiều rộng mới (trừ đi padding 16px của main container)
+            let newWidthPercentage = ((e.clientX - containerRect.left - 16) / (containerRect.width - 32)) * 100;
+            
+            // Giới hạn độ rộng từ 20% đến 80%
+            if (newWidthPercentage < 20) newWidthPercentage = 20;
+            if (newWidthPercentage > 80) newWidthPercentage = 80;
+
+            leftPanel.style.width = `${newWidthPercentage}%`;
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (isResizing) {
+                isResizing = false;
+                document.body.style.cursor = 'default';
+                // Yêu cầu Vis.js vẽ lại và căn giữa đồ thị sau khi kéo xong
+                if (network) {
+                    network.redraw();
+                    network.fit({ animation: { duration: 300 } });
+                }
+            }
+        });
+    </script>
+</body>
+</html>

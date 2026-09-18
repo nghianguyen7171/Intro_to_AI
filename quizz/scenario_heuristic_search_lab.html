@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applied Search Scenarios Lab</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        #network-graph { width: 100%; height: 100%; background-color: white; outline: none; }
+        .vis-network { overflow: hidden; }
+
+        .tab-btn.active { background-color: #4f46e5; color: white; border-color: #4f46e5; }
+        .tab-btn { background-color: white; color: #4b5563; border-color: #d1d5db; transition: all 0.2s; }
+        .tab-btn:hover:not(.active) { background-color: #f1f5f9; }
+        
+        .custom-scrollbar::-webkit-scrollbar { height: 8px; width: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        
+        /* Hiệu ứng màn che cho đồ thị */
+        .glass-overlay {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden">
+
+    <!-- Header -->
+    <header class="bg-slate-900 text-white p-4 shadow-md z-10 flex justify-between items-center shrink-0">
+        <div>
+            <h1 class="text-xl font-bold tracking-wide">🌍 Problem Formulation Lab</h1>
+            <p class="text-sm text-slate-300">Kỹ năng Mô hình hoá không gian trạng thái (State Space Formulation)</p>
+        </div>
+        <div class="flex space-x-2" id="tabs">
+            <button onclick="loadScenario(0)" class="tab-btn active px-5 py-2 border rounded-md text-sm font-medium shadow-sm">1. Tourism Navigation</button>
+            <button onclick="loadScenario(1)" class="tab-btn px-5 py-2 border rounded-md text-sm font-medium shadow-sm">2. Logistics Routing</button>
+            <button onclick="loadScenario(2)" class="tab-btn px-5 py-2 border rounded-md text-sm font-medium shadow-sm">3. Drone Rescue</button>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main id="main-container" class="flex-1 flex overflow-hidden p-4 gap-4 bg-slate-100">
+        
+        <!-- Left Panel: Scenario Text -->
+        <div id="left-panel" class="flex flex-col bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden relative" style="width: 38%;">
+            <div class="p-4 border-b border-gray-200 bg-slate-50 flex items-center justify-between shrink-0">
+                <div class="flex items-center gap-2">
+                    <span class="bg-indigo-100 text-indigo-800 text-xs font-semibold px-2.5 py-0.5 rounded border border-indigo-200">Word Problem</span>
+                    <h2 class="font-bold text-gray-800 text-lg">Đề bài tình huống</h2>
+                </div>
+            </div>
+            
+            <div class="flex-1 p-5 overflow-y-auto custom-scrollbar">
+                <h3 id="scenario-title" class="text-xl font-extrabold text-indigo-900 mb-4 border-l-4 border-indigo-500 pl-3">Tiêu đề</h3>
+                <div id="scenario-content" class="text-base text-gray-700 leading-relaxed space-y-4">
+                    <!-- Injected via JS -->
+                </div>
+                
+                <div class="mt-8 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                    <h4 class="font-bold text-amber-800 flex items-center gap-2 mb-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                        Nhiệm vụ của sinh viên:
+                    </h4>
+                    <ul class="list-disc pl-5 text-sm text-amber-900 space-y-1">
+                        <li>Đọc kỹ tình huống thực tế phía trên.</li>
+                        <li>Tự quy ước, đặt tên biến ngắn gọn cho các địa điểm (Ví dụ: A, B, C...).</li>
+                        <li>Vẽ đồ thị không gian trạng thái ra giấy nháp.</li>
+                        <li>Đánh dấu chi phí thực tế <span class="font-semibold">g(n)</span> lên các cạnh và chi phí ước lượng <span class="font-semibold">h(n)</span> lên các đỉnh tương ứng.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resizer -->
+        <div id="resizer" class="w-2 cursor-col-resize flex items-center justify-center group shrink-0 relative z-10 -mx-2">
+            <div class="w-1 h-16 bg-gray-300 rounded-full group-hover:bg-indigo-500 transition-colors duration-200"></div>
+        </div>
+
+        <!-- Right Panel: Hidden Graph -->
+        <div id="right-panel" class="flex-1 flex flex-col bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden relative">
+            <div class="p-3 border-b border-gray-200 bg-slate-50 flex items-center justify-between shrink-0 z-30">
+                <div>
+                    <h2 class="font-bold text-gray-800">Đồ thị Không gian trạng thái</h2>
+                    <p class="text-xs text-gray-500 mt-0.5">Sử dụng để đối chiếu kết quả mô hình hoá của sinh viên.</p>
+                </div>
+                <button id="toggle-header-btn" onclick="toggleGraph()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md shadow-sm transition-colors flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.543 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                    <span id="btn-text">Hiển thị Đồ thị mẫu</span>
+                </button>
+            </div>
+
+            <div class="flex-1 p-0 relative">
+                <!-- Vis.js Graph Canvas -->
+                <div id="network-graph" class="absolute inset-0 w-full h-full"></div>
+                
+                <!-- Blur Overlay -->
+                <div id="graph-overlay" class="absolute inset-0 z-20 flex flex-col items-center justify-center glass-overlay transition-all duration-500 ease-in-out">
+                    <div class="bg-white/90 p-8 rounded-2xl shadow-xl border border-gray-200 text-center max-w-md transform transition-transform">
+                        <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-slate-200">
+                            <svg class="w-8 h-8 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Đồ thị đang được ẩn</h3>
+                        <p class="text-sm text-gray-600 mb-6 leading-relaxed">Hãy cho sinh viên thời gian để tự đọc hiểu, gán nhãn và vẽ đồ thị ra giấy nháp trước khi xem đáp án mẫu.</p>
+                        <button onclick="toggleGraph()" class="px-6 py-2.5 bg-slate-800 hover:bg-slate-900 text-white font-medium rounded-lg shadow-md transition-all hover:scale-105 w-full">
+                            Mở khoá Đồ thị mẫu
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const defaultNodeOptions = {
+            shape: 'box',
+            font: { size: 15, color: '#1e293b', face: 'Inter', multi: 'html', bold: { size: 16 } },
+            borderWidth: 2,
+            color: { background: '#ffffff', border: '#94a3b8', highlight: { background: '#f8fafc', border: '#3b82f6' } },
+            margin: { top: 10, bottom: 10, left: 15, right: 15 },
+            shapeProperties: { borderRadius: 8 }
+        };
+
+        const startColor = { background: '#fce7f3', border: '#10b981' };
+        const goalColor = { background: '#dbeafe', border: '#3b82f6' };
+
+        const scenariosData = [
+            {
+                id: 0,
+                title: "Điều hướng Du lịch Nội đô",
+                text: `
+                    <p>Một du khách quốc tế đang ở <strong>Hồ Hoàn Kiếm</strong> và muốn tìm đường ngắn nhất để đến <strong>Sân bay Nội Bài</strong>. 
+                    Hệ thống bản đồ ghi nhận thời gian di chuyển thực tế (phút) do tắc đường giữa các địa điểm như sau:</p>
+                    <ul class="list-disc pl-5 mt-3 space-y-2 text-sm">
+                        <li>Từ Hồ Hoàn Kiếm đi đến Chợ Đồng Xuân mất 10 phút, tới Văn Miếu mất 15 phút, hoặc qua Nhà Hát Lớn mất 8 phút.</li>
+                        <li>Từ Nhà Hát Lớn, đi đến Hoàng Thành Thăng Long mất 18 phút.</li>
+                        <li>Từ Chợ Đồng Xuân, đi đến Hồ Tây mất 12 phút.</li>
+                        <li>Từ Văn Miếu, đi đến Hoàng Thành Thăng Long mất 10 phút, hoặc đi tới Cầu Giấy mất 20 phút.</li>
+                        <li>Từ Hoàng Thành Thăng Long, đi ra Hồ Tây mất 8 phút, hoặc tới Bảo Tàng Dân tộc học (DTH) mất 15 phút.</li>
+                        <li>Từ Hồ Tây, đi tới Lotte Mall mất 10 phút, hoặc đi xa hơn ra Cầu Nhật Tân mất 18 phút.</li>
+                        <li>Từ Cầu Giấy, đi thẳng tới Bảo Tàng DTH mất 8 phút.</li>
+                        <li>Từ Bảo Tàng DTH, qua Lotte Mall mất 5 phút, hoặc đi dọc vành đai tới Cầu Thăng Long mất 14 phút.</li>
+                        <li>Từ Lotte Mall, lên Cầu Nhật Tân mất 8 phút.</li>
+                        <li>Từ Cầu Nhật Tân, đi cao tốc tới Sân bay Nội Bài mất 22 phút.</li>
+                        <li>Từ Cầu Thăng Long, sang Khu CN Thăng Long mất 6 phút.</li>
+                        <li>Từ Khu CN Thăng Long, tới Sân bay Nội Bài mất 15 phút.</li>
+                    </ul>
+                    <p class="mt-4">Khoảng cách đường chim bay tối thiểu từ các địa điểm về Sân bay Nội Bài được tính toán là:</p>
+                    <div class="font-mono bg-slate-100 p-3 rounded-md mt-2 border border-slate-200 text-sm leading-loose">
+                        h(Hồ Hoàn Kiếm) = 45 | h(Nhà Hát Lớn) = 42<br>
+                        h(Chợ Đồng Xuân) = 35 | h(Văn Miếu) = 32<br>
+                        h(Hoàng Thành Thăng Long) = 28 | h(Hồ Tây) = 25<br>
+                        h(Cầu Giấy) = 24 | h(Bảo Tàng DTH) = 18<br>
+                        h(Lotte Mall) = 15 | h(Cầu Thăng Long) = 12<br>
+                        h(Cầu Nhật Tân) = 10 | h(Khu CN Thăng Long) = 8<br>
+                        h(Sân bay Nội Bài) = 0
+                    </div>
+                `,
+                nodes: [
+                    { id: '1', label: '<b>Hồ Hoàn Kiếm</b>\n<i>h=45</i>', level: 0, color: startColor, borderWidth: 3 },
+                    { id: '2', label: '<b>Chợ Đồng Xuân</b>\n<i>h=35</i>', level: 1 },
+                    { id: '3', label: '<b>Văn Miếu</b>\n<i>h=32</i>', level: 1 },
+                    { id: '4', label: '<b>Nhà Hát Lớn</b>\n<i>h=42</i>', level: 1 },
+                    { id: '5', label: '<b>Hoàng Thành TL</b>\n<i>h=28</i>', level: 2 },
+                    { id: '6', label: '<b>Hồ Tây</b>\n<i>h=25</i>', level: 2 },
+                    { id: '7', label: '<b>Cầu Giấy</b>\n<i>h=24</i>', level: 2 },
+                    { id: '8', label: '<b>Bảo Tàng DTH</b>\n<i>h=18</i>', level: 3 },
+                    { id: '9', label: '<b>Lotte Mall</b>\n<i>h=15</i>', level: 3 },
+                    { id: '10', label: '<b>Cầu Thăng Long</b>\n<i>h=12</i>', level: 4 },
+                    { id: '11', label: '<b>Cầu Nhật Tân</b>\n<i>h=10</i>', level: 4 },
+                    { id: '12', label: '<b>Sân bay Nội Bài</b>\n<i>h=0</i>', level: 5, color: goalColor, borderWidth: 3 }
+                ],
+                edges: [
+                    { from: '1', to: '2', label: '10' }, { from: '1', to: '3', label: '15' }, { from: '1', to: '4', label: '8' },
+                    { from: '4', to: '5', label: '18' }, { from: '2', to: '6', label: '12' },
+                    { from: '3', to: '5', label: '10' }, { from: '3', to: '7', label: '20' },
+                    { from: '5', to: '6', label: '8' }, { from: '5', to: '8', label: '15' },
+                    { from: '6', to: '9', label: '10' }, { from: '6', to: '11', label: '18' },
+                    { from: '7', to: '8', label: '8' }, { from: '8', to: '9', label: '5' },
+                    { from: '8', to: '10', label: '14' }, { from: '9', to: '11', label: '8' },
+                    { from: '11', to: '12', label: '22' }, { from: '10', to: '12', label: '21' }, // direct path replaced by node 10->12? No, let's keep logic
+                    { from: '10', to: '13', label: '6' }, { id: 'dummy', from: '10', to: '10', hidden: true } 
+                ]
+            },
+            {
+                id: 1,
+                title: "Tối ưu Kho vận Giao hàng",
+                text: `
+                    <p>Xe tải xuất phát từ <strong>Kho Tổng</strong> cần vận chuyển hàng hóa đến <strong>Hub Khu vực</strong> đi qua các hệ thống trạm thu phí. 
+                    Mức phí giao thông (đơn vị: nghìn đồng) được ghi nhận như sau:</p>
+                    <ul class="list-disc pl-5 mt-3 space-y-2 text-sm">
+                        <li>Từ Kho Tổng có thể chia đường đi Trạm A (12k), Trạm B (15k), hoặc Trạm C (18k).</li>
+                        <li>Từ Trạm A, đi tới Trạm D tốn 20k, tới Trạm E tốn 22k.</li>
+                        <li>Từ Trạm B, cắt ngang sang Trạm E tốn 10k, đi xuống Trạm F tốn 25k.</li>
+                        <li>Từ Trạm C, đi tới Trạm F tốn 18k.</li>
+                        <li>Từ Trạm D, đi tiếp tới Trạm G tốn 15k.</li>
+                        <li>Từ Trạm E, rẽ sang Trạm G tốn 12k, hoặc đi thẳng Trạm H tốn 20k.</li>
+                        <li>Từ Trạm F, vòng lên Trạm H tốn 15k, đi xuống Trạm I tốn 25k.</li>
+                        <li>Từ Trạm G, có đường tới Trạm J tốn 18k, hoặc chạy thẳng lên Hub Khu vực nhưng phí rất đắt là 35k.</li>
+                        <li>Từ Trạm H, tới Trạm J tốn 10k.</li>
+                        <li>Từ Trạm I, đi thẳng tới Hub Khu vực tốn 20k.</li>
+                        <li>Từ Trạm J, đi vào Hub Khu vực tốn 12k.</li>
+                    </ul>
+                    <p class="mt-4">Chi phí ước lượng thấp nhất (đã trừ hao) từ các vị trí để đi đến Hub Khu vực là:</p>
+                    <div class="font-mono bg-slate-100 p-3 rounded-md mt-2 border border-slate-200 text-sm leading-loose">
+                        h(Kho Tổng) = 60<br>
+                        h(Trạm A) = 52 | h(Trạm B) = 50 | h(Trạm C) = 45<br>
+                        h(Trạm D) = 35 | h(Trạm E) = 30 | h(Trạm F) = 28<br>
+                        h(Trạm G) = 20 | h(Trạm H) = 18 | h(Trạm I) = 15<br>
+                        h(Trạm J) = 10 | h(Hub Khu vực) = 0
+                    </div>
+                `,
+                nodes: [
+                    { id: '1', label: '<b>Kho Tổng</b>\n<i>h=60</i>', level: 0, color: startColor, borderWidth: 3 },
+                    { id: 'A', label: '<b>Trạm A</b>\n<i>h=52</i>', level: 1 },
+                    { id: 'B', label: '<b>Trạm B</b>\n<i>h=50</i>', level: 1 },
+                    { id: 'C', label: '<b>Trạm C</b>\n<i>h=45</i>', level: 1 },
+                    { id: 'D', label: '<b>Trạm D</b>\n<i>h=35</i>', level: 2 },
+                    { id: 'E', label: '<b>Trạm E</b>\n<i>h=30</i>', level: 2 },
+                    { id: 'F', label: '<b>Trạm F</b>\n<i>h=28</i>', level: 2 },
+                    { id: 'G', label: '<b>Trạm G</b>\n<i>h=20</i>', level: 3 },
+                    { id: 'H', label: '<b>Trạm H</b>\n<i>h=18</i>', level: 3 },
+                    { id: 'I', label: '<b>Trạm I</b>\n<i>h=15</i>', level: 3 },
+                    { id: 'J', label: '<b>Trạm J</b>\n<i>h=10</i>', level: 4 },
+                    { id: '12', label: '<b>Hub Khu vực</b>\n<i>h=0</i>', level: 5, color: goalColor, borderWidth: 3 }
+                ],
+                edges: [
+                    { from: '1', to: 'A', label: '12' }, { from: '1', to: 'B', label: '15' }, { from: '1', to: 'C', label: '18' },
+                    { from: 'A', to: 'D', label: '20' }, { from: 'A', to: 'E', label: '22' },
+                    { from: 'B', to: 'E', label: '10' }, { from: 'B', to: 'F', label: '25' },
+                    { from: 'C', to: 'F', label: '18' },
+                    { from: 'D', to: 'G', label: '15' },
+                    { from: 'E', to: 'G', label: '12' }, { from: 'E', to: 'H', label: '20' },
+                    { from: 'F', to: 'H', label: '15' }, { from: 'F', to: 'I', label: '25' },
+                    { from: 'G', to: 'J', label: '18' }, { from: 'G', to: '12', label: '35' },
+                    { from: 'H', to: 'J', label: '10' },
+                    { from: 'I', to: '12', label: '20' },
+                    { from: 'J', to: '12', label: '12' }
+                ]
+            },
+            {
+                id: 2,
+                title: "Cứu hộ bằng Drone",
+                text: `
+                    <p>Một Drone y tế cần bay từ <strong>Trạm điều hành</strong> đến khu vực tai nạn tại <strong>Đỉnh núi</strong> qua các trạm kiểm soát (đặt tên theo bảng chữ cái vô tuyến). Năng lượng tiêu hao (đơn vị: %) cho các chặng bay là:</p>
+                    <ul class="list-disc pl-5 mt-3 space-y-2 text-sm">
+                        <li>Từ Trạm điều hành bay tới Alpha tốn 8%, tới Beta tốn 14%, tới Gamma tốn 10%.</li>
+                        <li>Từ Alpha bay tới Delta tốn 12%, tới Echo tốn 18%.</li>
+                        <li>Từ Beta bay cắt sang Echo tốn 9%, bay tới Foxtrot tốn 15%.</li>
+                        <li>Từ Gamma bay tới Foxtrot tốn 12%.</li>
+                        <li>Từ Delta bay tới Golf tốn 15%.</li>
+                        <li>Từ Echo có thể bay rẽ sang Golf tốn 10%, hoặc tới Hotel tốn 22%.</li>
+                        <li>Từ Foxtrot bay tới Hotel tốn 14%, bay tới India tốn 25%.</li>
+                        <li>Từ Golf bay tới Juliet tốn 18%, bay vọt thẳng lên Đỉnh núi tốn 30%.</li>
+                        <li>Từ Hotel bay tới Juliet tốn 12%.</li>
+                        <li>Từ India bay tới Đỉnh núi tốn 15%.</li>
+                        <li>Từ Juliet bay tới Đỉnh núi tốn chỉ 8%.</li>
+                    </ul>
+                    <p class="mt-4">Năng lượng lý thuyết tối thiểu để bay đường thẳng từ các trạm về Đỉnh núi được ước tính:</p>
+                    <div class="font-mono bg-slate-100 p-3 rounded-md mt-2 border border-slate-200 text-sm leading-loose">
+                        h(Trạm điều hành) = 40<br>
+                        h(Alpha) = 32 | h(Beta) = 28 | h(Gamma) = 30<br>
+                        h(Delta) = 22 | h(Echo) = 20 | h(Foxtrot) = 18<br>
+                        h(Golf) = 12 | h(Hotel) = 10 | h(India) = 8<br>
+                        h(Juliet) = 5 | h(Đỉnh núi) = 0
+                    </div>
+                `,
+                nodes: [
+                    { id: '0', label: '<b>Trạm điều hành</b>\n<i>h=40</i>', level: 0, color: startColor, borderWidth: 3 },
+                    { id: 'A', label: '<b>Alpha</b>\n<i>h=32</i>', level: 1 },
+                    { id: 'B', label: '<b>Beta</b>\n<i>h=28</i>', level: 1 },
+                    { id: 'C', label: '<b>Gamma</b>\n<i>h=30</i>', level: 1 },
+                    { id: 'D', label: '<b>Delta</b>\n<i>h=22</i>', level: 2 },
+                    { id: 'E', label: '<b>Echo</b>\n<i>h=20</i>', level: 2 },
+                    { id: 'F', label: '<b>Foxtrot</b>\n<i>h=18</i>', level: 2 },
+                    { id: 'G', label: '<b>Golf</b>\n<i>h=12</i>', level: 3 },
+                    { id: 'H', label: '<b>Hotel</b>\n<i>h=10</i>', level: 3 },
+                    { id: 'I', label: '<b>India</b>\n<i>h=8</i>', level: 3 },
+                    { id: 'J', label: '<b>Juliet</b>\n<i>h=5</i>', level: 4 },
+                    { id: '12', label: '<b>Đỉnh núi</b>\n<i>h=0</i>', level: 5, color: goalColor, borderWidth: 3 }
+                ],
+                edges: [
+                    { from: '0', to: 'A', label: '8' }, { from: '0', to: 'B', label: '14' }, { from: '0', to: 'C', label: '10' },
+                    { from: 'A', to: 'D', label: '12' }, { from: 'A', to: 'E', label: '18' },
+                    { from: 'B', to: 'E', label: '9' }, { from: 'B', to: 'F', label: '15' },
+                    { from: 'C', to: 'F', label: '12' },
+                    { from: 'D', to: 'G', label: '15' },
+                    { from: 'E', to: 'G', label: '10' }, { from: 'E', to: 'H', label: '22' },
+                    { from: 'F', to: 'H', label: '14' }, { from: 'F', to: 'I', label: '25' },
+                    { from: 'G', to: 'J', label: '18' }, { from: 'G', to: '12', label: '30' },
+                    { from: 'H', to: 'J', label: '12' },
+                    { from: 'I', to: '12', label: '15' },
+                    { from: 'J', to: '12', label: '8' }
+                ]
+            }
+        ];
+
+        // Sửa lại bug nhỏ ở hàm renderGraph trong bài 1 để gộp nút 10 và 13
+        scenariosData[0].edges.pop(); // remove dummy
+        scenariosData[0].edges.pop(); // remove dummy 13
+        scenariosData[0].nodes.push({ id: '13', label: '<b>Khu CN Thăng Long</b>\n<i>h=8</i>', level: 4 });
+        scenariosData[0].edges.push({ from: '10', to: '13', label: '6' });
+        scenariosData[0].edges.push({ from: '13', to: '12', label: '15' });
+
+        let network = null;
+        let isGraphVisible = false;
+
+        function toggleGraph() {
+            isGraphVisible = !isGraphVisible;
+            const overlay = document.getElementById('graph-overlay');
+            const btnText = document.getElementById('btn-text');
+            const headerBtn = document.getElementById('toggle-header-btn');
+            
+            if (isGraphVisible) {
+                // Hide Overlay (Show Graph)
+                overlay.classList.add('opacity-0', 'pointer-events-none');
+                btnText.textContent = 'Ẩn đồ thị';
+                headerBtn.classList.replace('bg-indigo-600', 'bg-rose-600');
+                headerBtn.classList.replace('hover:bg-indigo-700', 'hover:bg-rose-700');
+                
+                // Redraw to ensure fit after overlay transitions
+                if (network) {
+                    setTimeout(() => {
+                        network.redraw();
+                        network.fit({ animation: { duration: 800, easingFunction: 'easeInOutQuad' } });
+                    }, 150);
+                }
+            } else {
+                // Show Overlay (Hide Graph)
+                overlay.classList.remove('opacity-0', 'pointer-events-none');
+                btnText.textContent = 'Hiển thị Đồ thị mẫu';
+                headerBtn.classList.replace('bg-rose-600', 'bg-indigo-600');
+                headerBtn.classList.replace('hover:bg-rose-700', 'hover:bg-indigo-700');
+            }
+        }
+
+        function renderGraph(nodesArray, edgesArray) {
+            const container = document.getElementById('network-graph');
+            const data = {
+                nodes: new vis.DataSet(nodesArray.map(n => ({...defaultNodeOptions, ...n}))),
+                edges: new vis.DataSet(edgesArray.map(e => ({
+                    ...e,
+                    font: { align: 'top', size: 14, color: '#dc2626', strokeWidth: 3, strokeColor: '#ffffff' },
+                    color: { color: '#94a3b8', highlight: '#3b82f6' },
+                    smooth: { type: 'cubicBezier', forceDirection: 'horizontal', roundness: 0.4 }
+                })))
+            };
+
+            const options = {
+                layout: {
+                    hierarchical: {
+                        direction: 'LR',
+                        sortMethod: 'directed',
+                        nodeSpacing: 120,
+                        levelSeparation: 220
+                    }
+                },
+                interaction: { hover: true, tooltipDelay: 200, zoomView: true, dragView: true },
+                physics: false
+            };
+
+            if (network !== null) { network.destroy(); }
+            network = new vis.Network(container, data, options);
+            
+            // Initial fit
+            network.once("afterDrawing", function() {
+                network.fit();
+            });
+        }
+
+        function loadScenario(index) {
+            // Update Tabs
+            document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+                if(i === index) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+
+            // Reset Toggle State
+            if(isGraphVisible) {
+                toggleGraph(); // Tự động ẩn đồ thị khi đổi bài mới
+            }
+
+            // Load Data
+            const ex = scenariosData[index];
+            document.getElementById('scenario-title').textContent = ex.title;
+            document.getElementById('scenario-content').innerHTML = ex.text;
+            
+            renderGraph(ex.nodes, ex.edges);
+        }
+
+        // Resizer Logic
+        const resizer = document.getElementById('resizer');
+        const leftPanel = document.getElementById('left-panel');
+        const mainContainer = document.getElementById('main-container');
+        let isResizing = false;
+
+        resizer.addEventListener('mousedown', (e) => {
+            isResizing = true;
+            document.body.style.cursor = 'col-resize';
+            e.preventDefault(); 
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isResizing) return;
+            const containerRect = mainContainer.getBoundingClientRect();
+            // Calculate percentage width of left panel
+            let newWidthPercentage = ((e.clientX - containerRect.left - 16) / (containerRect.width - 32)) * 100;
+            if (newWidthPercentage < 25) newWidthPercentage = 25;
+            if (newWidthPercentage > 60) newWidthPercentage = 60;
+            leftPanel.style.width = `${newWidthPercentage}%`;
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (isResizing) {
+                isResizing = false;
+                document.body.style.cursor = 'default';
+                // Resize network if it's visible
+                if (network && isGraphVisible) {
+                    network.redraw();
+                    network.fit({ animation: { duration: 300 } });
+                }
+            }
+        });
+
+        // Boot
+        window.onload = () => loadScenario(0);
+    </script>
+</body>
+</html>

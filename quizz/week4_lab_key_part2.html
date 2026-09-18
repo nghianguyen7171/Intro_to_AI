@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Download Week 4 Lab Key — Part II</title>
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="icon" href="../favicon.ico" type="image/vnd.microsoft.icon">
+  <style>
+    .dl-hero {
+      padding: 3.5rem 0 3rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-alt);
+    }
+    .dl-hero .eyebrow {
+      margin: 0 0 .45rem;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .dl-hero h1 {
+      margin: 0 0 .75rem;
+      font-size: clamp(1.5rem, 3.5vw, 2.1rem);
+      max-width: 28ch;
+    }
+    .dl-hero p {
+      margin: 0 0 1.5rem;
+      max-width: 62ch;
+      color: var(--text-soft);
+    }
+    .dl-status {
+      margin-top: 1.25rem;
+      font-size: .9rem;
+      color: var(--text-soft);
+    }
+    .wrap-center {
+      max-width: 72ch;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="../index.html#home">
+        <img class="brand-logo" src="../images/neu-logo.png" alt="National Economics University logo">
+        <img class="brand-logo" src="../images/fda-logo.png" alt="Faculty of Data Science and Artificial Intelligence logo">
+        <span class="brand-text">
+          <span class="brand-course">Intro to AI</span>
+          <span class="brand-dept">National Economics University</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="../index.html#home">Home</a>
+        <a href="../index.html#lectures">Lectures</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="dl-hero">
+    <div class="wrap">
+      <div class="wrap-center">
+        <p class="eyebrow">Week 5 · Lab key</p>
+        <h1>Week 4 Lab Key — Part II</h1>
+        <p>
+          Your browser will download
+          <code>week4_lab_key_part2.ipynb</code>.
+          Open it in Jupyter, VS Code, or Google Colab.
+        </p>
+        <p>
+          <a id="manual-dl"
+             class="btn"
+             href="week4_lab_key_part2.ipynb"
+             download="week4_lab_key_part2.ipynb">
+            Download .ipynb
+          </a>
+          <a class="btn btn-quiet" href="../index.html#lectures">Back to Lectures</a>
+        </p>
+        <p id="status" class="dl-status" aria-live="polite">Preparing download…</p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <div>
+        <p class="footer-course">Introduction to Artificial Intelligence</p>
+        <p class="footer-meta">EP15.TOKT11121 · EP16.TOKT11121</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var FILE = 'week4_lab_key_part2.ipynb';
+      var NAME = 'week4_lab_key_part2.ipynb';
+      var status = document.getElementById('status');
+
+      function saveBlob(blob) {
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = NAME;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+        status.textContent = 'Download started: ' + NAME;
+      }
+
+      // Fetch as a blob so the browser saves a real .ipynb file instead of
+      // opening GitHub Pages' application/x-ipynb+json response as raw text.
+      fetch(FILE)
+        .then(function (res) {
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          return res.blob();
+        })
+        .then(saveBlob)
+        .catch(function () {
+          status.textContent = 'Automatic download failed — use the button above.';
+          document.getElementById('manual-dl').click();
+        });
+    })();
+  </script>
+</body>
+</html>

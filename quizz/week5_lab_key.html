@@ -1,0 +1,1129 @@
+<title>Week 5 Answer Key</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* ── Tokens ── */
+:root {
+  --bg:         #F2F4FA;
+  --surface:    #FFFFFF;
+  --border:     #CDD3E8;
+  --text:       #18223A;
+  --muted:      #56628A;
+  --accent:     #1A6BB5;
+  --accent-bg:  #E4EDF9;
+  --green:      #1A7849;
+  --green-bg:   #E4F4EC;
+  --yellow-bg:  #FFFAE6;
+  --yellow-bdr: #E8C237;
+  --code-bg:    #EBEEf8;
+  --goal-bg:    #E0F5EB;
+  --goal-bdr:   #1A7849;
+  --ex3:        #C05621;
+  --ex7:        #1A6BB5;
+  --ex8:        #6B3FB5;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:         #0D1220;
+    --surface:    #16203A;
+    --border:     #273050;
+    --text:       #D8E0F5;
+    --muted:      #7888BB;
+    --accent:     #5B9FE2;
+    --accent-bg:  #182A48;
+    --green:      #4DC98A;
+    --green-bg:   #0E2A1C;
+    --yellow-bg:  #29220A;
+    --yellow-bdr: #987010;
+    --code-bg:    #131B30;
+    --goal-bg:    #0E2A1C;
+    --goal-bdr:   #4DC98A;
+    --ex3:        #E07840;
+    --ex7:        #5B9FE2;
+    --ex8:        #A87FE8;
+  }
+}
+:root[data-theme="dark"] {
+  --bg:         #0D1220;
+  --surface:    #16203A;
+  --border:     #273050;
+  --text:       #D8E0F5;
+  --muted:      #7888BB;
+  --accent:     #5B9FE2;
+  --accent-bg:  #182A48;
+  --green:      #4DC98A;
+  --green-bg:   #0E2A1C;
+  --yellow-bg:  #29220A;
+  --yellow-bdr: #987010;
+  --code-bg:    #131B30;
+  --goal-bg:    #0E2A1C;
+  --goal-bdr:   #4DC98A;
+  --ex3:        #E07840;
+  --ex7:        #5B9FE2;
+  --ex8:        #A87FE8;
+}
+
+/* ── Reset / Base ── */
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  padding-inline: 20px;
+  padding-block: 24px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.65;
+}
+img { max-width: 100%; display: block; }
+
+/* ── Page wrapper ── */
+.page {
+  max-width: 860px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+/* ── Header ── */
+.site-header {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 24px 28px;
+}
+.course-tag {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+.site-header h1 {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: clamp(20px, 4vw, 26px);
+  font-weight: 700;
+  margin: 0 0 4px;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+.site-header .subtitle {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 0;
+}
+.key-badge {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin-top: 12px;
+}
+
+/* ── TOC ── */
+.toc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 24px;
+}
+.toc h2 {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 10px;
+  font-family: 'Inter', sans-serif;
+}
+.toc ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.toc a {
+  display: inline-block;
+  padding: 5px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  text-decoration: none;
+  transition: background .15s, border-color .15s;
+}
+.toc a:hover { background: var(--accent-bg); border-color: var(--accent); color: var(--accent); }
+
+/* ── Exercise sections ── */
+.exercise {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.ex-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 28px;
+  border-bottom: 1px solid var(--border);
+}
+.ex-num {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--ex-color);
+  border-radius: 6px;
+  padding: 4px 10px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.ex3 { --ex-color: var(--ex3); }
+.ex7 { --ex-color: var(--ex7); }
+.ex8 { --ex-color: var(--ex8); }
+.ex-header h2 {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: clamp(16px, 3vw, 19px);
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+.ex-body {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* ── Sub-sections ── */
+.section-title {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.section-title .label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: block;
+  margin-bottom: 2px;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ── Tables ── */
+.tbl-wrap { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border); }
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+th {
+  background: var(--accent-bg);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 9px 14px;
+  text-align: left;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--border);
+}
+th.center, td.center { text-align: center; }
+td {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+tr:nth-child(even) td { background: color-mix(in srgb, var(--bg) 50%, transparent); }
+tr.goal td {
+  background: var(--goal-bg);
+  font-weight: 600;
+  color: var(--goal-bdr);
+}
+tr.goal td:first-child::after { content: ' ★'; }
+
+/* trace tables: step col narrow */
+.trace-table th:first-child, .trace-table td:first-child { width: 46px; text-align: center; }
+.trace-table td:nth-child(2) { white-space: nowrap; }
+.trace-table td:nth-child(3),
+.trace-table td:nth-child(4),
+.trace-table td:nth-child(5) { text-align: center; width: 42px; }
+.open-cell { font-family: 'JetBrains Mono', monospace; font-size: 12px; min-width: 240px; }
+.open-cell strong { color: var(--accent); }
+.footnote-ref { color: var(--muted); font-size: 12px; }
+
+/* ── Code / pre ── */
+pre, code {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+}
+pre {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 18px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  overflow-x: auto;
+  white-space: pre;
+  margin: 0;
+}
+code {
+  background: var(--code-bg);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 12.5px;
+}
+
+/* ── Result box ── */
+.result-box {
+  border-left: 4px solid var(--green);
+  background: var(--green-bg);
+  border-radius: 0 8px 8px 0;
+  padding: 12px 18px;
+  font-size: 14px;
+  line-height: 1.7;
+}
+.result-box strong { color: var(--green); }
+
+/* ── Answer box (questions) ── */
+.q-block {
+  border-left: 3px solid var(--accent);
+  background: var(--accent-bg);
+  border-radius: 0 8px 8px 0;
+  padding: 12px 18px;
+}
+.q-block .q-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+.q-block p:last-child { margin-bottom: 0; }
+
+/* ── Bonus box ── */
+.bonus-box {
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 14px 18px;
+  background: color-mix(in srgb, var(--yellow-bg) 60%, transparent);
+}
+.bonus-box .bonus-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+/* ── Info callout ── */
+.callout {
+  border-left: 3px solid var(--yellow-bdr);
+  background: var(--yellow-bg);
+  border-radius: 0 8px 8px 0;
+  padding: 10px 16px;
+  font-size: 13.5px;
+}
+
+/* ── Grid diagram ── */
+.grid-visual {
+  display: grid;
+  grid-template-columns: auto repeat(5, 44px);
+  grid-template-rows: auto repeat(5, 44px);
+  gap: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  width: fit-content;
+}
+.grid-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: 11px;
+  padding: 2px;
+}
+.grid-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 12px;
+  border: 1px solid var(--border);
+}
+.cell-free  { background: var(--surface); color: var(--muted); }
+.cell-wall  { background: var(--border); color: var(--muted); font-size: 10px; }
+.cell-start { background: var(--accent); color: #fff; }
+.cell-goal  { background: var(--green); color: #fff; }
+
+/* ── Figure ── */
+figure { margin: 0; }
+figure img {
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  width: 100%;
+}
+figcaption {
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 6px;
+}
+
+/* ── Abbr list ── */
+.abbr-table td:first-child { font-family: 'JetBrains Mono', monospace; font-weight: 500; }
+.abbr-table td:last-child { text-align: center; font-variant-numeric: tabular-nums; }
+
+/* ── Path display ── */
+.path-display {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  margin-top: 4px;
+}
+.path-node {
+  background: var(--accent-bg);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+.path-node.goal {
+  background: var(--green-bg);
+  border-color: var(--green);
+  color: var(--green);
+}
+.path-arrow { color: var(--muted); font-size: 16px; }
+
+/* ── Coord note ── */
+.coord-note {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 18px;
+  font-size: 13.5px;
+}
+.coord-note code { font-size: 13px; }
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  body { padding-inline: 14px; }
+  .ex-body { padding: 18px; }
+  .ex-header { padding: 16px 18px; gap: 10px; }
+  th, td { padding: 8px 10px; }
+}
+</style>
+
+<div class="page">
+
+  <!-- ── Header ── -->
+  <header class="site-header">
+    <div class="course-tag">EP15/EP16.TOKT11121 · Introduction to Artificial Intelligence · NEU</div>
+    <h1>Week 5 Lab — Answer Key</h1>
+    <p class="subtitle">Faculty of Data Science &amp; Artificial Intelligence, NEU</p>
+    <span class="key-badge">Instructor Copy</span>
+  </header>
+
+  <!-- ── TOC ── -->
+  <nav class="toc">
+    <h2>Jump to exercise</h2>
+    <ul>
+      <li><a href="#ex3">Ex 3 — Vaccine Delivery</a></li>
+      <li><a href="#ex7">Ex 7 — Grid Pathfinding</a></li>
+      <li><a href="#ex8">Ex 8 — Metro Navigation</a></li>
+    </ul>
+  </nav>
+
+  <!-- ══════════════════════════════════════════
+       EXERCISE 3
+  ══════════════════════════════════════════ -->
+  <section class="exercise ex3" id="ex3">
+    <div class="ex-header">
+      <span class="ex-num">Exercise 3</span>
+      <h2>Emergency Vaccine Delivery — Mekong Delta</h2>
+    </div>
+    <div class="ex-body">
+
+      <!-- Abbreviations -->
+      <div>
+        <h3 class="section-title"><span class="label">State-space graph</span>Abbreviation table</h3>
+        <div class="tbl-wrap">
+          <table class="abbr-table">
+            <thead>
+              <tr><th>Abbr</th><th>Location</th><th class="center">h(n)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>PCC</strong></td><td>Provincial Cold-Chain Center <em>(Start)</em></td><td class="center">10</td></tr>
+              <tr><td><strong>PHF</strong></td><td>Phú Hòa Ferry</td><td class="center">8</td></tr>
+              <tr><td><strong>HLB</strong></td><td>Hưng Long Bridge</td><td class="center">6</td></tr>
+              <tr><td><strong>TAC</strong></td><td>Tân An Canal Road</td><td class="center">7</td></tr>
+              <tr><td><strong>BMM</strong></td><td>Bình Minh Market</td><td class="center">6</td></tr>
+              <tr><td><strong>SHC</strong></td><td>Sông Hậu Crossing</td><td class="center">4</td></tr>
+              <tr><td><strong>MPL</strong></td><td>Mỹ Phước Levee</td><td class="center">5</td></tr>
+              <tr><td><strong>LKD</strong></td><td>Long Khánh Dock</td><td class="center">4</td></tr>
+              <tr><td><strong>TTE</strong></td><td>Trung Thành Elevated Road</td><td class="center">3</td></tr>
+              <tr><td><strong>NBD</strong></td><td>Ngã Ba Đình Crossroads</td><td class="center">2</td></tr>
+              <tr><td><strong>RCC</strong></td><td>Remote Commune Clinic <em>(Goal)</em></td><td class="center">0</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <pre style="margin-top:14px">                PCC (h=10)
+              /     |     \
+           2/      5|      \3
+           /        |       \
+       PHF(8)    HLB(6)   TAC(7)
+       /   \     /   \    /   \
+      3     6   2     4  3     7
+     /       \ /       \/      \
+  BMM(6)   SHC(4)  MPL(5)  LKD(4)
+     \      /   \     \      /
+      4    2     5     3    2
+       \  /       \     \  /
+      TTE(3)     NBD(2)&lt;──┘
+          \        /
+           5      3
+            \    /
+            RCC(0)</pre>
+      </div>
+
+      <!-- A* trace -->
+      <div>
+        <h3 class="section-title"><span class="label">Task 2</span>A* Search trace</h3>
+        <p style="margin:0 0 10px;font-size:13.5px"><strong>Tie-breaking:</strong> equal f → smaller g; still tied → alphabetical order of location name.</p>
+        <div class="tbl-wrap">
+          <table class="trace-table">
+            <thead>
+              <tr>
+                <th>Step</th>
+                <th>Expanded</th>
+                <th class="center">g</th>
+                <th class="center">h</th>
+                <th class="center">f</th>
+                <th>Open list after expansion — format: Node[g, h, f]</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>PCC</td>
+                <td class="center">0</td><td class="center">10</td><td class="center">10</td>
+                <td class="open-cell">PHF[2,8,<strong>10</strong>], TAC[3,7,<strong>10</strong>], HLB[5,6,11]</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>PHF <em style="font-size:11px">(g=2 &lt; TAC g=3)</em></td>
+                <td class="center">2</td><td class="center">8</td><td class="center">10</td>
+                <td class="open-cell">TAC[3,7,<strong>10</strong>], BMM[5,6,11], HLB[5,6,11], SHC[8,4,12]</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>TAC</td>
+                <td class="center">3</td><td class="center">7</td><td class="center">10</td>
+                <td class="open-cell">BMM[5,6,<strong>11</strong>], HLB[5,6,<strong>11</strong>], MPL[6,5,11], SHC[8,4,12], LKD[10,4,14]</td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>BMM <em style="font-size:11px">(g=5=HLB, B&lt;H)</em></td>
+                <td class="center">5</td><td class="center">6</td><td class="center">11</td>
+                <td class="open-cell">HLB[5,6,<strong>11</strong>], MPL[6,5,11], SHC[8,4,12], TTE[9,3,12], LKD[10,4,14]</td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td>HLB <em style="font-size:11px">(g=5 &lt; MPL g=6)</em></td>
+                <td class="center">5</td><td class="center">6</td><td class="center">11</td>
+                <td class="open-cell">MPL[6,5,<strong>11</strong>], SHC[<strong>7</strong>,4,<strong>11</strong>]†, TTE[9,3,12], LKD[10,4,14]</td>
+              </tr>
+              <tr>
+                <td>6</td>
+                <td>MPL <em style="font-size:11px">(g=6 &lt; SHC g=7)</em></td>
+                <td class="center">6</td><td class="center">5</td><td class="center">11</td>
+                <td class="open-cell">SHC[7,4,<strong>11</strong>], NBD[9,2,11], TTE[9,3,12], LKD[10,4,14]</td>
+              </tr>
+              <tr>
+                <td>7</td>
+                <td>SHC <em style="font-size:11px">(g=7 &lt; NBD g=9)</em></td>
+                <td class="center">7</td><td class="center">4</td><td class="center">11</td>
+                <td class="open-cell">NBD[9,2,<strong>11</strong>], TTE[9,3,12], LKD[10,4,14]</td>
+              </tr>
+              <tr>
+                <td>8</td>
+                <td>NBD</td>
+                <td class="center">9</td><td class="center">2</td><td class="center">11</td>
+                <td class="open-cell">TTE[9,3,<strong>12</strong>], RCC[12,0,12], LKD[10,4,14]</td>
+              </tr>
+              <tr>
+                <td>9</td>
+                <td>TTE <em style="font-size:11px">(g=9 &lt; RCC g=12)</em></td>
+                <td class="center">9</td><td class="center">3</td><td class="center">12</td>
+                <td class="open-cell">RCC[12,0,<strong>12</strong>], LKD[10,4,14]</td>
+              </tr>
+              <tr class="goal">
+                <td>10</td>
+                <td>RCC — GOAL</td>
+                <td class="center">12</td><td class="center">0</td><td class="center">12</td>
+                <td class="open-cell">—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:12.5px;color:var(--muted);margin:8px 0 0">
+          † Step 5: HLB→SHC gives g=7 &lt; current g=8 → SHC updated from [8,4,12] to [7,4,11].
+        </p>
+        <div class="result-box" style="margin-top:14px">
+          <strong>Optimal path</strong><br>
+          <div class="path-display" style="margin-top:6px">
+            <span class="path-node">PCC</span><span class="path-arrow">→</span>
+            <span class="path-node">TAC</span><span class="path-arrow">→</span>
+            <span class="path-node">MPL</span><span class="path-arrow">→</span>
+            <span class="path-node">NBD</span><span class="path-arrow">→</span>
+            <span class="path-node goal">RCC</span>
+          </div>
+          <div style="margin-top:8px">Total cost: 3 + 3 + 3 + 3 = <strong>12 hours</strong></div>
+          <div style="font-size:12.5px;color:var(--muted);margin-top:2px">Reconstruction: RCC ← NBD ← MPL ← TAC ← PCC</div>
+        </div>
+      </div>
+
+      <!-- Greedy trace -->
+      <div>
+        <h3 class="section-title"><span class="label">Task 3</span>Greedy Best-First Search trace</h3>
+        <p style="margin:0 0 10px;font-size:13.5px">Greedy always expands the node with the <strong>smallest h</strong>, ignoring g entirely.</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Step</th><th>Expanded</th><th class="center">h</th><th>Neighbors added to Open</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="center">1</td><td>PCC</td><td class="center">10</td><td>HLB (h=6), TAC (h=7), PHF (h=8)</td></tr>
+              <tr><td class="center">2</td><td>HLB</td><td class="center">6</td><td>SHC (h=4), MPL (h=5)</td></tr>
+              <tr><td class="center">3</td><td>SHC</td><td class="center">4</td><td>NBD (h=2), TTE (h=3)</td></tr>
+              <tr><td class="center">4</td><td>NBD</td><td class="center">2</td><td>RCC (h=0)</td></tr>
+              <tr class="goal"><td class="center">5</td><td>RCC — GOAL</td><td class="center">0</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="result-box" style="margin-top:14px">
+          <strong>Greedy path</strong><br>
+          <div class="path-display" style="margin-top:6px">
+            <span class="path-node">PCC</span><span class="path-arrow">→</span>
+            <span class="path-node">HLB</span><span class="path-arrow">→</span>
+            <span class="path-node">SHC</span><span class="path-arrow">→</span>
+            <span class="path-node">NBD</span><span class="path-arrow">→</span>
+            <span class="path-node goal">RCC</span>
+          </div>
+          <div style="margin-top:8px">Total cost: 5 + 2 + 5 + 3 = <strong>15 hours</strong></div>
+        </div>
+      </div>
+
+      <!-- Questions -->
+      <div>
+        <h3 class="section-title"><span class="label">Questions</span>Answers</h3>
+        <div style="display:flex;flex-direction:column;gap:16px">
+
+          <div class="q-block">
+            <div class="q-label">Q1 — Same route?</div>
+            <p><strong>No.</strong> A* found <strong>PCC → TAC → MPL → NBD → RCC</strong> (12 h); Greedy found <strong>PCC → HLB → SHC → NBD → RCC</strong> (15 h). A* is faster by <strong>3 hours</strong>.</p>
+            <p style="margin-bottom:0">Greedy chose HLB (h=6) over TAC (h=7) because HLB looks closer by heuristic. However, the edge PCC→HLB costs 5 h while PCC→TAC costs only 3 h — Greedy never counts the cost already paid.</p>
+          </div>
+
+          <div class="q-block">
+            <div class="q-label">Q2 — Admissibility check</div>
+            <p style="margin-bottom:10px">h*(n) = true shortest path cost from n to RCC:</p>
+            <div class="tbl-wrap">
+              <table>
+                <thead>
+                  <tr><th>Node</th><th>Key paths to RCC</th><th class="center">h*(n)</th><th class="center">h(n)</th><th class="center">h ≤ h*?</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>PCC</td><td>PCC→TAC→MPL→NBD→RCC = 3+3+3+3</td><td class="center"><strong>12</strong></td><td class="center">10</td><td class="center" style="color:var(--green)">✓</td></tr>
+                  <tr><td>PHF</td><td>PHF→BMM→TTE→RCC = 3+4+5 = 12 <br><span style="color:var(--muted);font-size:12px">PHF→SHC→TTE→RCC = 6+2+5 = 13</span></td><td class="center"><strong>12</strong></td><td class="center">8</td><td class="center" style="color:var(--green)">✓</td></tr>
+                  <tr><td>HLB</td><td>HLB→SHC→TTE→RCC = 2+2+5 = 9 <br><span style="color:var(--muted);font-size:12px">HLB→MPL→NBD→RCC = 4+3+3 = 10</span></td><td class="center"><strong>9</strong></td><td class="center">6</td><td class="center" style="color:var(--green)">✓</td></tr>
+                  <tr><td>SHC</td><td>SHC→TTE→RCC = 2+5 = 7 <br><span style="color:var(--muted);font-size:12px">SHC→NBD→RCC = 5+3 = 8</span></td><td class="center"><strong>7</strong></td><td class="center">4</td><td class="center" style="color:var(--green)">✓</td></tr>
+                  <tr><td>MPL</td><td>MPL→NBD→RCC = 3+3 = 6</td><td class="center"><strong>6</strong></td><td class="center">5</td><td class="center" style="color:var(--green)">✓</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p style="margin:10px 0 0;font-size:13.5px">All nodes satisfy h(n) ≤ h*(n) → heuristic is <strong>admissible</strong>.</p>
+          </div>
+
+          <div class="q-block">
+            <div class="q-label">Q3 — PHF shut down</div>
+            <p style="margin-bottom:0">The optimal A* route <strong>PCC → TAC → MPL → NBD → RCC</strong> does <strong>not</strong> pass through PHF at all. Removing PHF (and its edges PHF→BMM, PHF→SHC) leaves the optimal path completely unaffected — A* still returns the same <strong>12-hour route</strong>.</p>
+          </div>
+
+        </div>
+      </div>
+
+    </div><!-- /ex-body -->
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       EXERCISE 7
+  ══════════════════════════════════════════ -->
+  <section class="exercise ex7" id="ex7">
+    <div class="ex-header">
+      <span class="ex-num">Exercise 7</span>
+      <h2>Grid Pathfinding — Warehouse Robot</h2>
+    </div>
+    <div class="ex-body">
+
+      <!-- Figure + coordinate note -->
+      <div>
+        <figure>
+          <img src="warehouse_robot.png" alt="Warehouse 5×5 grid with blocked cells">
+          <figcaption>Warehouse 5 × 5 grid — blocked cells (###) are storage shelves the robot cannot enter.</figcaption>
+        </figure>
+
+        <div class="coord-note" style="margin-top:16px">
+          <strong>Coordinate convention</strong> — each cell is written as <code>(r, c)</code> where:<br>
+          &nbsp; • <code>r</code> = <strong>row</strong> — 0 at the <strong>top</strong>, 4 at the <strong>bottom</strong><br>
+          &nbsp; • <code>c</code> = <strong>column</strong> — 0 at the <strong>left</strong>, 4 at the <strong>right</strong><br>
+          So: S = (0, 0) top-left corner; G = (4, 4) bottom-right corner.
+        </div>
+
+        <!-- HTML grid -->
+        <div style="margin-top:16px;overflow-x:auto">
+          <div class="grid-visual">
+            <!-- labels row -->
+            <div class="grid-label"></div>
+            <div class="grid-label">c=0</div>
+            <div class="grid-label">c=1</div>
+            <div class="grid-label">c=2</div>
+            <div class="grid-label">c=3</div>
+            <div class="grid-label">c=4</div>
+            <!-- r=0 -->
+            <div class="grid-label">r=0</div>
+            <div class="grid-cell cell-start">S</div>
+            <div class="grid-cell cell-free"></div>
+            <div class="grid-cell cell-free"></div>
+            <div class="grid-cell cell-wall">×</div>
+            <div class="grid-cell cell-free"></div>
+            <!-- r=1 -->
+            <div class="grid-label">r=1</div>
+            <div class="grid-cell cell-free"></div>
+            <div class="grid-cell cell-wall">×</div>
+            <div class="grid-cell cell-free"></div>
+            <div class="grid-cell cell-free"></div>
+            <div class="grid-cell cell-free"></div>
+            <!-- r=2 -->
+            <div class="grid-label">r=2</div>
+            <div class="grid-cell cell-free"></div>
+            <div class="grid-cell cell-wall">×</div>
+            <div class="grid-cell cell-free"></div>
+            <div class="grid-cell cell-wall">×</div>
+            <div class="grid-cell cell-free"></div>
+            <!-- r=3 -->
+            <div class="grid-label">r=3</div>
+            <div class="grid-cell cell-free"></div>
+            <div class="grid-cell cell-free"></div>
+            <div class="grid-cell cell-free"></div>
+            <div class="grid-cell cell-wall">×</div>
+            <div class="grid-cell cell-free"></div>
+            <!-- r=4 -->
+            <div class="grid-label">r=4</div>
+            <div class="grid-cell cell-free"></div>
+            <div class="grid-cell cell-free"></div>
+            <div class="grid-cell cell-free"></div>
+            <div class="grid-cell cell-free"></div>
+            <div class="grid-cell cell-goal">G</div>
+          </div>
+          <p style="font-size:12px;color:var(--muted);margin-top:6px">Blocked: (0,3), (1,1), (2,1), (2,3), (3,3)</p>
+        </div>
+      </div>
+
+      <!-- Step 1: Compute h1 h2 -->
+      <div>
+        <h3 class="section-title"><span class="label">Step 1</span>Compute h<sub>1</sub> and h<sub>2</sub></h3>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th class="center">Cell (r, c)</th>
+                <th>h<sub>1</sub> = √[(r−4)² + (c−4)²]</th>
+                <th>h<sub>2</sub> = |r−4| + |c−4|</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="center">(0, 0) = S</td><td>√(16+16) = √32 ≈ <strong>5.66</strong></td><td>4+4 = <strong>8</strong></td></tr>
+              <tr><td class="center">(0, 2)</td><td>√(16+4) = √20 ≈ <strong>4.47</strong></td><td>4+2 = <strong>6</strong></td></tr>
+              <tr><td class="center">(1, 0)</td><td>√(9+16) = √25 = <strong>5.00</strong></td><td>3+4 = <strong>7</strong></td></tr>
+              <tr><td class="center">(2, 2)</td><td>√(4+4) = √8 ≈ <strong>2.83</strong></td><td>2+2 = <strong>4</strong></td></tr>
+              <tr><td class="center">(1, 4)</td><td>√(9+0) = <strong>3.00</strong></td><td>3+0 = <strong>3</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Step 2: Dominance -->
+      <div>
+        <h3 class="section-title"><span class="label">Step 2</span>Check dominance</h3>
+        <div class="callout">
+          For every cell: h<sub>2</sub> ≥ h<sub>1</sub> ✓<br>
+          <em>"h<sub>2</sub> dominates h<sub>1</sub> because for any cell (r, c), Manhattan distance is always <strong>greater than or equal to</strong> Euclidean distance."</em>
+        </div>
+        <p style="font-size:13.5px;margin-top:10px"><strong>Proof sketch:</strong> the straight line is the shortest possible path between two points, so the Euclidean distance is a lower bound on any axis-aligned (Manhattan) path — by the triangle inequality applied to horizontal + vertical steps.</p>
+      </div>
+
+      <!-- Step 3: Admissibility -->
+      <div>
+        <h3 class="section-title"><span class="label">Step 3</span>Verify admissibility</h3>
+        <p style="margin:0 0 10px;font-size:13.5px">BFS backward from G=(4,4) ignoring blocked cells gives the true shortest paths h*(n):</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th class="center">Cell</th>
+                <th class="center">h<sub>1</sub></th>
+                <th class="center">h<sub>2</sub></th>
+                <th class="center">h*(n)</th>
+                <th class="center">h<sub>1</sub> ≤ h*?</th>
+                <th class="center">h<sub>2</sub> ≤ h*?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="center">(0,0)</td><td class="center">5.66</td><td class="center">8</td><td class="center"><strong>8</strong></td><td class="center" style="color:var(--green)">✓</td><td class="center" style="color:var(--green)">✓</td></tr>
+              <tr><td class="center">(0,2)</td><td class="center">4.47</td><td class="center">6</td><td class="center"><strong>6</strong></td><td class="center" style="color:var(--green)">✓</td><td class="center" style="color:var(--green)">✓</td></tr>
+              <tr><td class="center">(1,0)</td><td class="center">5.00</td><td class="center">7</td><td class="center"><strong>7</strong></td><td class="center" style="color:var(--green)">✓</td><td class="center" style="color:var(--green)">✓</td></tr>
+              <tr><td class="center">(2,2)</td><td class="center">2.83</td><td class="center">4</td><td class="center"><strong>4</strong></td><td class="center" style="color:var(--green)">✓</td><td class="center" style="color:var(--green)">✓</td></tr>
+              <tr><td class="center">(1,4)</td><td class="center">3.00</td><td class="center">3</td><td class="center"><strong>3</strong></td><td class="center" style="color:var(--green)">✓</td><td class="center" style="color:var(--green)">✓</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:13px;margin-top:8px;color:var(--muted)">Note: h<sub>2</sub> equals h* exactly for all five cells — the obstacles happen not to force any detour on these particular paths.</p>
+      </div>
+
+      <!-- Step 4: A* trace -->
+      <div>
+        <h3 class="section-title"><span class="label">Step 4</span>A* trace with h<sub>2</sub> (Manhattan distance)</h3>
+        <p style="margin:0 0 10px;font-size:13.5px"><strong>Tie-breaking:</strong> equal f → smaller h<sub>2</sub>; still tied → smaller (r, c) lexicographically.</p>
+        <div class="tbl-wrap">
+          <table class="trace-table">
+            <thead>
+              <tr>
+                <th>Step</th>
+                <th>Expanded</th>
+                <th class="center">g</th>
+                <th class="center">h<sub>2</sub></th>
+                <th class="center">f</th>
+                <th>Open list after expansion — format: (r,c)[g, h, f]</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td><td>(0,0)</td>
+                <td class="center">0</td><td class="center">8</td><td class="center">8</td>
+                <td class="open-cell">(0,1)[1,7,<strong>8</strong>], (1,0)[1,7,<strong>8</strong>]</td>
+              </tr>
+              <tr>
+                <td>2</td><td>(0,1) <em style="font-size:11px">(h same, (0,1)&lt;(1,0))</em></td>
+                <td class="center">1</td><td class="center">7</td><td class="center">8</td>
+                <td class="open-cell">(1,0)[1,7,<strong>8</strong>], (0,2)[2,6,<strong>8</strong>]</td>
+              </tr>
+              <tr>
+                <td>3</td><td>(0,2) <em style="font-size:11px">(h=6 &lt; (1,0) h=7)</em></td>
+                <td class="center">2</td><td class="center">6</td><td class="center">8</td>
+                <td class="open-cell">(1,0)[1,7,<strong>8</strong>], (1,2)[3,5,<strong>8</strong>]</td>
+              </tr>
+              <tr>
+                <td>4</td><td>(1,2) <em style="font-size:11px">(h=5 &lt; (1,0) h=7)</em></td>
+                <td class="center">3</td><td class="center">5</td><td class="center">8</td>
+                <td class="open-cell">(1,0)[1,7,<strong>8</strong>], (1,3)[4,4,<strong>8</strong>], (2,2)[4,4,<strong>8</strong>]</td>
+              </tr>
+              <tr>
+                <td>5</td><td>(1,3) <em style="font-size:11px">(h same, (1,3)&lt;(2,2))</em></td>
+                <td class="center">4</td><td class="center">4</td><td class="center">8</td>
+                <td class="open-cell">(1,0)[1,7,<strong>8</strong>], (2,2)[4,4,<strong>8</strong>], (1,4)[5,3,<strong>8</strong>]</td>
+              </tr>
+              <tr>
+                <td>6</td><td>(1,4) <em style="font-size:11px">(h=3 smallest)</em></td>
+                <td class="center">5</td><td class="center">3</td><td class="center">8</td>
+                <td class="open-cell">(1,0)[1,7,<strong>8</strong>], (2,2)[4,4,<strong>8</strong>], (2,4)[6,2,<strong>8</strong>], (0,4)[6,4,10]</td>
+              </tr>
+              <tr>
+                <td>7</td><td>(2,4) <em style="font-size:11px">(h=2 smallest)</em></td>
+                <td class="center">6</td><td class="center">2</td><td class="center">8</td>
+                <td class="open-cell">(1,0)[1,7,<strong>8</strong>], (2,2)[4,4,<strong>8</strong>], (3,4)[7,1,<strong>8</strong>], (0,4)[6,4,10]</td>
+              </tr>
+              <tr>
+                <td>8</td><td>(3,4) <em style="font-size:11px">(h=1 smallest)</em></td>
+                <td class="center">7</td><td class="center">1</td><td class="center">8</td>
+                <td class="open-cell">(1,0)[1,7,<strong>8</strong>], (2,2)[4,4,<strong>8</strong>], (4,4)[8,0,<strong>8</strong>], (0,4)[6,4,10]</td>
+              </tr>
+              <tr class="goal">
+                <td>9</td><td>(4,4) = G</td>
+                <td class="center">8</td><td class="center">0</td><td class="center">8</td>
+                <td class="open-cell">—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="result-box" style="margin-top:14px">
+          <strong>Optimal path</strong><br>
+          <div class="path-display" style="margin-top:6px">
+            <span class="path-node">(0,0)</span><span class="path-arrow">→</span>
+            <span class="path-node">(0,1)</span><span class="path-arrow">→</span>
+            <span class="path-node">(0,2)</span><span class="path-arrow">→</span>
+            <span class="path-node">(1,2)</span><span class="path-arrow">→</span>
+            <span class="path-node">(1,3)</span><span class="path-arrow">→</span>
+            <span class="path-node">(1,4)</span><span class="path-arrow">→</span>
+            <span class="path-node">(2,4)</span><span class="path-arrow">→</span>
+            <span class="path-node">(3,4)</span><span class="path-arrow">→</span>
+            <span class="path-node goal">(4,4)</span>
+          </div>
+          <div style="margin-top:8px">Cost: <strong>8 steps</strong></div>
+          <div style="font-size:12.5px;color:var(--muted);margin-top:2px">Note: (1,0) remains in Open throughout but is never expanded — its f=8 is always beaten by a node with smaller h<sub>2</sub>.</div>
+        </div>
+      </div>
+
+      <!-- Step 5: Wall effect -->
+      <div>
+        <h3 class="section-title"><span class="label">Step 5</span>Effect of extra wall at (3,4)</h3>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div class="q-block">
+            <div class="q-label">1. Does h<sub>2</sub>(2,4) change?</div>
+            <p style="margin-bottom:0"><strong>No.</strong> h<sub>2</sub>(2,4) = |2−4| + |4−4| = 2. Manhattan distance is computed purely from coordinates — it ignores obstacles entirely.</p>
+          </div>
+          <div class="q-block">
+            <div class="q-label">2. h*(2,4) with the new wall</div>
+            <p>With (3,4) blocked, (2,4)'s only accessible neighbor is (1,4). The robot must take a long detour:</p>
+            <pre>(2,4)→(1,4)→(1,3)→(1,2)→(2,2)→(3,2)→(4,2)→(4,3)→(4,4)   →  8 steps</pre>
+            <p style="margin-bottom:0">h*(2,4) = <strong>8</strong>. Since h<sub>2</sub>(2,4) = 2 ≤ 8, h<sub>2</sub> remains <strong>admissible</strong>.</p>
+          </div>
+          <div class="q-block">
+            <div class="q-label">3. Effect on tightness</div>
+            <p style="margin-bottom:0">h<sub>2</sub> = 2 but h* = 8 — the heuristic underestimates by 6 steps. Heavy obstacles create large gaps between h<sub>2</sub> and h*, causing A* to explore many more nodes. <strong>Admissibility is preserved; search efficiency degrades.</strong></p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /ex-body -->
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       EXERCISE 8
+  ══════════════════════════════════════════ -->
+  <section class="exercise ex8" id="ex8">
+    <div class="ex-header">
+      <span class="ex-num">Exercise 8</span>
+      <h2>Metro Navigation — City Airport</h2>
+    </div>
+    <div class="ex-body">
+
+      <div>
+        <figure>
+          <img src="metro_map.png" alt="City metro map with Line 1 (Red) and Line 2 (Blue)">
+          <figcaption>City metro map — Line 1 (Red Express) and Line 2 (Blue Local) with transfer points.</figcaption>
+        </figure>
+        <div class="callout" style="margin-top:14px">
+          <strong>Abbreviations:</strong>
+          <strong>Ce</strong> Central · <strong>Ri</strong> Riverside · <strong>Mi</strong> Midtown · <strong>We</strong> Westgate ·
+          <strong>Up</strong> Uptown · <strong>Do</strong> Docklands · <strong>Ea</strong> Eastfield · <strong>Sk</strong> Skyview · <strong>G</strong> Airport
+        </div>
+      </div>
+
+      <!-- Task 1: A* -->
+      <div>
+        <h3 class="section-title"><span class="label">Task 1</span>A* Search trace</h3>
+        <p style="margin:0 0 10px;font-size:13.5px"><strong>Tie-breaking:</strong> equal f → smaller h; still tied → alphabetical order.</p>
+        <div class="tbl-wrap">
+          <table class="trace-table">
+            <thead>
+              <tr>
+                <th>Step</th>
+                <th>Expanded</th>
+                <th class="center">g</th>
+                <th class="center">h</th>
+                <th class="center">f</th>
+                <th>Open list after expansion — format: Name[g, h, f]</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td><td>Ce</td>
+                <td class="center">0</td><td class="center">10</td><td class="center">10</td>
+                <td class="open-cell">Up[2,3,<strong>5</strong>], Ri[3,8,11]</td>
+              </tr>
+              <tr>
+                <td>2</td><td>Up</td>
+                <td class="center">2</td><td class="center">3</td><td class="center">5</td>
+                <td class="open-cell">Do[5,3,<strong>8</strong>], Ri[3,8,11]</td>
+              </tr>
+              <tr>
+                <td>3</td><td>Do</td>
+                <td class="center">5</td><td class="center">3</td><td class="center">8</td>
+                <td class="open-cell">Ri[3,8,<strong>11</strong>], Ea[9,2,11]</td>
+              </tr>
+              <tr>
+                <td>4</td><td>Ri <em style="font-size:11px">(g=3 &lt; Ea g=9)</em></td>
+                <td class="center">3</td><td class="center">8</td><td class="center">11</td>
+                <td class="open-cell">Ea[9,2,<strong>11</strong>], Mi[7,5,12]</td>
+              </tr>
+              <tr>
+                <td>5</td><td>Ea</td>
+                <td class="center">9</td><td class="center">2</td><td class="center">11</td>
+                <td class="open-cell">Mi[7,5,<strong>12</strong>], Sk[11,1,12]</td>
+              </tr>
+              <tr>
+                <td>6</td><td>Sk <em style="font-size:11px">(h=1 &lt; Mi h=5)</em></td>
+                <td class="center">11</td><td class="center">1</td><td class="center">12</td>
+                <td class="open-cell">Mi[7,5,<strong>12</strong>], G[20,0,20]</td>
+              </tr>
+              <tr>
+                <td>7</td><td>Mi</td>
+                <td class="center">7</td><td class="center">5</td><td class="center">12</td>
+                <td class="open-cell">We[10,2,<strong>12</strong>], G[20,0,20]</td>
+              </tr>
+              <tr>
+                <td>8</td><td>We <em style="font-size:11px">(f=12 &lt; G f=20)</em></td>
+                <td class="center">10</td><td class="center">2</td><td class="center">12</td>
+                <td class="open-cell">G[<strong>12</strong>,0,<strong>12</strong>]†</td>
+              </tr>
+              <tr class="goal">
+                <td>9</td><td>G = Airport</td>
+                <td class="center">12</td><td class="center">0</td><td class="center">12</td>
+                <td class="open-cell">—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:12.5px;color:var(--muted);margin:8px 0 0">† Step 8: We→Airport g=12 &lt; current g=20 → Airport updated from [20,0,20] to [12,0,12].</p>
+        <div class="result-box" style="margin-top:14px">
+          <strong>Optimal path</strong> (all Line 1 — Red Express)<br>
+          <div class="path-display" style="margin-top:6px">
+            <span class="path-node">Central</span><span class="path-arrow">→</span>
+            <span class="path-node">Riverside</span><span class="path-arrow">→</span>
+            <span class="path-node">Midtown</span><span class="path-arrow">→</span>
+            <span class="path-node">Westgate</span><span class="path-arrow">→</span>
+            <span class="path-node goal">Airport</span>
+          </div>
+          <div style="margin-top:8px">Total: 3 + 4 + 3 + 2 = <strong>12 minutes</strong></div>
+        </div>
+      </div>
+
+      <!-- Task 2: Greedy -->
+      <div>
+        <h3 class="section-title"><span class="label">Task 2</span>Greedy Best-First Search trace</h3>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Step</th><th>Expanded</th><th class="center">h</th><th>Next choice</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="center">1</td><td>Ce</td><td class="center">10</td><td>Up (h=3), Ri (h=8) → choose <strong>Up</strong></td></tr>
+              <tr><td class="center">2</td><td>Up</td><td class="center">3</td><td>Do (h=3) → choose <strong>Do</strong></td></tr>
+              <tr><td class="center">3</td><td>Do</td><td class="center">3</td><td>Ea (h=2) → choose <strong>Ea</strong></td></tr>
+              <tr><td class="center">4</td><td>Ea</td><td class="center">2</td><td>Sk (h=1) → choose <strong>Sk</strong></td></tr>
+              <tr><td class="center">5</td><td>Sk</td><td class="center">1</td><td>G (h=0) → choose <strong>G</strong></td></tr>
+              <tr class="goal"><td class="center">6</td><td>G = Airport</td><td class="center">0</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="result-box" style="margin-top:14px">
+          <strong>Greedy path</strong> (Blue Line + shuttle)<br>
+          <div class="path-display" style="margin-top:6px">
+            <span class="path-node">Central</span><span class="path-arrow">→</span>
+            <span class="path-node">Uptown</span><span class="path-arrow">→</span>
+            <span class="path-node">Docklands</span><span class="path-arrow">→</span>
+            <span class="path-node">Eastfield</span><span class="path-arrow">→</span>
+            <span class="path-node">Skyview</span><span class="path-arrow">→</span>
+            <span class="path-node goal">Airport</span>
+          </div>
+          <div style="margin-top:8px">Total: 2 + 3 + 4 + 2 + 9 = <strong>20 minutes</strong></div>
+        </div>
+      </div>
+
+      <!-- Tasks 3–7 -->
+      <div>
+        <h3 class="section-title"><span class="label">Tasks 3–7</span>Analysis &amp; Questions</h3>
+        <div style="display:flex;flex-direction:column;gap:16px">
+
+          <div class="q-block">
+            <div class="q-label">Task 3 — Comparison</div>
+            <p style="margin-bottom:0">A* and Greedy find <strong>different</strong> routes. A* is faster by <strong>8 minutes</strong> (12 min vs 20 min).</p>
+          </div>
+
+          <div class="q-block">
+            <div class="q-label">Task 4 — Why Greedy fails</div>
+            <p>At step 1, Greedy sees Ce's neighbors: Riverside (h=8) vs Uptown (h=3). It picks <strong>Uptown</strong> because h=3 looks very close. But Uptown's only outgoing path is the Blue Line, which ends with a <strong>9-minute shuttle</strong> from Skyview. True h*(Uptown) = 18 minutes — far from h=3.</p>
+            <p style="margin-bottom:0">The heuristic is <strong>misleading at Central Station</strong>: Greedy commits to a branch that looks promising locally but has already "locked in" a slow final leg it cannot escape. It never looks back at accumulated cost.</p>
+          </div>
+
+          <div class="q-block">
+            <div class="q-label">Task 5 — How A* escapes the same trap</div>
+            <p>When A* expands Skyview (step 6, g=11), it adds Airport at g=11+9=<strong>20</strong>, f=20. But Midtown is still in Open with f=<strong>12</strong>. A* expands Midtown first, then Westgate, which updates Airport to g=<strong>12</strong>, f=12.</p>
+            <p style="margin-bottom:0">The key: f = <strong>g + h</strong>. g(Skyview)=11 reflects the 11 minutes already spent on the Blue Line. A* balances past cost against future estimate — it refuses to commit until the full picture (g + h) is cheapest.</p>
+          </div>
+
+          <div class="q-block">
+            <div class="q-label">Task 6 — Admissibility verification</div>
+            <div class="tbl-wrap" style="margin-top:8px">
+              <table>
+                <thead>
+                  <tr><th>Station</th><th>Best path to Airport</th><th class="center">h*(n)</th><th class="center">h(n)</th><th class="center">h ≤ h*?</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Uptown</td>
+                    <td>Up→Do→Ea→Sk→G = 3+4+2+9</td>
+                    <td class="center"><strong>18</strong></td>
+                    <td class="center">3</td>
+                    <td class="center" style="color:var(--green)">✓</td>
+                  </tr>
+                  <tr>
+                    <td>Skyview</td>
+                    <td>Sk→G = 9</td>
+                    <td class="center"><strong>9</strong></td>
+                    <td class="center">1</td>
+                    <td class="center" style="color:var(--green)">✓</td>
+                  </tr>
+                  <tr>
+                    <td>Midtown</td>
+                    <td>Mi→We→G = 3+2</td>
+                    <td class="center"><strong>5</strong></td>
+                    <td class="center">5</td>
+                    <td class="center" style="color:var(--green)">✓ <em style="font-size:11px">(tight)</em></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="bonus-box">
+            <div class="bonus-label">Task 7 (Bonus) — Admissible ≠ Tight</div>
+            <p>Skyview: h=1, h*=9 → underestimates by <strong>8 minutes</strong>. This is <strong>not</strong> an admissibility violation — admissibility only forbids overestimating (h &gt; h*). Underestimating is always allowed.</p>
+            <p style="margin-bottom:0">The Skyview example reveals the distinction:</p>
+            <ul style="margin:6px 0 0;padding-left:20px">
+              <li><strong>Admissible:</strong> h(n) ≤ h*(n) for all n → guarantees A* finds an optimal path.</li>
+              <li><strong>Tight (accurate):</strong> h(n) ≈ h*(n) → minimises nodes A* must explore.</li>
+            </ul>
+            <p style="margin:8px 0 0">A loose heuristic (h=1 vs h*=9) still leads to the correct answer but causes A* to explore the Skyview branch before ruling it out (step 6). A tight h(Sk)≈9 would make f≈20 from the start, and A* would skip Skyview entirely.</p>
+          </div>
+
+        </div>
+      </div>
+
+    </div><!-- /ex-body -->
+  </section>
+
+</div><!-- /page -->

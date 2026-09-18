@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 5 Lab — Optimal Search (A*)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+/* ── Design tokens ── */
+:root {
+    --bg:        #f1f5f9;
+    --surface:   #ffffff;
+    --surface-2: #f8fafc;
+    --border:    #e2e8f0;
+    --text:      #0f172a;
+    --text-2:    #475569;
+    --text-3:    #94a3b8;
+    --accent:    #6366f1;
+    --accent-lt: #eef2ff;
+    --accent-bd: #c7d2fe;
+    --code-bg:   #1e293b;
+    --code-text: #e2e8f0;
+    --q-bg:      #fefce8;
+    --q-bd:      #fde047;
+    --task-bg:   #eff6ff;
+    --task-bd:   #93c5fd;
+    --def-bg:    #f0fdf4;
+    --def-bd:    #86efac;
+    --warn-bg:   #fff7ed;
+    --warn-bd:   #fdba74;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --bg:        #0f172a;
+        --surface:   #1e293b;
+        --surface-2: #162032;
+        --border:    #334155;
+        --text:      #f1f5f9;
+        --text-2:    #94a3b8;
+        --text-3:    #64748b;
+        --accent:    #818cf8;
+        --accent-lt: #1e1b4b;
+        --accent-bd: #3730a3;
+        --code-bg:   #090e1a;
+        --code-text: #e2e8f0;
+        --q-bg:      #2d2508;
+        --q-bd:      #713f12;
+        --task-bg:   #0c1a2e;
+        --task-bd:   #1e3a5f;
+        --def-bg:    #052e16;
+        --def-bd:    #166534;
+        --warn-bg:   #1c0e02;
+        --warn-bd:   #92400e;
+    }
+}
+:root[data-theme="dark"] {
+    --bg:        #0f172a;
+    --surface:   #1e293b;
+    --surface-2: #162032;
+    --border:    #334155;
+    --text:      #f1f5f9;
+    --text-2:    #94a3b8;
+    --text-3:    #64748b;
+    --accent:    #818cf8;
+    --accent-lt: #1e1b4b;
+    --accent-bd: #3730a3;
+    --code-bg:   #090e1a;
+    --code-text: #e2e8f0;
+    --q-bg:      #2d2508;
+    --q-bd:      #713f12;
+    --task-bg:   #0c1a2e;
+    --task-bd:   #1e3a5f;
+    --def-bg:    #052e16;
+    --def-bd:    #166534;
+    --warn-bg:   #1c0e02;
+    --warn-bd:   #92400e;
+}
+
+/* ── Base ── */
+*, *::before, *::after { box-sizing: border-box; }
+body { font-family: 'Inter', 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.65; margin: 0; }
+p { margin: 0 0 .7rem; }
+p:last-child { margin-bottom: 0; }
+strong { font-weight: 700; }
+code, .mono { font-family: 'JetBrains Mono', 'Courier New', monospace; }
+
+/* ── Header ── */
+#site-header { background: #0f172a; position: sticky; top: 0; z-index: 50; border-bottom: 1px solid #1e293b; }
+.header-inner { max-width: 960px; margin: 0 auto; padding: 0 1.5rem; }
+.header-top { display: flex; align-items: center; justify-content: space-between; padding: .9rem 0 .55rem; }
+.header-eyebrow { font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #818cf8; margin-bottom: .15rem; }
+.header-title { font-size: 1.05rem; font-weight: 800; color: #fff; line-height: 1.25; }
+.header-sub { font-size: .75rem; color: #94a3b8; margin-top: .1rem; }
+.badge-pill { background: #1e293b; border: 1px solid #334155; color: #94a3b8; font-size: .68rem; font-weight: 600; letter-spacing: .06em; padding: .2rem .65rem; border-radius: 4px; }
+
+/* ── Main layout ── */
+main { max-width: 960px; margin: 0 auto; padding: 1.75rem 1.5rem 5rem; }
+
+/* ── Submission box ── */
+.sub-box { background: var(--def-bg); border: 1px solid var(--def-bd); border-radius: 8px; padding: 1.1rem 1.4rem; margin-bottom: 1.75rem; }
+.sub-label { font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #15803d; margin-bottom: .6rem; }
+
+/* ── Exercise card ── */
+.ex-card { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0; padding: 1.4rem 1.5rem; margin-bottom: 1.75rem; }
+.ex-eyebrow { font-size: .68rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--accent); margin-bottom: .2rem; }
+.ex-title { font-size: 1.05rem; font-weight: 800; color: var(--text); margin-bottom: .9rem; }
+
+/* ── Content blocks ── */
+.def-box { background: var(--def-bg); border: 1px solid var(--def-bd); border-radius: 6px; padding: .75rem 1.1rem; margin: .75rem 0; }
+.def-label { font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #15803d; margin-bottom: .4rem; }
+.formula { background: var(--accent-lt); border: 1px solid var(--accent-bd); border-radius: 6px; padding: .6rem 1.2rem; margin: .6rem 0; font-family: 'JetBrains Mono', monospace; font-size: .95rem; text-align: center; color: var(--accent); font-weight: 600; }
+.task-box { background: var(--task-bg); border-left: 3px solid #60a5fa; border-radius: 0 6px 6px 0; padding: .9rem 1.2rem; margin: .85rem 0; }
+.task-label { font-size: .68rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: #1d4ed8; margin-bottom: .45rem; }
+.note { background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px; padding: .6rem 1rem; font-size: .845rem; color: var(--text-2); margin: .65rem 0; }
+.warn-box { background: var(--warn-bg); border: 1px solid var(--warn-bd); border-radius: 6px; padding: .6rem 1rem; font-size: .845rem; color: var(--text-2); margin: .65rem 0; }
+
+/* ── Q list ── */
+.q-box { background: var(--q-bg); border-left: 3px solid #eab308; border-radius: 0 6px 6px 0; padding: .9rem 1.2rem; margin-top: 1rem; }
+.q-label { font-size: .68rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: #a16207; margin-bottom: .45rem; }
+.q-list { margin: .1rem 0 0; }
+.q-item { display: flex; gap: .6rem; margin-bottom: .45rem; font-size: .875rem; align-items: flex-start; }
+.q-item:last-child { margin-bottom: 0; }
+.q-num { flex-shrink: 0; font-weight: 700; color: var(--accent); min-width: 2rem; }
+.bonus { color: #9333ea; font-size: .8rem; font-weight: 700; }
+
+/* ── Tables ── */
+.tbl-wrap { overflow-x: auto; margin: .7rem 0; }
+table { width: 100%; border-collapse: collapse; font-size: .845rem; }
+th { background: var(--surface-2); padding: .45rem .75rem; text-align: left; font-weight: 600; font-size: .76rem; letter-spacing: .02em; color: var(--text-2); border-bottom: 2px solid var(--border); }
+td { padding: .4rem .75rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+.tc { text-align: center; }
+
+/* ── Images ── */
+.graph-img { display: block; max-width: 100%; margin: 1rem auto; border-radius: 8px; border: 1px solid var(--border); }
+.img-cap { text-align: center; font-size: .77rem; color: var(--text-3); margin-top: .2rem; margin-bottom: .85rem; }
+.img-wrap { text-align: center; }
+
+/* ── Puzzle grid ── */
+.puzzle-row { display: flex; gap: 4px; margin: 3px 0; }
+.puzzle-cell { width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--border); border-radius: 4px; font-weight: 700; font-size: 1rem; background: var(--surface-2); }
+.puzzle-cell.blank { background: var(--accent-lt); border-color: var(--accent-bd); }
+.puzzle-states { display: flex; gap: 2rem; flex-wrap: wrap; margin: .75rem 0; }
+.puzzle-state { }
+.puzzle-label { font-size: .78rem; font-weight: 700; color: var(--text-2); margin-bottom: .4rem; }
+
+/* ── Heuristic pair ── */
+.h-pair { display: grid; grid-template-columns: 1fr 1fr; gap: .85rem; margin: .7rem 0; }
+.h-def { background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px; padding: .7rem .9rem; }
+.h-name { font-size: .75rem; font-weight: 700; color: var(--accent); margin-bottom: .3rem; letter-spacing: .03em; }
+
+/* ── Edge list ── */
+.edge-list { margin: .5rem 0 .5rem 0; padding-left: 1.3rem; list-style: none; }
+.edge-list li { margin-bottom: .3rem; font-size: .875rem; padding-left: .1rem; }
+.edge-list li::before { content: "→"; color: var(--accent); font-weight: 700; margin-right: .4rem; }
+
+/* ── Divider ── */
+.sec-div { border: none; border-top: 1px solid var(--border); margin: 0 0 1.5rem; }
+
+/* ── Lists ── */
+.content-ul { padding-left: 1.3rem; list-style: disc; margin: .4rem 0; }
+.content-ul li { margin-bottom: .3rem; font-size: .875rem; }
+
+/* ── Print ── */
+@media print {
+    #site-header { background: #1e293b !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .ex-card { break-inside: avoid; }
+    .graph-img { max-width: 90%; }
+}
+@media (max-width: 600px) {
+    .h-pair { grid-template-columns: 1fr; }
+    .puzzle-states { gap: 1.2rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════ HEADER -->
+<header id="site-header">
+    <div class="header-inner">
+        <div class="header-top">
+            <div>
+                <div class="header-eyebrow">EP15/EP16.TOKT11121 · Introduction to AI</div>
+                <div class="header-title">Week 5 — Optimal Search (A*)</div>
+                <div class="header-sub">Practice Lab &nbsp;·&nbsp; Theory Exercises</div>
+            </div>
+            <div><span class="badge-pill">PART I — THEORY</span></div>
+        </div>
+    </div>
+</header>
+
+<!-- ════════════════════════════════════════════ MAIN -->
+<main>
+
+<!-- Submission -->
+<div class="sub-box">
+    <div class="sub-label">Submission</div>
+    <p style="font-size:.875rem; margin:0;">Submit your answers as a <strong>.pdf</strong> or <strong>.docx</strong> file.
+    File name: <code>&lt;HọTên&gt;_&lt;MSSV&gt;_W5_THEORY.pdf</code> — e.g. <code>NguyenVanAn_12345678_W5_THEORY.pdf</code></p>
+</div>
+
+<!-- ════ Ex 1 ════ -->
+<div class="ex-card">
+    <div class="ex-eyebrow">Exercise 1</div>
+    <div class="ex-title">Complex Pathfinding Graph</div>
+
+    <p>The directed weighted graph below is given. Each node shows its heuristic <code>h(n)</code> — the estimated remaining cost to reach <strong>Z</strong>. Numbers on edges are movement costs.</p>
+
+    <div class="img-wrap">
+        <img src="astar_practice_4.png" alt="A* Practice Graph" class="graph-img" style="max-width:560px;">
+    </div>
+
+    <div class="task-box">
+        <div class="task-label">Task</div>
+        <p>Find a path from <strong>S</strong> to <strong>Z</strong> using each algorithm below. Trace every step.</p>
+        <ol class="content-ul" style="list-style:decimal; padding-left:1.4rem;">
+            <li><strong>A*</strong> — maintain an open list sorted by f(n) = g(n) + h(n)</li>
+            <li><strong>Greedy Best-First Search</strong> — always expand the node with the smallest h(n)</li>
+        </ol>
+    </div>
+</div>
+
+<!-- ════ Ex 2 ════ -->
+<div class="ex-card">
+    <div class="ex-eyebrow">Exercise 2</div>
+    <div class="ex-title">Two Corridors — A* vs Hill Climbing</div>
+
+    <p>The directed weighted graph below has a <strong>left corridor</strong> and a <strong>right corridor</strong>. Each node shows <code>h(n)</code>; edge numbers are movement costs.</p>
+
+    <div class="img-wrap">
+        <img src="astar_practice_5.png" alt="Two-Corridor Graph" class="graph-img" style="max-width:560px;">
+    </div>
+
+    <div class="task-box">
+        <div class="task-label">Task</div>
+        <p>Find a path from <strong>S</strong> to <strong>Z</strong> using each algorithm below. Trace every step.</p>
+        <ol class="content-ul" style="list-style:decimal; padding-left:1.4rem;">
+            <li><strong>A*</strong></li>
+            <li><strong>Hill Climbing (Steepest Ascent)</strong> — keep only the current node; move to a neighbour with strictly smaller h, or stop if none exists</li>
+        </ol>
+    </div>
+</div>
+
+<!-- ════ Ex 3 ════ -->
+<div class="ex-card">
+    <div class="ex-eyebrow">Exercise 3</div>
+    <div class="ex-title">Emergency Vaccine Delivery — Mekong Delta</div>
+
+    <p>During a dengue fever outbreak in the Mekong Delta, a vaccination team must deliver temperature-sensitive vaccines from the <strong>Provincial Cold-Chain Center</strong> to a <strong>Remote Commune Clinic</strong> cut off by seasonal flooding. Travel times (hours) account for road conditions, ferry waits, and flood detours.</p>
+
+    <div class="def-box" style="margin:.9rem 0;">
+        <div class="def-label">Connections &amp; Travel Times (hours)</div>
+        <ul class="edge-list">
+            <li><strong>Provincial Cold-Chain Center</strong> → Phú Hòa Ferry (2h) · Hưng Long Bridge (5h) · Tân An Canal Road (3h)</li>
+            <li><strong>Phú Hòa Ferry</strong> → Bình Minh Market (3h) · Sông Hậu Crossing (6h)</li>
+            <li><strong>Hưng Long Bridge</strong> → Sông Hậu Crossing (2h) · Mỹ Phước Levee (4h)</li>
+            <li><strong>Tân An Canal Road</strong> → Mỹ Phước Levee (3h) · Long Khánh Dock (7h)</li>
+            <li><strong>Bình Minh Market</strong> → Trung Thành Elevated Road (4h)</li>
+            <li><strong>Sông Hậu Crossing</strong> → Trung Thành Elevated Road (2h) · Ngã Ba Đình Crossroads (5h)</li>
+            <li><strong>Mỹ Phước Levee</strong> → Ngã Ba Đình Crossroads (3h)</li>
+            <li><strong>Long Khánh Dock</strong> → Ngã Ba Đình Crossroads (2h)</li>
+            <li><strong>Trung Thành Elevated Road</strong> → Remote Commune Clinic (5h)</li>
+            <li><strong>Ngã Ba Đình Crossroads</strong> → Remote Commune Clinic (3h)</li>
+        </ul>
+    </div>
+
+    <p><strong>Heuristic h(n)</strong> — estimated direct boat travel time (hours) to the Clinic:</p>
+    <div class="tbl-wrap">
+        <table style="max-width:640px;">
+            <thead><tr><th>Location</th><th class="tc">h(n)</th><th>Location</th><th class="tc">h(n)</th></tr></thead>
+            <tbody>
+                <tr><td>Provincial Cold-Chain Center</td><td class="tc">10</td><td>Sông Hậu Crossing</td><td class="tc">4</td></tr>
+                <tr><td>Phú Hòa Ferry</td><td class="tc">8</td><td>Mỹ Phước Levee</td><td class="tc">5</td></tr>
+                <tr><td>Hưng Long Bridge</td><td class="tc">6</td><td>Long Khánh Dock</td><td class="tc">4</td></tr>
+                <tr><td>Tân An Canal Road</td><td class="tc">7</td><td>Trung Thành Elevated Road</td><td class="tc">3</td></tr>
+                <tr><td>Bình Minh Market</td><td class="tc">6</td><td>Ngã Ba Đình Crossroads</td><td class="tc">2</td></tr>
+                <tr><td><strong>Remote Commune Clinic</strong></td><td class="tc"><strong>0</strong></td><td></td><td></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="task-box">
+        <div class="task-label">Task</div>
+        <ol class="content-ul" style="list-style:decimal; padding-left:1.4rem;">
+            <li>Draw the state-space graph from the connection list above.</li>
+            <li>Apply <strong>A*</strong> to find the fastest route. Trace step by step.</li>
+            <li>Apply <strong>Greedy Best-First Search</strong> on the same graph. Trace step by step.</li>
+        </ol>
+        <div class="note" style="margin-top:.6rem;">
+            <strong>Tie-breaking:</strong> equal f → expand the node with smaller g; still tied → alphabetical order.
+        </div>
+    </div>
+
+    <div class="q-box">
+        <div class="q-label">Questions</div>
+        <div class="q-list">
+            <div class="q-item"><span class="q-num">1.</span><span>Do A* and Greedy find the same route? If not, which is faster and by how many hours?</span></div>
+            <div class="q-item"><span class="q-num">2.</span><span>Verify that h(n) is admissible by computing h*(n) for at least three locations of your choice.</span></div>
+            <div class="q-item"><span class="q-num">3.</span><span>If the ferry at Phú Hòa is shut down (all edges from Phú Hòa Ferry removed), does the A* optimal route change?</span></div>
+        </div>
+    </div>
+</div>
+
+<!-- ════ Ex 4 ════ -->
+<div class="ex-card">
+    <div class="ex-eyebrow">Exercise 4</div>
+    <div class="ex-title">Admissibility Check</div>
+
+    <p>The directed weighted graph below has 8 nodes (S = start, G = goal). Each node shows its heuristic <code>h(n)</code>; edge labels are movement costs.</p>
+
+    <div class="img-wrap">
+        <img src="heuristic_admissibility_graph.svg" alt="Admissibility Check Graph" class="graph-img" style="max-width:600px;">
+        <div class="img-cap">h values: S=8, A=8, B=6, C=4, D=7, E=3, F=2, G=0</div>
+    </div>
+
+    <div class="def-box">
+        <div class="def-label">Definition — Admissibility</div>
+        <p style="margin:0;">A heuristic is <strong>admissible</strong> if and only if for every node n:</p>
+        <div class="formula">h(n) ≤ h*(n)</div>
+        <p style="margin:0; font-size:.845rem; color:var(--text-2);">where h*(n) is the <em>true optimal cost</em> (shortest path cost) from n to G.</p>
+    </div>
+
+    <div class="task-box">
+        <div class="task-label">Task</div>
+        <ol class="content-ul" style="list-style:decimal; padding-left:1.4rem; margin:0;">
+            <li><strong>Step 1.</strong> For each node S, A, B, C, D, E, F: find the shortest path to G and compute h*(n). Compare with the h(n) value shown in the graph.</li>
+            <li><strong>Step 2.</strong> Is h admissible overall? Identify every violation and state by how much h(n) overestimates h*(n).</li>
+            <li><strong>Step 3.</strong> If A* uses this heuristic as-is, is it still guaranteed to find the optimal path? Explain in one or two sentences.</li>
+            <li><strong>Step 4.</strong> <span class="bonus">Bonus</span> — Propose the minimal correction that restores admissibility: change as few values as possible, by as small an amount as possible.</li>
+        </ol>
+    </div>
+</div>
+
+<!-- ════ Ex 5 ════ -->
+<div class="ex-card">
+    <div class="ex-eyebrow">Exercise 5</div>
+    <div class="ex-title">Consistency Check</div>
+
+    <p>Use the <strong>same graph and heuristic values</strong> as Exercise 4.</p>
+
+    <div class="def-box">
+        <div class="def-label">Definition — Consistency (Monotonicity)</div>
+        <p style="margin:0;">A heuristic h is <strong>consistent</strong> if for every edge n → n' with cost c:</p>
+        <div class="formula">h(n) ≤ c + h(n')</div>
+        <p style="margin:.4rem 0 0; font-size:.845rem; color:var(--text-2);">This is a <em>local</em> check — verify one edge at a time, without needing h*(n).</p>
+    </div>
+
+    <p style="margin-top:.8rem;">The table below lists every edge with the relevant h and cost values. For each row, compute <code>c + h(n')</code> and determine whether the condition holds.</p>
+
+    <div class="tbl-wrap">
+        <table>
+            <thead><tr><th>Edge</th><th class="tc">h(n)</th><th class="tc">Cost c</th><th class="tc">h(n')</th><th class="tc">c + h(n') = ?</th><th class="tc">Consistent?</th></tr></thead>
+            <tbody>
+                <tr><td class="mono">S → A</td><td class="tc">8</td><td class="tc">2</td><td class="tc">8</td><td class="tc"></td><td class="tc"></td></tr>
+                <tr><td class="mono">S → B</td><td class="tc">8</td><td class="tc">5</td><td class="tc">6</td><td class="tc"></td><td class="tc"></td></tr>
+                <tr><td class="mono">A → C</td><td class="tc">8</td><td class="tc">4</td><td class="tc">4</td><td class="tc"></td><td class="tc"></td></tr>
+                <tr><td class="mono">A → D</td><td class="tc">8</td><td class="tc">1</td><td class="tc">7</td><td class="tc"></td><td class="tc"></td></tr>
+                <tr><td class="mono">B → D</td><td class="tc">6</td><td class="tc">2</td><td class="tc">7</td><td class="tc"></td><td class="tc"></td></tr>
+                <tr><td class="mono">B → E</td><td class="tc">6</td><td class="tc">3</td><td class="tc">3</td><td class="tc"></td><td class="tc"></td></tr>
+                <tr><td class="mono">C → F</td><td class="tc">4</td><td class="tc">3</td><td class="tc">2</td><td class="tc"></td><td class="tc"></td></tr>
+                <tr><td class="mono">D → F</td><td class="tc">7</td><td class="tc">4</td><td class="tc">2</td><td class="tc"></td><td class="tc"></td></tr>
+                <tr><td class="mono">D → E</td><td class="tc">7</td><td class="tc">2</td><td class="tc">3</td><td class="tc"></td><td class="tc"></td></tr>
+                <tr><td class="mono">E → G</td><td class="tc">3</td><td class="tc">4</td><td class="tc">0</td><td class="tc"></td><td class="tc"></td></tr>
+                <tr><td class="mono">F → G</td><td class="tc">2</td><td class="tc">2</td><td class="tc">0</td><td class="tc"></td><td class="tc"></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="q-box">
+        <div class="q-label">Questions</div>
+        <div class="q-list">
+            <div class="q-item"><span class="q-num">1.</span><span>List every edge that violates consistency. By how much does h(n) exceed c + h(n')?</span></div>
+            <div class="q-item"><span class="q-num">2.</span><span>Which node caused an admissibility violation in Ex 4 <em>and</em> causes consistency violations here?</span></div>
+            <div class="q-item"><span class="q-num">3.</span><span>Node A was also inadmissible in Ex 4 (h(A)=8 > h*(A)=7). Are edges A→C and A→D consistent? Use your findings to answer: does admissibility imply consistency?</span></div>
+            <div class="q-item"><span class="q-num">4.</span><span><span class="bonus">Bonus</span> — If you fix the single node responsible for the consistency violations, does that also fix the admissibility violation from Ex 4?</span></div>
+        </div>
+    </div>
+</div>
+
+<!-- ════ Ex 6 ════ -->
+<div class="ex-card">
+    <div class="ex-eyebrow">Exercise 6</div>
+    <div class="ex-title">Heuristic Dominance — 8-Puzzle</div>
+
+    <p>The <strong>8-puzzle</strong> is a 3×3 sliding-tile board with tiles 1–8 and one blank. A move slides an adjacent tile into the blank. Goal state:</p>
+
+    <div style="display:flex; gap:2rem; align-items:flex-start; flex-wrap:wrap; margin:.75rem 0;">
+        <div>
+            <div style="font-size:.75rem; font-weight:700; color:var(--text-2); margin-bottom:.4rem;">Goal state</div>
+            <div class="puzzle-row"><div class="puzzle-cell">1</div><div class="puzzle-cell">2</div><div class="puzzle-cell">3</div></div>
+            <div class="puzzle-row"><div class="puzzle-cell">4</div><div class="puzzle-cell">5</div><div class="puzzle-cell">6</div></div>
+            <div class="puzzle-row"><div class="puzzle-cell">7</div><div class="puzzle-cell">8</div><div class="puzzle-cell blank">_</div></div>
+        </div>
+    </div>
+
+    <div class="h-pair">
+        <div class="h-def">
+            <div class="h-name">h₁ — Misplaced Tiles</div>
+            <p style="margin:0; font-size:.855rem;">Count tiles not in their goal position (blank excluded).</p>
+            <p style="margin:.35rem 0 0; font-size:.8rem; color:var(--text-2);"><em>Relaxed problem:</em> each misplaced tile can teleport to its goal in one move.</p>
+        </div>
+        <div class="h-def">
+            <div class="h-name">h₂ — Manhattan Distance</div>
+            <p style="margin:0; font-size:.855rem;">Sum of horizontal + vertical distances of each tile from its goal (blank excluded).</p>
+            <p style="margin:.35rem 0 0; font-size:.8rem; color:var(--text-2);"><em>Relaxed problem:</em> tiles pass through each other freely, but still pay 1 per step.</p>
+        </div>
+    </div>
+
+    <div class="task-box">
+        <div class="task-label">Task — Three puzzle states</div>
+        <p>For each state below, compute h₁ and h₂ by hand. Show the per-tile breakdown for each state.</p>
+    </div>
+
+    <div class="puzzle-states">
+        <div class="puzzle-state">
+            <div class="puzzle-label">State A</div>
+            <div class="puzzle-row"><div class="puzzle-cell">5</div><div class="puzzle-cell">1</div><div class="puzzle-cell">3</div></div>
+            <div class="puzzle-row"><div class="puzzle-cell">4</div><div class="puzzle-cell blank">_</div><div class="puzzle-cell">2</div></div>
+            <div class="puzzle-row"><div class="puzzle-cell">7</div><div class="puzzle-cell">6</div><div class="puzzle-cell">8</div></div>
+        </div>
+        <div class="puzzle-state">
+            <div class="puzzle-label">State B</div>
+            <div class="puzzle-row"><div class="puzzle-cell">1</div><div class="puzzle-cell">2</div><div class="puzzle-cell">3</div></div>
+            <div class="puzzle-row"><div class="puzzle-cell">4</div><div class="puzzle-cell blank">_</div><div class="puzzle-cell">6</div></div>
+            <div class="puzzle-row"><div class="puzzle-cell">5</div><div class="puzzle-cell">7</div><div class="puzzle-cell">8</div></div>
+        </div>
+        <div class="puzzle-state">
+            <div class="puzzle-label">State C</div>
+            <div class="puzzle-row"><div class="puzzle-cell">1</div><div class="puzzle-cell">2</div><div class="puzzle-cell">3</div></div>
+            <div class="puzzle-row"><div class="puzzle-cell">4</div><div class="puzzle-cell">5</div><div class="puzzle-cell">6</div></div>
+            <div class="puzzle-row"><div class="puzzle-cell">8</div><div class="puzzle-cell">7</div><div class="puzzle-cell blank">_</div></div>
+        </div>
+    </div>
+
+    <div class="q-box">
+        <div class="q-label">Questions</div>
+        <div class="q-list">
+            <div class="q-item"><span class="q-num">1.</span><span>For each state, is h₂ ≥ h₁? Summarise in a table: State | h₁ | h₂ | h₂ ≥ h₁?</span></div>
+            <div class="q-item"><span class="q-num">2.</span><span>Both h₁ and h₂ are admissible. Which one is more <em>informed</em>? Justify with your results.</span></div>
+            <div class="q-item"><span class="q-num">3.</span><span>Explain in your own words why h₂(n) ≥ h₁(n) must <em>always</em> hold for any 8-puzzle state. <em>(Hint: what does each misplaced tile contribute to h₁ vs. h₂?)</em></span></div>
+            <div class="q-item"><span class="q-num">4.</span><span>If h₂ dominates h₁ and both are admissible, what does that guarantee about A* using h₂ compared to A* using h₁?</span></div>
+        </div>
+    </div>
+</div>
+
+<!-- ════ Ex 7 ════ -->
+<div class="ex-card">
+    <div class="ex-eyebrow">Exercise 7</div>
+    <div class="ex-title">Grid Pathfinding — Warehouse Robot</div>
+
+    <p>A <strong>warehouse delivery robot</strong> starts at its charging station <strong>S = (0,0)</strong> and must reach the pickup zone <strong>G = (4,4)</strong>. The floor is a <strong>5 × 5 grid</strong>; the robot moves in four directions and each step costs <strong>1</strong>. Gray cells are storage shelves (blocked).</p>
+
+    <div class="img-wrap">
+        <img src="warehouse_robot.png" alt="Warehouse Robot Grid" class="graph-img" style="max-width:520px;">
+        <div class="img-cap">Shelves (blocked): (0,3) · (1,1) · (2,1) · (2,3) · (3,3)</div>
+    </div>
+
+    <div class="h-pair">
+        <div class="h-def">
+            <div class="h-name">h₁ — Euclidean Distance</div>
+            <div class="formula" style="font-size:.82rem; padding:.45rem .9rem;">h₁(r,c) = √[(r−4)² + (c−4)²]</div>
+            <p style="margin:0; font-size:.8rem; color:var(--text-2);"><em>Relaxed:</em> robot flies in a straight line, ignoring shelves.</p>
+        </div>
+        <div class="h-def">
+            <div class="h-name">h₂ — Manhattan Distance</div>
+            <div class="formula" style="font-size:.82rem; padding:.45rem .9rem;">h₂(r,c) = |r−4| + |c−4|</div>
+            <p style="margin:0; font-size:.8rem; color:var(--text-2);"><em>Relaxed:</em> shelves are transparent — robot still pays 1 per step.</p>
+        </div>
+    </div>
+
+    <div class="q-box">
+        <div class="q-label">Questions</div>
+        <div class="q-list">
+            <div class="q-item"><span class="q-num">1.</span><span><strong>Compute h₁ and h₂</strong> for these five cells: (0,0), (0,2), (1,0), (2,2), (1,4). Round h₁ to two decimal places.</span></div>
+            <div class="q-item"><span class="q-num">2.</span><span><strong>Dominance.</strong> Is h₂(n) ≥ h₁(n) for all five cells? Complete the sentence: <em>"h₂ dominates h₁ because Manhattan distance is always ________ Euclidean distance."</em></span></div>
+            <div class="q-item"><span class="q-num">3.</span><span><strong>Admissibility.</strong> For each of the five cells, find the true shortest path to G (count steps, avoid walls) and verify h₁ ≤ h* and h₂ ≤ h*.</span></div>
+            <div class="q-item"><span class="q-num">4.</span><span><strong>A* trace with h₂.</strong> Starting from S=(0,0), trace A* using Manhattan distance. Record each expanded node, its g, h₂, f values, and the open list.
+                <div class="note" style="margin-top:.4rem;"><strong>Tie-breaking:</strong> equal f → smaller h₂; still tied → smaller (row, col) lexicographically.</div>
+            </span></div>
+            <div class="q-item"><span class="q-num">5.</span><span><strong>Effect of obstacles.</strong> Suppose an extra wall is added at (3,4).
+                <ul class="content-ul" style="margin-top:.3rem;">
+                    <li>Does h₂(2,4) change? Why or why not?</li>
+                    <li>Find h*(2,4) with the new wall. Is h₂ still admissible?</li>
+                    <li>What does this reveal about how obstacles affect the <em>tightness</em> of the Manhattan-distance heuristic?</li>
+                </ul>
+            </span></div>
+        </div>
+    </div>
+</div>
+
+<!-- ════ Ex 8 ════ -->
+<div class="ex-card">
+    <div class="ex-eyebrow">Exercise 8</div>
+    <div class="ex-title">Metro Navigation — A* vs Greedy</div>
+
+    <p>A tourist arrives at <strong>Central Station</strong> and needs to reach the <strong>International Airport</strong>. The city metro has two lines and a shuttle service:</p>
+    <ul class="content-ul">
+        <li><strong>Line 1 (Red Express):</strong> Central Station → Riverside → Midtown → Westgate → Airport</li>
+        <li><strong>Line 2 (Blue Local):</strong> Central Station → Uptown → Docklands → Eastfield → Skyview → <em>(shuttle)</em> → Airport</li>
+    </ul>
+    <p>Transfer on foot at: <strong>Riverside ↔ Uptown</strong>, <strong>Midtown ↔ Docklands</strong>, <strong>Westgate ↔ Eastfield</strong>. All connections are one-directional.</p>
+
+    <div class="img-wrap">
+        <img src="metro_map.png" alt="City Metro Map" class="graph-img" style="max-width:680px;">
+    </div>
+
+    <div class="h-pair" style="margin-top:.3rem;">
+        <div>
+            <p style="margin:0 0 .5rem; font-weight:600;">Travel times (minutes)</p>
+            <div class="tbl-wrap">
+                <table>
+                    <thead><tr><th>From</th><th>To</th><th class="tc">min</th><th>Service</th></tr></thead>
+                    <tbody>
+                        <tr><td>Central Station</td><td>Riverside</td><td class="tc">3</td><td style="color:var(--text-2); font-size:.8rem;">Line 1</td></tr>
+                        <tr><td>Central Station</td><td>Uptown</td><td class="tc">2</td><td style="color:var(--text-2); font-size:.8rem;">Line 2</td></tr>
+                        <tr><td>Riverside</td><td>Midtown</td><td class="tc">4</td><td style="color:var(--text-2); font-size:.8rem;">Line 1</td></tr>
+                        <tr><td>Riverside</td><td>Uptown</td><td class="tc">2</td><td style="color:var(--text-2); font-size:.8rem;">Transfer</td></tr>
+                        <tr><td>Midtown</td><td>Westgate</td><td class="tc">3</td><td style="color:var(--text-2); font-size:.8rem;">Line 1</td></tr>
+                        <tr><td>Midtown</td><td>Docklands</td><td class="tc">3</td><td style="color:var(--text-2); font-size:.8rem;">Transfer</td></tr>
+                        <tr><td>Westgate</td><td>Airport</td><td class="tc">2</td><td style="color:var(--text-2); font-size:.8rem;">Line 1</td></tr>
+                        <tr><td>Westgate</td><td>Eastfield</td><td class="tc">2</td><td style="color:var(--text-2); font-size:.8rem;">Transfer</td></tr>
+                        <tr><td>Uptown</td><td>Docklands</td><td class="tc">3</td><td style="color:var(--text-2); font-size:.8rem;">Line 2</td></tr>
+                        <tr><td>Docklands</td><td>Eastfield</td><td class="tc">4</td><td style="color:var(--text-2); font-size:.8rem;">Line 2</td></tr>
+                        <tr><td>Eastfield</td><td>Skyview</td><td class="tc">2</td><td style="color:var(--text-2); font-size:.8rem;">Line 2</td></tr>
+                        <tr><td>Skyview</td><td>Airport</td><td class="tc">9</td><td style="color:#ea580c; font-size:.8rem; font-weight:600;">Shuttle ⏳</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div>
+            <p style="margin:0 0 .5rem; font-weight:600;">Heuristic h(n) — straight-line distance to Airport (min)</p>
+            <div class="tbl-wrap">
+                <table>
+                    <thead><tr><th>Station</th><th class="tc">h(n)</th></tr></thead>
+                    <tbody>
+                        <tr><td>Central Station</td><td class="tc">10</td></tr>
+                        <tr><td>Riverside</td><td class="tc">8</td></tr>
+                        <tr><td>Midtown</td><td class="tc">5</td></tr>
+                        <tr><td>Westgate</td><td class="tc">2</td></tr>
+                        <tr><td>Uptown</td><td class="tc">3</td></tr>
+                        <tr><td>Docklands</td><td class="tc">3</td></tr>
+                        <tr><td>Eastfield</td><td class="tc">2</td></tr>
+                        <tr><td>Skyview ★</td><td class="tc">1</td></tr>
+                        <tr><td><strong>Airport</strong></td><td class="tc"><strong>0</strong></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="note" style="margin-top:.5rem; font-size:.8rem;">
+                <strong>Abbreviations for A* trace:</strong> Ce · Ri · Mi · We · Up · Do · Ea · Sk · G
+            </div>
+        </div>
+    </div>
+
+    <div class="q-box" style="margin-top:1rem;">
+        <div class="q-label">Questions</div>
+        <div class="q-list">
+            <div class="q-item"><span class="q-num">1.</span><span><strong>A* trace.</strong> Trace A* step by step using f = g + h. For each step record: station expanded, g, h, f, and the open list.
+                <div class="note" style="margin-top:.3rem;"><strong>Tie-breaking:</strong> equal f → smaller h; still tied → alphabetical. Use abbreviations Ce/Ri/Mi/We/Up/Do/Ea/Sk/G.</div>
+            </span></div>
+            <div class="q-item"><span class="q-num">2.</span><span><strong>Greedy trace.</strong> Apply Greedy Best-First Search (always expand the node with the smallest h). List the stations visited and the total travel time.</span></div>
+            <div class="q-item"><span class="q-num">3.</span><span>Do A* and Greedy find the same route? Which is faster, and by how many minutes?</span></div>
+            <div class="q-item"><span class="q-num">4.</span><span><strong>Why Greedy fails.</strong> Trace Greedy's decisions step by step and identify the first station where it takes the wrong branch. What makes h(n) misleading there?</span></div>
+            <div class="q-item"><span class="q-num">5.</span><span><strong>A* escapes the trap.</strong> A* also visits <em>Skyview</em> during its search, yet does not report the Skyview→Airport path as optimal. Explain why, using the f values in your trace.</span></div>
+            <div class="q-item"><span class="q-num">6.</span><span><strong>Admissibility check.</strong> Compute h*(n) for <em>Uptown</em>, <em>Skyview</em>, and <em>Midtown</em>. Confirm h(n) ≤ h*(n) for each.</span></div>
+            <div class="q-item"><span class="q-num">7.</span><span><span class="bonus">Bonus</span> — Skyview has h=1 but h*=9 (underestimates by 8 minutes). Is this an admissibility violation? What does this reveal about the difference between <em>admissible</em> and <em>tight (accurate)</em>?</span></div>
+        </div>
+    </div>
+</div>
+
+</main>
+</body>
+</html>
