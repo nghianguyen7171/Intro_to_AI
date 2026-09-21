@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minimax &amp; Alpha-Beta Pruning — Exercises</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+/* ── Design tokens ── */
+:root {
+    --bg:        #f1f5f9;
+    --surface:   #ffffff;
+    --surface-2: #f8fafc;
+    --border:    #e2e8f0;
+    --text:      #0f172a;
+    --text-2:    #475569;
+    --text-3:    #94a3b8;
+    --accent:    #6366f1;
+    --accent-lt: #eef2ff;
+    --accent-bd: #c7d2fe;
+    --code-bg:   #1e293b;
+    --code-text: #e2e8f0;
+    --q-bg:      #fefce8;
+    --q-bd:      #fde047;
+    --task-bg:   #eff6ff;
+    --task-bd:   #93c5fd;
+    --def-bg:    #f0fdf4;
+    --def-bd:    #86efac;
+    --warn-bg:   #fff7ed;
+    --warn-bd:   #fdba74;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --bg:        #0f172a;
+        --surface:   #1e293b;
+        --surface-2: #162032;
+        --border:    #334155;
+        --text:      #f1f5f9;
+        --text-2:    #94a3b8;
+        --text-3:    #64748b;
+        --accent:    #818cf8;
+        --accent-lt: #1e1b4b;
+        --accent-bd: #3730a3;
+        --code-bg:   #090e1a;
+        --code-text: #e2e8f0;
+        --q-bg:      #2d2508;
+        --q-bd:      #713f12;
+        --task-bg:   #0c1a2e;
+        --task-bd:   #1e3a5f;
+        --def-bg:    #052e16;
+        --def-bd:    #166534;
+        --warn-bg:   #1c0e02;
+        --warn-bd:   #92400e;
+    }
+}
+:root[data-theme="dark"] {
+    --bg:        #0f172a;
+    --surface:   #1e293b;
+    --surface-2: #162032;
+    --border:    #334155;
+    --text:      #f1f5f9;
+    --text-2:    #94a3b8;
+    --text-3:    #64748b;
+    --accent:    #818cf8;
+    --accent-lt: #1e1b4b;
+    --accent-bd: #3730a3;
+    --code-bg:   #090e1a;
+    --code-text: #e2e8f0;
+    --q-bg:      #2d2508;
+    --q-bd:      #713f12;
+    --task-bg:   #0c1a2e;
+    --task-bd:   #1e3a5f;
+    --def-bg:    #052e16;
+    --def-bd:    #166534;
+    --warn-bg:   #1c0e02;
+    --warn-bd:   #92400e;
+}
+
+/* ── Base ── */
+*, *::before, *::after { box-sizing: border-box; }
+body { font-family: 'Inter', 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.65; margin: 0; }
+p { margin: 0 0 .7rem; }
+p:last-child { margin-bottom: 0; }
+strong { font-weight: 700; }
+code, .mono { font-family: 'JetBrains Mono', 'Courier New', monospace; }
+
+/* ── Header ── */
+#site-header { background: #0f172a; position: sticky; top: 0; z-index: 50; border-bottom: 1px solid #1e293b; }
+.header-inner { max-width: 960px; margin: 0 auto; padding: 0 1.5rem; }
+.header-top { display: flex; align-items: center; justify-content: space-between; padding: .9rem 0 .55rem; }
+.header-eyebrow { font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #818cf8; margin-bottom: .15rem; }
+.header-title { font-size: 1.05rem; font-weight: 800; color: #fff; line-height: 1.25; }
+.header-sub { font-size: .75rem; color: #94a3b8; margin-top: .1rem; }
+.badge-pill { background: #1e293b; border: 1px solid #334155; color: #94a3b8; font-size: .68rem; font-weight: 600; letter-spacing: .06em; padding: .2rem .65rem; border-radius: 4px; }
+
+/* ── Main layout ── */
+main { max-width: 960px; margin: 0 auto; padding: 1.75rem 1.5rem 5rem; }
+
+/* ── Submission box ── */
+.sub-box { background: var(--def-bg); border: 1px solid var(--def-bd); border-radius: 8px; padding: 1.1rem 1.4rem; margin-bottom: 1.75rem; }
+.sub-label { font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #15803d; margin-bottom: .6rem; }
+
+/* ── Exercise card ── */
+.ex-card { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0; padding: 1.4rem 1.5rem; margin-bottom: 1.75rem; }
+.ex-eyebrow { font-size: .68rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--accent); margin-bottom: .2rem; }
+.ex-title { font-size: 1.05rem; font-weight: 800; color: var(--text); margin-bottom: .9rem; }
+
+/* ── Section heading ── */
+.part-heading { font-size: 1.1rem; font-weight: 800; color: var(--accent); margin: 1.5rem 0 .6rem; padding-bottom: .35rem; border-bottom: 2px solid var(--accent-bd); }
+
+/* ── Content blocks ── */
+.def-box { background: var(--def-bg); border: 1px solid var(--def-bd); border-radius: 6px; padding: .75rem 1.1rem; margin: .75rem 0; }
+.def-label { font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #15803d; margin-bottom: .4rem; }
+.formula { background: var(--accent-lt); border: 1px solid var(--accent-bd); border-radius: 6px; padding: .6rem 1.2rem; margin: .6rem 0; font-family: 'JetBrains Mono', monospace; font-size: .95rem; text-align: center; color: var(--accent); font-weight: 600; }
+.task-box { background: var(--task-bg); border-left: 3px solid #60a5fa; border-radius: 0 6px 6px 0; padding: .9rem 1.2rem; margin: .85rem 0; }
+.task-label { font-size: .68rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: #1d4ed8; margin-bottom: .45rem; }
+.note { background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px; padding: .6rem 1rem; font-size: .845rem; color: var(--text-2); margin: .65rem 0; }
+.warn-box { background: var(--warn-bg); border: 1px solid var(--warn-bd); border-radius: 6px; padding: .6rem 1rem; font-size: .845rem; color: var(--text-2); margin: .65rem 0; }
+
+/* ── Q list ── */
+.q-box { background: var(--q-bg); border-left: 3px solid #eab308; border-radius: 0 6px 6px 0; padding: .9rem 1.2rem; margin-top: 1rem; }
+.q-label { font-size: .68rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: #a16207; margin-bottom: .45rem; }
+.q-list { margin: .1rem 0 0; }
+.q-item { display: flex; gap: .6rem; margin-bottom: .45rem; font-size: .875rem; align-items: flex-start; }
+.q-item:last-child { margin-bottom: 0; }
+.q-num { flex-shrink: 0; font-weight: 700; color: var(--accent); min-width: 2rem; }
+
+/* ── Tables ── */
+.tbl-wrap { overflow-x: auto; margin: .7rem 0; }
+table { width: 100%; border-collapse: collapse; font-size: .845rem; }
+th { background: var(--surface-2); padding: .45rem .75rem; text-align: left; font-weight: 600; font-size: .76rem; letter-spacing: .02em; color: var(--text-2); border-bottom: 2px solid var(--border); }
+td { padding: .4rem .75rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+.tc { text-align: center; }
+
+/* ── Images ── */
+.graph-img { display: block; max-width: 100%; margin: 1rem auto; border-radius: 8px; border: 1px solid var(--border); }
+.img-cap { text-align: center; font-size: .77rem; color: var(--text-3); margin-top: .2rem; margin-bottom: .85rem; }
+.img-wrap { text-align: center; }
+
+/* ── Tic-tac-toe grid ── */
+.ttt-grid { display: inline-grid; grid-template-columns: repeat(3, 52px); gap: 0; margin: .8rem 0; }
+.ttt-cell { width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--border); font-weight: 800; font-size: 1.2rem; background: var(--surface-2); }
+.ttt-cell.x-mark { color: #2563eb; }
+.ttt-cell.o-mark { color: #dc2626; }
+.ttt-cell.empty { color: var(--text-3); font-size: .7rem; font-weight: 500; }
+
+/* ── Lists ── */
+.content-ul { padding-left: 1.3rem; list-style: disc; margin: .4rem 0; }
+.content-ul li { margin-bottom: .3rem; font-size: .875rem; }
+.content-ol { padding-left: 1.3rem; list-style: decimal; margin: .4rem 0; }
+.content-ol li { margin-bottom: .3rem; font-size: .875rem; }
+
+/* ── Divider ── */
+.sec-div { border: none; border-top: 1px solid var(--border); margin: 0 0 1.5rem; }
+
+/* ── Print ── */
+@media print {
+    #site-header { background: #1e293b !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .ex-card { break-inside: avoid; }
+    .graph-img { max-width: 90%; }
+}
+@media (max-width: 600px) {
+    .ttt-grid { grid-template-columns: repeat(3, 44px); }
+    .ttt-cell { width: 44px; height: 44px; font-size: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════ HEADER -->
+<header id="site-header">
+    <div class="header-inner">
+        <div class="header-top">
+            <div>
+                <div class="header-eyebrow">EP15/EP16.TOKT11121 · Introduction to AI</div>
+                <div class="header-title">Minimax &amp; Alpha-Beta Pruning — Exercises</div>
+                <div class="header-sub">Adversarial Search &nbsp;·&nbsp; Game Trees</div>
+            </div>
+            <div><span class="badge-pill">EXERCISES</span></div>
+        </div>
+    </div>
+</header>
+
+<!-- ════════════════════════════════════════════ MAIN -->
+<main>
+
+<!-- ──── Conventions ──── -->
+<div class="def-box" style="margin-bottom: 1.5rem;">
+    <div class="def-label">Conventions</div>
+    <ul class="content-ul" style="margin-top: .3rem;">
+        <li><strong>▲ (MAX)</strong> nodes pick the <strong>maximum</strong> child value; <strong>▼ (MIN)</strong> nodes pick the <strong>minimum</strong>. Leaf values are utility scores for MAX.</li>
+        <li>Alpha-Beta traverses <strong>left to right</strong>, carrying two thresholds: <strong>α</strong> (best MAX is guaranteed) and <strong>β</strong> (best MIN is guaranteed).</li>
+        <li><strong>Prune when α ≥ β:</strong> at a MIN node, prune when current value <strong>v ≤ α</strong>; at a MAX node, prune when <strong>v ≥ β</strong>.</li>
+        <li>Alpha-Beta always returns the <strong>same root value</strong> as Minimax — it just examines fewer leaves.</li>
+    </ul>
+</div>
+
+<!-- ════════════════════════════════════════════ PART A -->
+<div class="part-heading">Part A — Four Minimax &amp; Alpha-Beta Trees</div>
+<p style="font-size:.875rem; color:var(--text-2); margin-bottom:1.5rem;">For <strong>each</strong> game tree below, perform both tasks:</p>
+
+<!-- ════ Exercise 1 ════ -->
+<div class="ex-card">
+    <div class="ex-eyebrow">Exercise 1</div>
+    <div class="ex-title">2-Level Tree (Easy)</div>
+
+    <div class="img-wrap">
+        <img src="adversarial_images/tree1_problem.png" alt="Exercise 1 — Game tree" class="graph-img" style="max-width:520px;">
+    </div>
+
+    <div class="task-box">
+        <div class="task-label">Tasks</div>
+        <ol class="content-ol">
+            <li>Apply <strong>Minimax</strong> to find the root value and the best move for MAX.</li>
+            <li>Apply <strong>Alpha-Beta pruning</strong> (left → right): identify which leaves are pruned.</li>
+        </ol>
+    </div>
+
+    <div class="q-box">
+        <div class="q-label">Questions</div>
+        <div class="q-list">
+            <div class="q-item"><span class="q-num">Q1.</span><span>What is the root (Minimax) value? Which branch does MAX choose?</span></div>
+            <div class="q-item"><span class="q-num">Q2.</span><span>How many leaves does Alpha-Beta prune? List them.</span></div>
+            <div class="q-item"><span class="q-num">Q3.</span><span>How many leaves does Alpha-Beta examine out of the total?</span></div>
+        </div>
+    </div>
+</div>
+
+<!-- ════ Exercise 2 ════ -->
+<div class="ex-card">
+    <div class="ex-eyebrow">Exercise 2</div>
+    <div class="ex-title">3-Level Binary Tree (Medium)</div>
+
+    <div class="img-wrap">
+        <img src="adversarial_images/tree2_problem.png" alt="Exercise 2 — Game tree" class="graph-img" style="max-width:560px;">
+    </div>
+
+    <div class="task-box">
+        <div class="task-label">Tasks</div>
+        <ol class="content-ol">
+            <li>Apply <strong>Minimax</strong> to find the root value and the best move for MAX.</li>
+            <li>Apply <strong>Alpha-Beta pruning</strong> (left → right): identify which leaves are pruned.</li>
+        </ol>
+    </div>
+
+    <div class="q-box">
+        <div class="q-label">Questions</div>
+        <div class="q-list">
+            <div class="q-item"><span class="q-num">Q1.</span><span>What is the root value? Which branch does MAX choose?</span></div>
+            <div class="q-item"><span class="q-num">Q2.</span><span>How many leaves does Alpha-Beta prune? List them.</span></div>
+            <div class="q-item"><span class="q-num">Q3.</span><span>How many leaves does Alpha-Beta examine out of the total?</span></div>
+        </div>
+    </div>
+</div>
+
+<!-- ════ Exercise 3 ════ -->
+<div class="ex-card">
+    <div class="ex-eyebrow">Exercise 3</div>
+    <div class="ex-title">3-Level Ternary Tree with Negative Values (Hard)</div>
+
+    <div class="img-wrap">
+        <img src="adversarial_images/tree3_problem.png" alt="Exercise 3 — Game tree" class="graph-img" style="max-width:580px;">
+    </div>
+
+    <div class="note">
+        <strong>Note:</strong> This tree contains <strong>negative leaf values</strong>. Remember that negative utilities are perfectly valid — they simply mean the position is unfavourable for MAX.
+    </div>
+
+    <div class="task-box">
+        <div class="task-label">Tasks</div>
+        <ol class="content-ol">
+            <li>Apply <strong>Minimax</strong> to find the root value and the best move for MAX.</li>
+            <li>Apply <strong>Alpha-Beta pruning</strong> (left → right): identify which leaves are pruned.</li>
+        </ol>
+    </div>
+
+    <div class="q-box">
+        <div class="q-label">Questions</div>
+        <div class="q-list">
+            <div class="q-item"><span class="q-num">Q1.</span><span>What is the root value? Which branch does MAX choose?</span></div>
+            <div class="q-item"><span class="q-num">Q2.</span><span>How many leaves does Alpha-Beta prune? List them.</span></div>
+            <div class="q-item"><span class="q-num">Q3.</span><span>How many leaves does Alpha-Beta examine out of the total?</span></div>
+        </div>
+    </div>
+</div>
+
+<!-- ════ Exercise 4 ════ -->
+<div class="ex-card">
+    <div class="ex-eyebrow">Exercise 4</div>
+    <div class="ex-title">4-Level Tree with 16 Leaves (Hardest)</div>
+
+    <div class="img-wrap">
+        <img src="adversarial_images/tree4_problem.png" alt="Exercise 4 — Game tree" class="graph-img" style="max-width:620px;">
+    </div>
+
+    <div class="task-box">
+        <div class="task-label">Tasks</div>
+        <ol class="content-ol">
+            <li>Apply <strong>Minimax</strong> bottom-up to find the root value and the best move for MAX.</li>
+            <li>Apply <strong>Alpha-Beta pruning</strong> (left → right): identify which leaves are pruned. Show α and β values at each step.</li>
+        </ol>
+    </div>
+
+    <div class="q-box">
+        <div class="q-label">Questions</div>
+        <div class="q-list">
+            <div class="q-item"><span class="q-num">Q1.</span><span>What is the root value? Which branch does MAX choose?</span></div>
+            <div class="q-item"><span class="q-num">Q2.</span><span>How many leaves does Alpha-Beta prune? List them.</span></div>
+            <div class="q-item"><span class="q-num">Q3.</span><span>How many leaves does Alpha-Beta examine out of the total?</span></div>
+            <div class="q-item"><span class="q-num">Q4.</span><span>If the branches were reordered (right to left), would the root value change? Would the number of pruned leaves change? Explain briefly.</span></div>
+        </div>
+    </div>
+</div>
+
+<!-- ════════════════════════════════════════════ PART B -->
+<hr class="sec-div" style="margin-top:1.5rem;">
+<div class="part-heading">Part B — Heuristic Alpha-Beta (Tic-Tac-Toe)</div>
+
+<div class="ex-card">
+    <div class="ex-eyebrow">Exercise 5</div>
+    <div class="ex-title">Heuristic Evaluation with Depth-Limited Search</div>
+
+    <p>Consider the following tic-tac-toe position. <strong>X is MAX and it is X's turn.</strong></p>
+
+    <div class="img-wrap">
+        <img src="adversarial_images/tictactoe_position.png" alt="Tic-tac-toe position" class="graph-img" style="max-width:260px;">
+    </div>
+
+    <p>Since the full game tree is too large, we <strong>limit the search depth to 2</strong> (X plays, then O responds) and use the following <strong>evaluation function</strong>:</p>
+
+    <div class="formula">EVAL(s) = (open lines for X) − (open lines for O)</div>
+
+    <div class="def-box">
+        <div class="def-label">Definition</div>
+        <p style="font-size:.875rem;">An <strong>"open line for X"</strong> is any row, column, or diagonal that does <strong>not</strong> contain an O piece (so X can still potentially win along it). Similarly for O.</p>
+        <p style="font-size:.875rem; margin-top:.4rem;">If a leaf state is <strong>terminal</strong> (someone wins), use the true utility instead: X wins = <strong>+∞</strong>, O wins = <strong>−∞</strong>.</p>
+    </div>
+
+    <div class="task-box">
+        <div class="task-label">Tasks</div>
+        <ol class="content-ol">
+            <li>Identify all <strong>empty squares</strong> where X can move. List X's possible moves.</li>
+            <li>For each of X's moves, determine O's possible responses (the remaining empty squares).</li>
+            <li><strong>Expand the game tree</strong> to depth 2 — draw or list all 6 leaf states.</li>
+            <li>Compute <strong>EVAL</strong> (or UTILITY if terminal) for each leaf state.</li>
+            <li>Apply <strong>Alpha-Beta pruning</strong> to determine the best move for X.</li>
+        </ol>
+    </div>
+
+    <div class="q-box">
+        <div class="q-label">Questions</div>
+        <div class="q-list">
+            <div class="q-item"><span class="q-num">Q1.</span><span>What is the Minimax value at the root? What is X's best move?</span></div>
+            <div class="q-item"><span class="q-num">Q2.</span><span>How many leaf states does Alpha-Beta examine vs. total leaves?</span></div>
+            <div class="q-item"><span class="q-num">Q3.</span><span>Why is X's best move strategically critical? What happens if X plays elsewhere?</span></div>
+        </div>
+    </div>
+
+    <div class="note">
+        <strong>Hint:</strong> Pay close attention to whether O has an <strong>immediate winning threat</strong> in the current position. One of X's moves is clearly forced.
+    </div>
+</div>
+
+</main>
+</body>
+</html>
