@@ -119,6 +119,7 @@ lectures:
     materials:
       - "Chapter 5, lecture notes"
       - "Game tree examples"
+      - { "Alpha-Beta Pruning (ví dụ chi tiết)": "quizz/alphabeta_3level_example.html" }
 
   - week: 8
     date: "2024-10-22"
