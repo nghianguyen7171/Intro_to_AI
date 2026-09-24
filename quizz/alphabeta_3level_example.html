@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alpha-Beta Pruning — Cây 3 tầng (Ví dụ chi tiết)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+/* ── Design tokens ── */
+:root {
+    --bg:        #f1f5f9;
+    --surface:   #ffffff;
+    --surface-2: #f8fafc;
+    --border:    #e2e8f0;
+    --text:      #0f172a;
+    --text-2:    #475569;
+    --text-3:    #94a3b8;
+    --accent:    #6366f1;
+    --accent-lt: #eef2ff;
+    --accent-bd: #c7d2fe;
+    --code-bg:   #1e293b;
+    --code-text: #e2e8f0;
+    --q-bg:      #fefce8;
+    --q-bd:      #fde047;
+    --task-bg:   #eff6ff;
+    --task-bd:   #93c5fd;
+    --def-bg:    #f0fdf4;
+    --def-bd:    #86efac;
+    --warn-bg:   #fff7ed;
+    --warn-bd:   #fdba74;
+    --cut-bg:    #fef2f2;
+    --cut-bd:    #fca5a5;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --bg:        #0f172a;
+        --surface:   #1e293b;
+        --surface-2: #162032;
+        --border:    #334155;
+        --text:      #f1f5f9;
+        --text-2:    #94a3b8;
+        --text-3:    #64748b;
+        --accent:    #818cf8;
+        --accent-lt: #1e1b4b;
+        --accent-bd: #3730a3;
+        --code-bg:   #090e1a;
+        --code-text: #e2e8f0;
+        --q-bg:      #2d2508;
+        --q-bd:      #713f12;
+        --task-bg:   #0c1a2e;
+        --task-bd:   #1e3a5f;
+        --def-bg:    #052e16;
+        --def-bd:    #166534;
+        --warn-bg:   #1c0e02;
+        --warn-bd:   #92400e;
+        --cut-bg:    #1c0808;
+        --cut-bd:    #7f1d1d;
+    }
+}
+:root[data-theme="dark"] {
+    --bg:        #0f172a;
+    --surface:   #1e293b;
+    --surface-2: #162032;
+    --border:    #334155;
+    --text:      #f1f5f9;
+    --text-2:    #94a3b8;
+    --text-3:    #64748b;
+    --accent:    #818cf8;
+    --accent-lt: #1e1b4b;
+    --accent-bd: #3730a3;
+    --code-bg:   #090e1a;
+    --code-text: #e2e8f0;
+    --q-bg:      #2d2508;
+    --q-bd:      #713f12;
+    --task-bg:   #0c1a2e;
+    --task-bd:   #1e3a5f;
+    --def-bg:    #052e16;
+    --def-bd:    #166534;
+    --warn-bg:   #1c0e02;
+    --warn-bd:   #92400e;
+    --cut-bg:    #1c0808;
+    --cut-bd:    #7f1d1d;
+}
+
+/* ── Base ── */
+*, *::before, *::after { box-sizing: border-box; }
+body { font-family: 'Inter', 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.7; margin: 0; }
+p { margin: 0 0 .7rem; }
+p:last-child { margin-bottom: 0; }
+strong { font-weight: 700; }
+code, .mono { font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: .9em; background: var(--surface-2); border: 1px solid var(--border); border-radius: 3px; padding: .1em .35em; }
+
+/* ── Header ── */
+#site-header { background: #0f172a; position: sticky; top: 0; z-index: 50; border-bottom: 1px solid #1e293b; }
+.header-inner { max-width: 960px; margin: 0 auto; padding: 0 1.5rem; }
+.header-top { display: flex; align-items: center; justify-content: space-between; padding: .9rem 0 .55rem; }
+.header-eyebrow { font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #818cf8; margin-bottom: .15rem; }
+.header-title { font-size: 1.05rem; font-weight: 800; color: #fff; line-height: 1.25; }
+.header-sub { font-size: .75rem; color: #94a3b8; margin-top: .1rem; }
+.badge-pill { background: #1e293b; border: 1px solid #334155; color: #94a3b8; font-size: .68rem; font-weight: 600; letter-spacing: .06em; padding: .2rem .65rem; border-radius: 4px; }
+
+/* ── Main layout ── */
+main { max-width: 960px; margin: 0 auto; padding: 1.75rem 1.5rem 5rem; }
+
+/* ── Section heading ── */
+.part-heading { font-size: 1.1rem; font-weight: 800; color: var(--accent); margin: 2rem 0 .6rem; padding-bottom: .35rem; border-bottom: 2px solid var(--accent-bd); }
+
+/* ── Content blocks ── */
+.def-box { background: var(--def-bg); border: 1px solid var(--def-bd); border-radius: 6px; padding: .85rem 1.1rem; margin: .85rem 0; }
+.def-label { font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #15803d; margin-bottom: .4rem; }
+.note { background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px; padding: .6rem 1rem; font-size: .845rem; color: var(--text-2); margin: .65rem 0; }
+.warn-box { background: var(--warn-bg); border: 1px solid var(--warn-bd); border-radius: 6px; padding: .6rem 1rem; font-size: .845rem; color: var(--text-2); margin: .65rem 0; }
+.cut-box { background: var(--cut-bg); border: 1px solid var(--cut-bd); border-radius: 6px; padding: .6rem 1rem; font-size: .845rem; margin: .45rem 0; }
+.cut-label { font-size: .68rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: #dc2626; margin-bottom: .3rem; }
+.formula { background: var(--accent-lt); border: 1px solid var(--accent-bd); border-radius: 6px; padding: .6rem 1.2rem; margin: .6rem 0; font-family: 'JetBrains Mono', monospace; font-size: .92rem; text-align: center; color: var(--accent); font-weight: 600; }
+
+/* ── Step card ── */
+.step-card { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0; padding: 1rem 1.3rem; margin-bottom: 1rem; }
+.step-card.step-cut { border-left-color: #ef4444; }
+.step-card.step-result { border-left-color: #16a34a; }
+.step-num { font-size: .72rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--accent); margin-bottom: .15rem; }
+.step-card.step-cut .step-num { color: #dc2626; }
+.step-card.step-result .step-num { color: #16a34a; }
+.step-title { font-size: .95rem; font-weight: 700; color: var(--text); margin-bottom: .5rem; }
+
+/* ── Quick-ref table ── */
+.tbl-wrap { overflow-x: auto; margin: .7rem 0; }
+table { width: 100%; border-collapse: collapse; font-size: .845rem; }
+th { background: var(--surface-2); padding: .5rem .75rem; text-align: left; font-weight: 600; font-size: .76rem; letter-spacing: .02em; color: var(--text-2); border-bottom: 2px solid var(--border); }
+td { padding: .45rem .75rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+.tc { text-align: center; }
+tr.row-highlight { background: var(--accent-lt); }
+tr.row-cut { background: var(--cut-bg); }
+
+/* ── Images ── */
+.graph-img { display: block; max-width: 100%; margin: 1rem auto; border-radius: 8px; border: 1px solid var(--border); }
+.img-cap { text-align: center; font-size: .77rem; color: var(--text-3); margin-top: .2rem; margin-bottom: .85rem; }
+.img-wrap { text-align: center; }
+
+/* ── Lists ── */
+.content-ul { padding-left: 1.3rem; list-style: disc; margin: .4rem 0; }
+.content-ul li { margin-bottom: .35rem; font-size: .875rem; }
+.content-ol { padding-left: 1.3rem; list-style: decimal; margin: .4rem 0; }
+.content-ol li { margin-bottom: .35rem; font-size: .875rem; }
+
+/* ── Summary box ── */
+.summary-box { background: var(--accent-lt); border: 2px solid var(--accent-bd); border-radius: 8px; padding: 1.2rem 1.4rem; margin-top: 1.5rem; }
+.summary-label { font-size: .72rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--accent); margin-bottom: .5rem; }
+
+/* ── Print ── */
+@media print {
+    #site-header { background: #1e293b !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .step-card { break-inside: avoid; }
+    .graph-img { max-width: 85%; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════ HEADER -->
+<header id="site-header">
+    <div class="header-inner">
+        <div class="header-top">
+            <div>
+                <div class="header-eyebrow">EP15/EP16.TOKT11121 · Introduction to AI</div>
+                <div class="header-title">Alpha-Beta Pruning — Cây 3 tầng (Ví dụ chi tiết)</div>
+                <div class="header-sub">Adversarial Search &nbsp;·&nbsp; Ví dụ mở rộng từ slide 16</div>
+            </div>
+            <div><span class="badge-pill">VÍ DỤ MINH HỌA</span></div>
+        </div>
+    </div>
+</header>
+
+<!-- ════════════════════════════════════════════ MAIN -->
+<main>
+
+<!-- ──── Cây bài toán ──── -->
+<div class="part-heading">Cây bài toán</div>
+
+<p>Cây có <strong>3 tầng quyết định</strong>: gốc <strong>MAX</strong> → tầng <strong>MIN</strong> → tầng <strong>MAX</strong> → lá.</p>
+
+<ul class="content-ul">
+    <li>Gốc <strong>A (MAX)</strong>; hai con <strong>B, C (MIN)</strong>.</li>
+    <li>B có hai con MAX: <strong>D</strong> (lá 3, 5) và <strong>E</strong> (lá 6, 9).</li>
+    <li>C có hai con MAX: <strong>F</strong> (lá 2, 4) và <strong>G</strong> (lá 7, 8).</li>
+</ul>
+
+<p>Duyệt <strong>sâu trước, từ trái sang phải</strong>. Kết quả và diễn tiến α/β/v ở từng nút:</p>
+
+<div class="img-wrap">
+    <img src="alphabeta3_images/ab3_problem.png" alt="Cây 3 tầng — đề bài" class="graph-img" style="max-width:600px;">
+    <div class="img-cap">Đề bài — Cây 3 tầng (8 lá)</div>
+</div>
+
+<div class="img-wrap">
+    <img src="alphabeta3_images/ab3_solution.png" alt="Cây 3 tầng — lời giải" class="graph-img" style="max-width:640px;">
+    <div class="img-cap">Lời giải — giá trị v, α, β và các nút bị cắt</div>
+</div>
+
+<!-- ════════════════════════════════════════════ SECTION 1 -->
+<div class="part-heading">1. Quy luật chọn v, α, β</div>
+<p style="font-size:.875rem; color:var(--text-2); font-style:italic;">Học thuộc phần này là làm được mọi bài.</p>
+
+<!-- v -->
+<div class="def-box">
+    <div class="def-label">v — "giá trị đang gom" của chính nút đó</div>
+    <ul class="content-ul" style="margin-top:.3rem;">
+        <li><strong>v cùng tính cách với nút:</strong> nút <strong>MAX</strong> thì v lấy <strong>max</strong>, nút <strong>MIN</strong> thì v lấy <strong>min</strong> các con đã xét.</li>
+        <li>Khởi tạo: nút MAX bắt đầu <strong>v = −∞</strong> (rồi chỉ đi lên); nút MIN bắt đầu <strong>v = +∞</strong> (rồi chỉ đi xuống).</li>
+        <li>Sau khi xét xong (hoặc bị cắt), <strong>v chính là giá trị nút trả về cho cha</strong>.</li>
+    </ul>
+</div>
+
+<!-- α, β -->
+<div class="def-box">
+    <div class="def-label">α, β — "cửa sổ" [α, β] mang từ trên xuống</div>
+    <ul class="content-ul" style="margin-top:.3rem;">
+        <li><strong>α</strong> = giá trị tốt nhất mà <strong>MAX</strong> đã chắc chắn có (cận <strong>dưới</strong>). <strong>β</strong> = giá trị tốt nhất mà <strong>MIN</strong> đã chắc chắn có (cận <strong>trên</strong>).</li>
+        <li>Mỗi con <strong>kế thừa</strong> cửa sổ [α, β] hiện thời của cha.</li>
+        <li><strong>Cập nhật — luật vàng: "MAX nuôi α, MIN nuôi β".</strong>
+            <ul class="content-ul" style="margin-top:.2rem;">
+                <li>Ở nút <strong>MAX</strong>: sau mỗi con, <strong>α ← max(α, v)</strong>. (nút MAX <em>không</em> đụng vào β, chỉ mang xuống)</li>
+                <li>Ở nút <strong>MIN</strong>: sau mỗi con, <strong>β ← min(β, v)</strong>. (nút MIN <em>không</em> đụng vào α, chỉ mang xuống)</li>
+            </ul>
+        </li>
+        <li>Ở gốc luôn khởi đầu <strong>α = −∞, β = +∞</strong>. Cửa sổ [α, β] chỉ <strong>hẹp dần</strong> khi đi sâu, không bao giờ rộng ra.</li>
+    </ul>
+</div>
+
+<!-- Luật cắt -->
+<div class="def-box" style="border-color: var(--cut-bd); background: var(--cut-bg);">
+    <div class="def-label" style="color:#dc2626;">Luật cắt tỉa</div>
+    <ul class="content-ul" style="margin-top:.3rem;">
+        <li>Nút <strong>MAX</strong>: nếu <strong>v ≥ β</strong> → <strong>cắt</strong> các con còn lại (gọi là <em>β-cut</em>).</li>
+        <li>Nút <strong>MIN</strong>: nếu <strong>v ≤ α</strong> → <strong>cắt</strong> các con còn lại (gọi là <em>α-cut</em>).</li>
+        <li>Gộp chung một câu: <strong>cắt khi α ≥ β</strong> (cửa sổ rỗng).</li>
+        <li>Trực giác: nút hiện tại vừa "vượt rào" mà tổ tiên phía đối lập đã đặt → tổ tiên chắc chắn không chọn nhánh này → xét tiếp là vô ích.</li>
+    </ul>
+</div>
+
+<!-- Bảng tra nhanh -->
+<div class="tbl-wrap" style="margin-top:1rem;">
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Lấy v bằng</th>
+                <th>Cập nhật ngưỡng nào</th>
+                <th>Cắt khi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Nút MAX ▲</strong></td>
+                <td>max (từ −∞)</td>
+                <td><strong>α ← max(α, v)</strong></td>
+                <td><strong>v ≥ β</strong></td>
+            </tr>
+            <tr>
+                <td><strong>Nút MIN ▼</strong></td>
+                <td>min (từ +∞)</td>
+                <td><strong>β ← min(β, v)</strong></td>
+                <td><strong>v ≤ α</strong></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- ════════════════════════════════════════════ SECTION 2 -->
+<div class="part-heading">2. Giải thích từng nút theo đúng thứ tự duyệt</div>
+
+<!-- Bước 1 -->
+<div class="step-card">
+    <div class="step-num">Bước 1</div>
+    <div class="step-title">Vào A (MAX)</div>
+    <p>Khởi tạo α = −∞, β = +∞, v = −∞. Đi xuống con trái B.</p>
+</div>
+
+<!-- Bước 2 -->
+<div class="step-card">
+    <div class="step-num">Bước 2</div>
+    <div class="step-title">Vào B (MIN)</div>
+    <p>Kế thừa α = −∞, β = +∞; khởi tạo v = +∞. Đi xuống con trái D.</p>
+</div>
+
+<!-- Bước 3 -->
+<div class="step-card">
+    <div class="step-num">Bước 3</div>
+    <div class="step-title">Vào D (MAX)</div>
+    <p>Kế thừa α = −∞, β = +∞; v = −∞.</p>
+    <ul class="content-ul">
+        <li>Lá <strong>3</strong>: v = max(−∞, 3) = <strong>3</strong>. v ≥ β? không. Cập nhật <strong>α = max(−∞, 3) = 3</strong>.</li>
+        <li>Lá <strong>5</strong>: v = max(3, 5) = <strong>5</strong>. v ≥ β? không. Cập nhật <strong>α = 5</strong>.</li>
+        <li>Hết con → <strong>D = 5</strong>, trả về B.</li>
+    </ul>
+</div>
+
+<!-- Bước 4 -->
+<div class="step-card">
+    <div class="step-num">Bước 4</div>
+    <div class="step-title">Về B (MIN) — nhận D = 5</div>
+    <p>v = min(+∞, 5) = <strong>5</strong>. Kiểm tra v ≤ α(−∞)? không. Cập nhật <strong>β = min(+∞, 5) = 5</strong>. Đi xuống con thứ hai E.</p>
+</div>
+
+<!-- Bước 5 — CẮT -->
+<div class="step-card step-cut">
+    <div class="step-num">Bước 5 — β-cut</div>
+    <div class="step-title">Vào E (MAX)</div>
+    <p>Kế thừa α = −∞, <strong>β = 5</strong> (β mới của B); v = −∞.</p>
+    <ul class="content-ul">
+        <li>Lá <strong>6</strong>: v = max(−∞, 6) = <strong>6</strong>. Kiểm tra <strong>v ≥ β? 6 ≥ 5 → ĐÚNG → β-cut</strong>: cắt lá <strong>9</strong>. E trả về 6.</li>
+    </ul>
+    <div class="cut-box">
+        <div class="cut-label">Vì sao cắt?</div>
+        <p>E là MAX nên E ≥ 6; nhưng B (MIN, cha) đã chắc chắn có 5 từ D, nên B sẽ không chọn E (E còn lớn hơn) → khỏi xét lá 9.</p>
+    </div>
+</div>
+
+<!-- Bước 6 -->
+<div class="step-card">
+    <div class="step-num">Bước 6</div>
+    <div class="step-title">Về B (MIN) — nhận E = 6</div>
+    <p>v = min(5, 6) = <strong>5</strong>. Hết con → <strong>B = 5</strong>, trả về A.</p>
+</div>
+
+<!-- Bước 7 -->
+<div class="step-card">
+    <div class="step-num">Bước 7</div>
+    <div class="step-title">Về A (MAX) — nhận B = 5</div>
+    <p>v = max(−∞, 5) = <strong>5</strong>. v ≥ β? không. Cập nhật <strong>α = max(−∞, 5) = 5</strong>. Đi xuống con phải C.</p>
+</div>
+
+<!-- Bước 8 -->
+<div class="step-card">
+    <div class="step-num">Bước 8</div>
+    <div class="step-title">Vào C (MIN)</div>
+    <p>Kế thừa <strong>α = 5</strong>, β = +∞; v = +∞. Đi xuống con trái F.</p>
+</div>
+
+<!-- Bước 9 -->
+<div class="step-card">
+    <div class="step-num">Bước 9</div>
+    <div class="step-title">Vào F (MAX)</div>
+    <p>Kế thừa α = 5, β = +∞; v = −∞.</p>
+    <ul class="content-ul">
+        <li>Lá <strong>2</strong>: v = max(−∞, 2) = <strong>2</strong>. v ≥ β? không. α = max(5, 2) = <strong>5</strong> (giữ nguyên).</li>
+        <li>Lá <strong>4</strong>: v = max(2, 4) = <strong>4</strong>. v ≥ β? không. α = <strong>5</strong>.</li>
+        <li>Hết con → <strong>F = 4</strong>, trả về C.</li>
+    </ul>
+</div>
+
+<!-- Bước 10 — CẮT -->
+<div class="step-card step-cut">
+    <div class="step-num">Bước 10 — α-cut</div>
+    <div class="step-title">Về C (MIN) — nhận F = 4</div>
+    <p>v = min(+∞, 4) = <strong>4</strong>. Kiểm tra <strong>v ≤ α? 4 ≤ 5 → ĐÚNG → α-cut</strong>: cắt <strong>cả nút G</strong> (lá 7 và 8). C trả về 4.</p>
+    <div class="cut-box">
+        <div class="cut-label">Vì sao cắt?</div>
+        <p>C là MIN nên C ≤ 4; nhưng A (MAX, cha) đã chắc chắn có 5 từ B, nên A sẽ không chọn C → khỏi xét G.</p>
+    </div>
+</div>
+
+<!-- Bước 11 — KẾT QUẢ -->
+<div class="step-card step-result">
+    <div class="step-num">Bước 11 — Kết quả</div>
+    <div class="step-title">Về A (MAX) — nhận C = 4</div>
+    <p>v = max(5, 4) = <strong>5</strong>. Hết con → <strong>A = 5</strong>. Nước đi tốt nhất của MAX là <strong>sang B</strong>.</p>
+</div>
+
+<!-- ════════════════════════════════════════════ SECTION 3 -->
+<div class="part-heading">3. Bảng theo dõi α, β, v qua từng bước</div>
+
+<div class="tbl-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>Bước</th>
+                <th>Nút (loại)</th>
+                <th>Kế thừa (α, β)</th>
+                <th>Xét</th>
+                <th>v sau đó</th>
+                <th>Cập nhật</th>
+                <th>Ghi chú</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>A (MAX)</td>
+                <td>(−∞, +∞)</td>
+                <td>khởi tạo</td>
+                <td>−∞</td>
+                <td>—</td>
+                <td>xuống B</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>B (MIN)</td>
+                <td>(−∞, +∞)</td>
+                <td>khởi tạo</td>
+                <td>+∞</td>
+                <td>—</td>
+                <td>xuống D</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>D (MAX)</td>
+                <td>(−∞, +∞)</td>
+                <td>lá 3</td>
+                <td>3</td>
+                <td>α=3</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>D (MAX)</td>
+                <td>(3, +∞)</td>
+                <td>lá 5</td>
+                <td>5</td>
+                <td>α=5</td>
+                <td><strong>D = 5</strong> → về B</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>B (MIN)</td>
+                <td>(−∞, +∞)</td>
+                <td>nhận D=5</td>
+                <td>5</td>
+                <td>β=5</td>
+                <td>xuống E</td>
+            </tr>
+            <tr class="row-cut">
+                <td>6</td>
+                <td>E (MAX)</td>
+                <td>(−∞, 5)</td>
+                <td>lá 6</td>
+                <td>6</td>
+                <td>—</td>
+                <td>6 ≥ β=5 → <strong style="color:#dc2626;">cắt lá 9</strong>; E=6</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>B (MIN)</td>
+                <td>(−∞, 5)</td>
+                <td>nhận E=6</td>
+                <td>5</td>
+                <td>β=5</td>
+                <td><strong>B = 5</strong> → về A</td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>A (MAX)</td>
+                <td>(−∞, +∞)</td>
+                <td>nhận B=5</td>
+                <td>5</td>
+                <td>α=5</td>
+                <td>xuống C</td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td>C (MIN)</td>
+                <td>(5, +∞)</td>
+                <td>khởi tạo</td>
+                <td>+∞</td>
+                <td>—</td>
+                <td>xuống F</td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>F (MAX)</td>
+                <td>(5, +∞)</td>
+                <td>lá 2</td>
+                <td>2</td>
+                <td>α=5</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>11</td>
+                <td>F (MAX)</td>
+                <td>(5, +∞)</td>
+                <td>lá 4</td>
+                <td>4</td>
+                <td>α=5</td>
+                <td><strong>F = 4</strong> → về C</td>
+            </tr>
+            <tr class="row-cut">
+                <td>12</td>
+                <td>C (MIN)</td>
+                <td>(5, +∞)</td>
+                <td>nhận F=4</td>
+                <td>4</td>
+                <td>—</td>
+                <td>4 ≤ α=5 → <strong style="color:#dc2626;">cắt cả G (lá 7, 8)</strong>; C=4</td>
+            </tr>
+            <tr class="row-highlight">
+                <td>13</td>
+                <td>A (MAX)</td>
+                <td>(5, +∞)</td>
+                <td>nhận C=4</td>
+                <td>5</td>
+                <td>α=5</td>
+                <td><strong>A = 5</strong>; nước tốt nhất: <strong>B</strong></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- ════════════════════════════════════════════ SECTION 4 -->
+<div class="part-heading">4. Tổng kết</div>
+
+<div class="summary-box">
+    <div class="summary-label">Kết quả</div>
+    <ul class="content-ul" style="margin-top:.2rem;">
+        <li><strong>Giá trị gốc = 5</strong>, MAX chọn <strong>nhánh B</strong>.</li>
+        <li>Alpha-Beta chỉ xét <strong>5 lá</strong> (3, 5, 6, 2, 4), <strong>cắt 3 lá</strong> (9, và 7–8 của G).</li>
+        <li>Ví dụ này minh họa <strong>cả hai kiểu cắt</strong>:
+            <ul class="content-ul" style="margin-top:.15rem;">
+                <li><strong>β-cut</strong> tại nút MAX E (v ≥ β) — cắt 1 lá.</li>
+                <li><strong>α-cut</strong> tại nút MIN C (v ≤ α) — cắt cả một cây con (2 lá).</li>
+            </ul>
+        </li>
+        <li>Đối chiếu với slide 16 (cây 2 tầng): quy luật y hệt, chỉ khác là ở cây 3 tầng, ngưỡng α được nút MAX ở tầng dưới cùng "nuôi lớn" trước khi trả lên, còn β được nút MIN ở giữa cập nhật — nhờ đó việc cắt lan tỏa mạnh hơn.</li>
+    </ul>
+</div>
+
+<div class="note" style="margin-top:1rem;">
+    <strong>Lưu ý:</strong> Đề (không kèm lời giải) nằm ở ảnh <code>ab3_problem.png</code> để giao cho sinh viên tự làm.
+</div>
+
+</main>
+</body>
+</html>
