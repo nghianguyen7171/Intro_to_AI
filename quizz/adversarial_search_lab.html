@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LAB — Adversarial Search: Minimax, Alpha-Beta, Heuristic &amp; MCTS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root {
+    --bg:        #f1f5f9;
+    --surface:   #ffffff;
+    --surface-2: #f8fafc;
+    --border:    #e2e8f0;
+    --text:      #0f172a;
+    --text-2:    #475569;
+    --text-3:    #94a3b8;
+    --accent:    #6366f1;
+    --accent-lt: #eef2ff;
+    --accent-bd: #c7d2fe;
+    --code-bg:   #1e293b;
+    --code-text: #e2e8f0;
+    --q-bg:      #fefce8;
+    --q-bd:      #fde047;
+    --task-bg:   #eff6ff;
+    --task-bd:   #93c5fd;
+    --def-bg:    #f0fdf4;
+    --def-bd:    #86efac;
+    --warn-bg:   #fff7ed;
+    --warn-bd:   #fdba74;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --bg:#0f172a;--surface:#1e293b;--surface-2:#162032;--border:#334155;--text:#f1f5f9;--text-2:#94a3b8;--text-3:#64748b;--accent:#818cf8;--accent-lt:#1e1b4b;--accent-bd:#3730a3;--code-bg:#090e1a;--code-text:#e2e8f0;--q-bg:#2d2508;--q-bd:#713f12;--task-bg:#0c1a2e;--task-bd:#1e3a5f;--def-bg:#052e16;--def-bd:#166534;--warn-bg:#1c0e02;--warn-bd:#92400e;
+    }
+}
+:root[data-theme="dark"] {
+    --bg:#0f172a;--surface:#1e293b;--surface-2:#162032;--border:#334155;--text:#f1f5f9;--text-2:#94a3b8;--text-3:#64748b;--accent:#818cf8;--accent-lt:#1e1b4b;--accent-bd:#3730a3;--code-bg:#090e1a;--code-text:#e2e8f0;--q-bg:#2d2508;--q-bd:#713f12;--task-bg:#0c1a2e;--task-bd:#1e3a5f;--def-bg:#052e16;--def-bd:#166534;--warn-bg:#1c0e02;--warn-bd:#92400e;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{font-family:'Inter','Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.7;margin:0}
+p{margin:0 0 .7rem}p:last-child{margin-bottom:0}
+strong{font-weight:700}
+code,.mono{font-family:'JetBrains Mono','Courier New',monospace;font-size:.9em;background:var(--surface-2);border:1px solid var(--border);border-radius:3px;padding:.1em .35em}
+
+#site-header{background:#0f172a;position:sticky;top:0;z-index:50;border-bottom:1px solid #1e293b}
+.header-inner{max-width:960px;margin:0 auto;padding:0 1.5rem}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:.9rem 0 .55rem}
+.header-eyebrow{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#818cf8;margin-bottom:.15rem}
+.header-title{font-size:1.05rem;font-weight:800;color:#fff;line-height:1.25}
+.header-sub{font-size:.75rem;color:#94a3b8;margin-top:.1rem}
+.badge-pill{background:#1e293b;border:1px solid #334155;color:#94a3b8;font-size:.68rem;font-weight:600;letter-spacing:.06em;padding:.2rem .65rem;border-radius:4px}
+
+main{max-width:960px;margin:0 auto;padding:1.75rem 1.5rem 5rem}
+
+.part-heading{font-size:1.1rem;font-weight:800;color:var(--accent);margin:2rem 0 .6rem;padding-bottom:.35rem;border-bottom:2px solid var(--accent-bd)}
+.sub-heading{font-size:.95rem;font-weight:700;color:var(--text);margin:1.2rem 0 .5rem}
+
+.ex-card{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;padding:1.4rem 1.5rem;margin-bottom:1.75rem}
+.ex-eyebrow{font-size:.68rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);margin-bottom:.2rem}
+.ex-title{font-size:1.05rem;font-weight:800;color:var(--text);margin-bottom:.9rem}
+
+.def-box{background:var(--def-bg);border:1px solid var(--def-bd);border-radius:6px;padding:.85rem 1.1rem;margin:.85rem 0}
+.def-label{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#15803d;margin-bottom:.4rem}
+.task-box{background:var(--task-bg);border-left:3px solid #60a5fa;border-radius:0 6px 6px 0;padding:.9rem 1.2rem;margin:.85rem 0}
+.task-label{font-size:.68rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#1d4ed8;margin-bottom:.45rem}
+.note{background:var(--surface-2);border:1px solid var(--border);border-radius:6px;padding:.6rem 1rem;font-size:.845rem;color:var(--text-2);margin:.65rem 0}
+.warn-box{background:var(--warn-bg);border:1px solid var(--warn-bd);border-radius:6px;padding:.6rem 1rem;font-size:.845rem;color:var(--text-2);margin:.65rem 0}
+.formula{background:var(--accent-lt);border:1px solid var(--accent-bd);border-radius:6px;padding:.6rem 1.2rem;margin:.6rem 0;font-family:'JetBrains Mono',monospace;font-size:.92rem;text-align:center;color:var(--accent);font-weight:600}
+.bonus-tag{display:inline-block;background:#f3e8ff;border:1px solid #c084fc;color:#7c3aed;font-size:.68rem;font-weight:700;padding:.1rem .5rem;border-radius:3px;letter-spacing:.04em;margin-left:.4rem}
+
+.q-box{background:var(--q-bg);border-left:3px solid #eab308;border-radius:0 6px 6px 0;padding:.9rem 1.2rem;margin-top:1rem}
+.q-label{font-size:.68rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#a16207;margin-bottom:.45rem}
+.q-list{margin:.1rem 0 0}
+.q-item{display:flex;gap:.6rem;margin-bottom:.45rem;font-size:.875rem;align-items:flex-start}
+.q-item:last-child{margin-bottom:0}
+.q-num{flex-shrink:0;font-weight:700;color:var(--accent);min-width:2.5rem}
+
+.tbl-wrap{overflow-x:auto;margin:.7rem 0}
+table{width:100%;border-collapse:collapse;font-size:.845rem}
+th{background:var(--surface-2);padding:.5rem .75rem;text-align:left;font-weight:600;font-size:.76rem;letter-spacing:.02em;color:var(--text-2);border-bottom:2px solid var(--border)}
+td{padding:.45rem .75rem;border-bottom:1px solid var(--border);vertical-align:top}
+tr:last-child td{border-bottom:none}
+.tc{text-align:center}
+
+.graph-img{display:block;max-width:100%;margin:1rem auto;border-radius:8px;border:1px solid var(--border)}
+.img-cap{text-align:center;font-size:.77rem;color:var(--text-3);margin-top:.2rem;margin-bottom:.85rem}
+.img-wrap{text-align:center}
+
+.content-ul{padding-left:1.3rem;list-style:disc;margin:.4rem 0}
+.content-ul li{margin-bottom:.35rem;font-size:.875rem}
+.content-ol{padding-left:1.3rem;list-style:decimal;margin:.4rem 0}
+.content-ol li{margin-bottom:.35rem;font-size:.875rem}
+
+.score-bar{background:var(--surface-2);border:1px solid var(--border);border-radius:6px;padding:.7rem 1.1rem;margin-bottom:1.5rem;font-size:.845rem}
+
+.sec-div{border:none;border-top:1px solid var(--border);margin:1.5rem 0}
+
+@media print{
+    #site-header{background:#1e293b!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .ex-card{break-inside:avoid}
+    .graph-img{max-width:85%}
+}
+</style>
+</head>
+<body>
+
+<!-- ════ HEADER ════ -->
+<header id="site-header">
+    <div class="header-inner">
+        <div class="header-top">
+            <div>
+                <div class="header-eyebrow">EP15/EP16.TOKT11121 · Introduction to AI</div>
+                <div class="header-title">LAB — Adversarial Search</div>
+                <div class="header-sub">Minimax · Alpha-Beta · Heuristic Evaluation · MCTS &nbsp;·&nbsp; Tuần 8</div>
+            </div>
+            <div><span class="badge-pill">LÀM TAY — KHÔNG LẬP TRÌNH</span></div>
+        </div>
+    </div>
+</header>
+
+<!-- ════ MAIN ════ -->
+<main>
+
+<!-- Conventions -->
+<div class="def-box" style="margin-bottom:1rem;">
+    <div class="def-label">Quy ước chung</div>
+    <ul class="content-ul" style="margin-top:.3rem;">
+        <li>Nút <strong>▲ MAX</strong> lấy <strong>max</strong> các con; nút <strong>▼ MIN</strong> lấy <strong>min</strong> các con. Giá trị ở lá là điểm cho MAX.</li>
+        <li>Alpha-Beta duyệt <strong>trái → phải</strong>; cắt khi <strong>α ≥ β</strong> (nút MIN cắt khi v ≤ α; nút MAX cắt khi v ≥ β).</li>
+        <li><strong>Luật vàng:</strong> "MAX nuôi α, MIN nuôi β"; v cùng loại với nút (MAX→max từ −∞, MIN→min từ +∞).</li>
+    </ul>
+</div>
+
+<!-- Scoring -->
+<div class="score-bar">
+    <strong>Thang điểm:</strong> Câu 1: 30 · Câu 2: 25 · Câu 3: 25 · Câu 4: 20. (Các ý <span class="bonus-tag">★ THƯỞNG</span> là điểm cộng thêm.)
+</div>
+
+<!-- ════════════════════════════════ CÂU 1 ════════════════════════════════ -->
+<div class="part-heading">Câu 1 — Minimax &amp; Alpha-Beta trên cây (30đ)</div>
+
+<p>Với <strong>mỗi cây</strong>: (1) tìm giá trị các nút và giá trị gốc bằng <strong>Minimax</strong>, cho biết nước đi tốt nhất của MAX; (2) chạy <strong>Alpha-Beta</strong> (trái→phải), <strong>ghi α/β/v tại mỗi nút</strong> và <strong>liệt kê các lá bị cắt</strong>.</p>
+
+<!-- 1a -->
+<div class="ex-card">
+    <div class="ex-eyebrow">Câu 1a</div>
+    <div class="ex-title">Cây 3 tầng</div>
+    <div class="img-wrap">
+        <img src="lab_images/p1_treeA_problem.png" alt="Câu 1a — cây 3 tầng" class="graph-img" style="max-width:540px;">
+    </div>
+</div>
+
+<!-- 1b -->
+<div class="ex-card">
+    <div class="ex-eyebrow">Câu 1b</div>
+    <div class="ex-title">Cây 4 tầng (có số âm)</div>
+    <div class="img-wrap">
+        <img src="lab_images/p1_treeB_problem.png" alt="Câu 1b — cây 4 tầng" class="graph-img" style="max-width:620px;">
+    </div>
+</div>
+
+<!-- 1c -->
+<div class="ex-card">
+    <div class="ex-eyebrow">Câu 1c</div>
+    <div class="ex-title">Cây KHÔNG ĐỀU (nhiều tầng, phân nhánh khác nhau, lá ở nhiều độ sâu)</div>
+    <div class="warn-box">
+        <strong>Lưu ý:</strong> một số <strong>lá nằm ngay ở tầng trên</strong> (ví dụ giá trị 16, 12 là con trực tiếp của nút MIN). Khi tính, cứ dùng loại nút (MAX/MIN) theo tầng, và lá là giá trị cuối bất kể độ sâu.
+    </div>
+    <div class="img-wrap">
+        <img src="lab_images/p1c_irregular_problem.png" alt="Câu 1c — cây không đều" class="graph-img" style="max-width:680px;">
+    </div>
+</div>
+
+<!-- 1d bonus -->
+<div class="ex-card" style="border-left-color:#7c3aed;">
+    <div class="ex-eyebrow" style="color:#7c3aed;">★ Câu 1d <span class="bonus-tag">THƯỞNG 5đ</span></div>
+    <div class="ex-title">Thứ tự duyệt tối ưu</div>
+    <p>Với cây 1a, chỉ ra thứ tự duyệt các nhánh giúp Alpha-Beta <strong>cắt nhiều nhất</strong> và <strong>ít nhất</strong>; nêu độ phức tạp tốt nhất/tệ nhất.</p>
+</div>
+
+<hr class="sec-div">
+
+<!-- ════════════════════════════════ CÂU 2 ════════════════════════════════ -->
+<div class="part-heading">Câu 2 — Mô hình hóa game thật thành cây và giải (25đ)</div>
+
+<!-- 2a -->
+<div class="ex-card">
+    <div class="ex-eyebrow">Câu 2a — Coin-row game (15đ)</div>
+    <div class="ex-title">Dãy đồng xu [3, 9, 1, 2]</div>
+
+    <p><strong>Luật:</strong> một dãy đồng xu. Hai người <strong>luân phiên</strong>, mỗi lượt lấy <strong>một xu ở đầu trái hoặc đầu phải</strong> của dãy còn lại. Mỗi người muốn <strong>tối đa tổng mệnh giá mình lấy</strong>. Người đi trước là <strong>MAX</strong>. Quy ước <strong>UTILITY = (tổng MAX) − (tổng MIN)</strong>.</p>
+
+    <div class="img-wrap">
+        <img src="lab_images/p2_coinrow_problem.png" alt="Dãy xu [3, 9, 1, 2]" class="graph-img" style="max-width:420px;">
+    </div>
+
+    <div class="task-box">
+        <div class="task-label">Yêu cầu</div>
+        <ol class="content-ol">
+            <li>(5đ) Mô hình hóa <strong>6 thành phần</strong>: S₀, PLAYER, ACTIONS, RESULT, TERMINAL-TEST, UTILITY.</li>
+            <li>(7đ) <strong>Vẽ toàn bộ cây</strong>, điền UTILITY ở lá; chạy <strong>Minimax</strong>: giá trị gốc và <strong>nước đi đầu tối ưu</strong>.</li>
+            <li>(3đ) Chiến lược <strong>tham lam</strong> (luôn lấy đầu lớn hơn) cho kết quả gì? Vì sao <strong>không</strong> tối ưu?</li>
+        </ol>
+    </div>
+</div>
+
+<!-- 2b -->
+<div class="ex-card">
+    <div class="ex-eyebrow">Câu 2b — Nim (10đ)</div>
+    <div class="ex-title">5 viên sỏi — lấy 1 hoặc 2, ai lấy cuối thắng</div>
+
+    <p><strong>Luật:</strong> có <strong>5 viên sỏi</strong>. Hai người luân phiên, mỗi lượt lấy <strong>1 hoặc 2 viên</strong>; <strong>ai lấy viên cuối cùng thì THẮNG</strong>. Người đi trước là <strong>MAX</strong>. Quy ước <strong>UTILITY = +1 nếu MAX thắng, −1 nếu MIN thắng</strong>.</p>
+
+    <div class="task-box">
+        <div class="task-label">Yêu cầu</div>
+        <ol class="content-ol">
+            <li>(4đ) Mô hình hóa <strong>6 thành phần</strong> cho trò chơi này.</li>
+            <li>(4đ) <strong>Vẽ cây trò chơi</strong> (mỗi nút ghi số viên còn lại; cạnh ghi số viên lấy), điền UTILITY ở lá; chạy <strong>Minimax</strong> tìm giá trị gốc và <strong>nước đi đầu tối ưu</strong>.</li>
+            <li>(2đ) Người đi trước <strong>thắng hay thua</strong> nếu cả hai chơi tối ưu?</li>
+        </ol>
+    </div>
+    <div class="note">
+        <strong>Gợi ý kiểm tra:</strong> các vị trí là <strong>bội số của 3</strong> viên là "thế thua" cho người sắp đi.
+    </div>
+</div>
+
+<hr class="sec-div">
+
+<!-- ════════════════════════════════ CÂU 3 ════════════════════════════════ -->
+<div class="part-heading">Câu 3 — Heuristic Alpha-Beta trên cờ vua (25đ)</div>
+
+<div class="ex-card">
+    <div class="ex-eyebrow">Câu 3</div>
+    <div class="ex-title">Đánh giá vị trí cờ vua bằng EVAL (chênh lệch chất)</div>
+
+    <p>Cây cờ vua quá lớn để duyệt tới hết ván, nên ta <strong>tìm sâu 2 tầng rồi dừng</strong> (Trắng đi → Đen đáp) và dùng <strong>hàm đánh giá:</strong></p>
+
+    <div class="formula">EVAL = chênh lệch chất (material) = tổng quân Trắng − tổng quân Đen</div>
+
+    <p>Với quy ước: <strong>Tốt (P) = 1, Mã (N) = Tượng (B) = 3, Xe (R) = 5, Hậu (Q) = 9</strong>.</p>
+
+    <p><strong>Trắng đi (MAX).</strong> Thế cờ hiện tại đang cân bằng chất (EVAL = 0):</p>
+
+    <div class="img-wrap">
+        <img src="lab_images/p3c_chess_position.png" alt="Thế cờ — Trắng đi (MAX)" class="graph-img" style="max-width:400px;">
+    </div>
+
+    <p>Xét <strong>3 nước ăn quân ứng viên</strong> của Trắng; với mỗi nước, Đen có <strong>2 đáp trả</strong> (ăn lại / không ăn lại). Bảng diễn biến và EVAL ở mỗi thế cờ lá (sau 2 nước, tính theo <em>thay đổi</em> chất so với hiện tại):</p>
+
+    <div class="tbl-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nước Trắng</th>
+                    <th>Đáp trả của Đen</th>
+                    <th>Diễn biến</th>
+                    <th class="tc">EVAL</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>A: Nxd5</strong> (Mã ăn Tốt d5)</td>
+                    <td>Đen không ăn lại được (Mã an toàn)</td>
+                    <td>Trắng +1 Tốt</td>
+                    <td class="tc"><strong>+1</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>A: Nxd5</strong></td>
+                    <td>Đen đi dở, mất thêm 1 Tốt</td>
+                    <td>Trắng +2 Tốt</td>
+                    <td class="tc">+2</td>
+                </tr>
+                <tr>
+                    <td><strong>B: Rxe7</strong> (Xe ăn Tượng e7)</td>
+                    <td>…Rxe7 (Xe Đen ăn lại)</td>
+                    <td>+Tượng(3) − Xe(5)</td>
+                    <td class="tc"><strong>−2</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>B: Rxe7</strong></td>
+                    <td>Đen không ăn lại</td>
+                    <td>+Tượng(3)</td>
+                    <td class="tc">+3</td>
+                </tr>
+                <tr>
+                    <td><strong>C: Bxc6</strong> (Tượng ăn Mã c6)</td>
+                    <td>…bxc6 (Tốt ăn lại)</td>
+                    <td>+Mã(3) − Tượng(3)</td>
+                    <td class="tc"><strong>0</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>C: Bxc6</strong></td>
+                    <td>Đen không ăn lại</td>
+                    <td>+Mã(3)</td>
+                    <td class="tc">+3</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="task-box">
+        <div class="task-label">Yêu cầu</div>
+        <ol class="content-ol">
+            <li>(8đ) Vẽ cây tìm kiếm 2 tầng (Trắng-MAX → Đen-MIN → EVAL) và chạy <strong>Minimax</strong>: tìm giá trị mỗi nước, giá trị gốc và <strong>nước đi tốt nhất</strong> cho Trắng.</li>
+            <li>(10đ) Chạy <strong>Alpha-Beta</strong> (trái→phải): <strong>ghi α/β/v tại mỗi nút</strong> và liệt kê các lá bị cắt.</li>
+            <li>(4đ) Giải thích bằng ngôn ngữ cờ vua vì sao nước tối ưu lại tốt hơn hai nước còn lại (gợi ý: "ăn Tốt sạch" vs "mất chất" vs "đổi ngang").</li>
+            <li>(3đ) Vì sao phải dùng <strong>cutoff + EVAL</strong> thay vì duyệt tới hết ván? EVAL (đếm chất) là <em>ước lượng thô</em> — điều này ảnh hưởng gì tới tính tối ưu? Nêu ràng buộc UTILITY(thua) ≤ EVAL ≤ UTILITY(thắng).</li>
+        </ol>
+    </div>
+</div>
+
+<hr class="sec-div">
+
+<!-- ════════════════════════════════ CÂU 4 ════════════════════════════════ -->
+<div class="part-heading">Câu 4 — Monte-Carlo Tree Search (chạy tay) (20đ)</div>
+
+<div class="ex-card">
+    <div class="ex-eyebrow">Câu 4</div>
+    <div class="ex-title">MCTS — 3 vòng lặp Selection → Simulation → Back-propagation</div>
+
+    <p>Cho cây MCTS hiện tại (gốc R, ba nước A, B, C; mỗi nút ghi <strong>w/n</strong> = số ván thắng / số lượt):</p>
+
+    <div class="img-wrap">
+        <img src="lab_images/p4_mcts_init.png" alt="Cây MCTS ban đầu" class="graph-img" style="max-width:400px;">
+    </div>
+
+    <!-- UCB definition -->
+    <div class="def-box">
+        <div class="def-label">Định nghĩa hàm UCB (Upper Confidence Bound)</div>
+        <p style="margin-top:.3rem;">Khi ở bước <strong>Selection</strong>, mỗi nút con được chấm điểm bằng:</p>
+        <div class="formula">UCB(nút) = w/n &nbsp;+&nbsp; C · √( ln N / n )</div>
+        <p style="font-size:.875rem; margin-top:.5rem;">trong đó: <strong>w</strong> = số ván thắng đã tích lũy qua nút; <strong>n</strong> = số lượt đã đi qua nút; <strong>N</strong> = số lượt của <strong>nút cha</strong>; <strong>C</strong> = hằng số khám phá (ở đây <strong>C = √2 ≈ 1.414</strong>).</p>
+        <ul class="content-ul" style="margin-top:.4rem;">
+            <li>Số hạng <strong>w/n</strong> = <em>tỉ lệ thắng</em> → phần <strong>khai thác</strong> (ưu tiên nút đang tốt).</li>
+            <li>Số hạng <strong>C·√(ln N / n)</strong> = phần <strong>khám phá</strong> (thưởng cho nút <strong>ít được thử</strong>, n nhỏ).</li>
+            <li>Quy ước: nút chưa từng thăm (n = 0) có UCB = <strong>+∞</strong> (phải thăm trước). Selection luôn chọn nút có <strong>UCB lớn nhất</strong>.</li>
+        </ul>
+    </div>
+
+    <!-- Helpers -->
+    <div class="note">
+        <strong>Luật phá hòa:</strong> khi UCB bằng nhau, ưu tiên theo thứ tự chữ cái (A &lt; B &lt; C).<br>
+        <strong>Hằng số hỗ trợ tính tay:</strong> ln 12 ≈ 2.485, &nbsp; ln 13 ≈ 2.565, &nbsp; ln 14 ≈ 2.639.<br>
+        <strong>Kết quả 3 ván mô phỏng cho sẵn</strong> (playout vòng 1, 2, 3): <strong>THẮNG, THẮNG, THẮNG</strong>.
+    </div>
+
+    <div class="task-box">
+        <div class="task-label">Yêu cầu</div>
+        <ol class="content-ol">
+            <li>(12đ) Thực hiện <strong>3 vòng lặp</strong> MCTS. Mỗi vòng: tính <strong>UCB</strong> cho A, B, C → <strong>chọn</strong> nút (Selection) → dùng kết quả playout cho sẵn (Simulation) → <strong>cập nhật w/n</strong> của nút được chọn và của gốc (Back-propagation). Ghi rõ w/n sau mỗi vòng.</li>
+            <li>(3đ) Sau 3 vòng, <strong>nước đi nào</strong> được chọn để đi thật? Dựa vào tiêu chí gì?</li>
+            <li>(3đ) <strong>Giả định:</strong> nếu playout <strong>vòng 1 là THUA</strong>, hãy tính lại UCB ở <strong>vòng 2</strong> và cho biết nút nào được chọn. Điều này minh họa tính chất gì của MCTS?</li>
+            <li>(2đ) Giải thích ý nghĩa hai số hạng trong công thức UCB (khai thác vs khám phá).</li>
+        </ol>
+    </div>
+</div>
+
+<hr class="sec-div">
+
+<!-- Footer -->
+<div class="note" style="margin-top:1rem;">
+    <strong>Nộp:</strong> toàn bộ cây/bảng đã điền + lời giải. Nhớ ghi rõ bước tính α/β/v (Câu 1, 3) và UCB (Câu 4).
+</div>
+
+</main>
+</body>
+</html>
