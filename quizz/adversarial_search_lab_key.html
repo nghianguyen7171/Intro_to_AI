@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LAB — Adversarial Search — ĐÁP ÁN CHI TIẾT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root {
+    --bg:        #f1f5f9;
+    --surface:   #ffffff;
+    --surface-2: #f8fafc;
+    --border:    #e2e8f0;
+    --text:      #0f172a;
+    --text-2:    #475569;
+    --text-3:    #94a3b8;
+    --accent:    #6366f1;
+    --accent-lt: #eef2ff;
+    --accent-bd: #c7d2fe;
+    --code-bg:   #1e293b;
+    --code-text: #e2e8f0;
+    --ans-bg:    #f0fdf4;
+    --ans-bd:    #22c55e;
+    --ans-text:  #166534;
+    --step-bg:   #eff6ff;
+    --step-bd:   #3b82f6;
+    --cut-bg:    #fef2f2;
+    --cut-bd:    #ef4444;
+    --cut-text:  #991b1b;
+    --tip-bg:    #fffbeb;
+    --tip-bd:    #f59e0b;
+    --tip-text:  #92400e;
+    --key-bg:    #faf5ff;
+    --key-bd:    #a855f7;
+    --key-text:  #6b21a8;
+    --def-bg:    #f0fdf4;
+    --def-bd:    #86efac;
+    --warn-bg:   #fff7ed;
+    --warn-bd:   #fdba74;
+    --task-bg:   #eff6ff;
+    --task-bd:   #93c5fd;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --bg:#0f172a;--surface:#1e293b;--surface-2:#162032;--border:#334155;
+        --text:#f1f5f9;--text-2:#94a3b8;--text-3:#64748b;
+        --accent:#818cf8;--accent-lt:#1e1b4b;--accent-bd:#3730a3;
+        --code-bg:#090e1a;--code-text:#e2e8f0;
+        --ans-bg:#052e16;--ans-bd:#16a34a;--ans-text:#86efac;
+        --step-bg:#0c1a2e;--step-bd:#2563eb;
+        --cut-bg:#2a0a0a;--cut-bd:#dc2626;--cut-text:#fca5a5;
+        --tip-bg:#1c1002;--tip-bd:#d97706;--tip-text:#fcd34d;
+        --key-bg:#1a0a2e;--key-bd:#9333ea;--key-text:#d8b4fe;
+        --def-bg:#052e16;--def-bd:#166534;
+        --warn-bg:#1c0e02;--warn-bd:#92400e;
+        --task-bg:#0c1a2e;--task-bd:#1e3a5f;
+    }
+}
+:root[data-theme="dark"] {
+    --bg:#0f172a;--surface:#1e293b;--surface-2:#162032;--border:#334155;
+    --text:#f1f5f9;--text-2:#94a3b8;--text-3:#64748b;
+    --accent:#818cf8;--accent-lt:#1e1b4b;--accent-bd:#3730a3;
+    --code-bg:#090e1a;--code-text:#e2e8f0;
+    --ans-bg:#052e16;--ans-bd:#16a34a;--ans-text:#86efac;
+    --step-bg:#0c1a2e;--step-bd:#2563eb;
+    --cut-bg:#2a0a0a;--cut-bd:#dc2626;--cut-text:#fca5a5;
+    --tip-bg:#1c1002;--tip-bd:#d97706;--tip-text:#fcd34d;
+    --key-bg:#1a0a2e;--key-bd:#9333ea;--key-text:#d8b4fe;
+    --def-bg:#052e16;--def-bd:#166534;
+    --warn-bg:#1c0e02;--warn-bd:#92400e;
+    --task-bg:#0c1a2e;--task-bd:#1e3a5f;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{font-family:'Inter','Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.7;margin:0}
+p{margin:0 0 .7rem}p:last-child{margin-bottom:0}
+strong{font-weight:700}
+code,.mono{font-family:'JetBrains Mono','Courier New',monospace;font-size:.9em;background:var(--surface-2);border:1px solid var(--border);border-radius:3px;padding:.1em .35em}
+
+#site-header{background:#0f172a;position:sticky;top:0;z-index:50;border-bottom:1px solid #1e293b}
+.header-inner{max-width:960px;margin:0 auto;padding:0 1.5rem}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:.9rem 0 .55rem}
+.header-eyebrow{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#818cf8;margin-bottom:.15rem}
+.header-title{font-size:1.05rem;font-weight:800;color:#fff;line-height:1.25}
+.header-sub{font-size:.75rem;color:#94a3b8;margin-top:.1rem}
+.badge-pill{background:#7f1d1d;border:1px solid #dc2626;color:#fecaca;font-size:.68rem;font-weight:600;letter-spacing:.06em;padding:.2rem .65rem;border-radius:4px}
+
+main{max-width:960px;margin:0 auto;padding:1.75rem 1.5rem 5rem}
+
+.part-heading{font-size:1.1rem;font-weight:800;color:var(--accent);margin:2rem 0 .6rem;padding-bottom:.35rem;border-bottom:2px solid var(--accent-bd)}
+
+.ex-card{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--ans-bd);border-radius:0 8px 8px 0;padding:1.4rem 1.5rem;margin-bottom:1.75rem}
+.ex-eyebrow{font-size:.68rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ans-text);margin-bottom:.2rem}
+.ex-title{font-size:1.05rem;font-weight:800;color:var(--text);margin-bottom:.9rem}
+
+.ans-box{background:var(--ans-bg);border:1px solid var(--ans-bd);border-radius:6px;padding:.85rem 1.1rem;margin:.85rem 0}
+.ans-label{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ans-text);margin-bottom:.4rem}
+
+.step-box{background:var(--step-bg);border-left:3px solid var(--step-bd);border-radius:0 6px 6px 0;padding:.85rem 1.1rem;margin:.85rem 0}
+.step-label{font-size:.68rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#1d4ed8;margin-bottom:.45rem}
+
+.cut-box{background:var(--cut-bg);border:1px solid var(--cut-bd);border-radius:6px;padding:.7rem 1rem;margin:.65rem 0;font-size:.845rem;color:var(--cut-text)}
+.cut-label{font-size:.68rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--cut-text);margin-bottom:.3rem}
+
+.tip-box{background:var(--tip-bg);border-left:3px solid var(--tip-bd);border-radius:0 6px 6px 0;padding:.7rem 1rem;margin:.85rem 0;font-size:.845rem}
+.tip-label{font-size:.68rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--tip-text);margin-bottom:.3rem}
+
+.key-box{background:var(--key-bg);border:1px solid var(--key-bd);border-radius:6px;padding:.7rem 1rem;margin:.65rem 0;font-size:.845rem}
+.key-label{font-size:.68rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--key-text);margin-bottom:.3rem}
+
+.def-box{background:var(--def-bg);border:1px solid var(--def-bd);border-radius:6px;padding:.85rem 1.1rem;margin:.85rem 0}
+.def-label{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#15803d;margin-bottom:.4rem}
+
+.warn-box{background:var(--warn-bg);border:1px solid var(--warn-bd);border-radius:6px;padding:.6rem 1rem;font-size:.845rem;color:var(--text-2);margin:.65rem 0}
+
+.formula{background:var(--accent-lt);border:1px solid var(--accent-bd);border-radius:6px;padding:.6rem 1.2rem;margin:.6rem 0;font-family:'JetBrains Mono',monospace;font-size:.92rem;text-align:center;color:var(--accent);font-weight:600}
+.bonus-tag{display:inline-block;background:#f3e8ff;border:1px solid #c084fc;color:#7c3aed;font-size:.68rem;font-weight:700;padding:.1rem .5rem;border-radius:3px;letter-spacing:.04em;margin-left:.4rem}
+
+.note{background:var(--surface-2);border:1px solid var(--border);border-radius:6px;padding:.6rem 1rem;font-size:.845rem;color:var(--text-2);margin:.65rem 0}
+
+.tbl-wrap{overflow-x:auto;margin:.7rem 0}
+table{width:100%;border-collapse:collapse;font-size:.845rem}
+th{background:var(--surface-2);padding:.5rem .75rem;text-align:left;font-weight:600;font-size:.76rem;letter-spacing:.02em;color:var(--text-2);border-bottom:2px solid var(--border)}
+td{padding:.45rem .75rem;border-bottom:1px solid var(--border);vertical-align:top}
+tr:last-child td{border-bottom:none}
+.tc{text-align:center}
+
+.graph-img{display:block;max-width:100%;margin:1rem auto;border-radius:8px;border:1px solid var(--border)}
+.img-cap{text-align:center;font-size:.77rem;color:var(--text-3);margin-top:.2rem;margin-bottom:.85rem}
+.img-wrap{text-align:center}
+
+.content-ul{padding-left:1.3rem;list-style:disc;margin:.4rem 0}
+.content-ul li{margin-bottom:.35rem;font-size:.875rem}
+.content-ol{padding-left:1.3rem;list-style:decimal;margin:.4rem 0}
+.content-ol li{margin-bottom:.35rem;font-size:.875rem}
+
+.ab-step{display:flex;gap:.7rem;margin-bottom:.6rem;align-items:flex-start}
+.ab-node{flex-shrink:0;font-weight:700;font-size:.82rem;padding:.15rem .5rem;border-radius:4px;min-width:6rem;text-align:center}
+.ab-max{background:#dbeafe;border:1px solid #93c5fd;color:#1e40af}
+.ab-min{background:#fce7f3;border:1px solid #f9a8d4;color:#9d174d}
+.ab-desc{font-size:.86rem;line-height:1.65}
+
+.sec-div{border:none;border-top:1px solid var(--border);margin:1.5rem 0}
+.score-bar{background:var(--surface-2);border:1px solid var(--border);border-radius:6px;padding:.7rem 1.1rem;margin-bottom:1.5rem;font-size:.845rem}
+
+.summary-tbl td:first-child{font-weight:600;white-space:nowrap}
+
+@media print{
+    #site-header{background:#1e293b!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .ex-card{break-inside:avoid}
+    .graph-img{max-width:85%}
+    .badge-pill{background:#7f1d1d!important;color:#fecaca!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+
+<header id="site-header">
+    <div class="header-inner">
+        <div class="header-top">
+            <div>
+                <div class="header-eyebrow">EP15/EP16.TOKT11121 · Introduction to AI</div>
+                <div class="header-title">LAB — Adversarial Search — ĐÁP ÁN CHI TIẾT</div>
+                <div class="header-sub">Minimax · Alpha-Beta · Heuristic Evaluation · MCTS &nbsp;·&nbsp; Tuần 8</div>
+            </div>
+            <div><span class="badge-pill">⚠ DÀNH CHO GIẢNG VIÊN</span></div>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<!-- ═══ RECALL BOX ═══ -->
+<div class="def-box" style="margin-bottom:1rem;">
+    <div class="def-label">Nhắc lại quy ước</div>
+    <ul class="content-ul" style="margin-top:.3rem;">
+        <li>Nút <strong>▲ MAX</strong> lấy <strong>max</strong> các con; nút <strong>▼ MIN</strong> lấy <strong>min</strong> các con. Giá trị ở lá là điểm cho MAX.</li>
+        <li>Alpha-Beta duyệt <strong>trái → phải</strong>; cắt khi <strong>α ≥ β</strong>.</li>
+        <li><strong>Luật vàng:</strong> "MAX nuôi α, MIN nuôi β."
+            <br>— Khi <strong>MAX</strong> tìm được con có giá trị lớn → cập nhật <strong>α</strong> (cận dưới cho MAX).
+            <br>— Khi <strong>MIN</strong> tìm được con có giá trị nhỏ → cập nhật <strong>β</strong> (cận trên cho MIN).
+            <br>— <strong>v</strong> cùng loại với nút: MAX khởi tạo v = −∞ (lấy max), MIN khởi tạo v = +∞ (lấy min).</li>
+        <li><strong>Điều kiện cắt:</strong> Tại nút MIN: nếu <strong>v ≤ α</strong> → cắt (MAX cha đã có lựa chọn tốt hơn). Tại nút MAX: nếu <strong>v ≥ β</strong> → cắt (MIN cha đã có lựa chọn tốt hơn).</li>
+    </ul>
+</div>
+
+<div class="tip-box" style="margin-bottom:1.5rem;">
+    <div class="tip-label">💡 Cách đọc đáp án Alpha-Beta</div>
+    <p style="font-size:.86rem;">Mỗi nút ghi: <strong>tên (loại)</strong> vào với <strong>α, β</strong> kế thừa từ cha. Duyệt từng con trái→phải, cập nhật <strong>v</strong> (giá trị tạm). Khi v vi phạm điều kiện cắt → <span style="color:var(--cut-text);font-weight:700;">CẮT</span> các con còn lại. Cuối cùng trả v về cho cha.</p>
+</div>
+
+
+<!-- ═══════════════════════════════ CÂU 1 ═══════════════════════════════ -->
+<div class="part-heading">Câu 1 — Minimax &amp; Alpha-Beta trên cây (30đ)</div>
+
+<!-- ──── 1a ──── -->
+<div class="ex-card">
+    <div class="ex-eyebrow">Đáp án Câu 1a</div>
+    <div class="ex-title">Cây 3 tầng — Gốc = 6, MAX chọn nhánh trái (B)</div>
+
+    <!-- MINIMAX -->
+    <div class="ans-box">
+        <div class="ans-label">Phần 1: Minimax (bottom-up)</div>
+        <p><strong>Ý tưởng:</strong> Tính giá trị từ <em>lá lên gốc</em>. Mỗi nút MAX lấy max các con, MIN lấy min các con.</p>
+        <div class="step-box">
+            <div class="step-label">Tầng 3 → Tầng 2 (MAX lấy max)</div>
+            <ul class="content-ul">
+                <li><strong>D</strong> = max(6, 4) = <strong>6</strong> &nbsp;← lấy con lớn hơn</li>
+                <li><strong>E</strong> = max(7, 2) = <strong>7</strong></li>
+                <li><strong>F</strong> = max(5, 1) = <strong>5</strong></li>
+                <li><strong>G</strong> = max(8, 4) = <strong>8</strong></li>
+            </ul>
+        </div>
+        <div class="step-box">
+            <div class="step-label">Tầng 2 → Tầng 1 (MIN lấy min)</div>
+            <ul class="content-ul">
+                <li><strong>B</strong> = min(D=6, E=7) = <strong>6</strong> &nbsp;← MIN chọn nhỏ hơn để hạn chế MAX</li>
+                <li><strong>C</strong> = min(F=5, G=8) = <strong>5</strong></li>
+            </ul>
+        </div>
+        <div class="step-box">
+            <div class="step-label">Tầng 1 → Gốc (MAX lấy max)</div>
+            <ul class="content-ul">
+                <li><strong>A (gốc)</strong> = max(B=6, C=5) = <strong style="color:var(--ans-text);font-size:1rem;">6</strong></li>
+                <li>→ MAX chọn <strong>nhánh trái (B)</strong> vì B=6 > C=5.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ALPHA-BETA -->
+    <div class="ans-box" style="margin-top:1rem;">
+        <div class="ans-label">Phần 2: Alpha-Beta (trái → phải, ghi α/β/v từng bước)</div>
+        <p><strong>Ý tưởng:</strong> Duyệt như Minimax nhưng "nhìn trước" — nếu biết chắc một nhánh <em>không thể tốt hơn</em> nhánh đã tìm, ta <strong>bỏ qua</strong> (cắt) nhánh đó.</p>
+
+        <div class="ab-step">
+            <div class="ab-node ab-max">A (MAX)</div>
+            <div class="ab-desc">Vào: α=−∞, β=+∞. <em>(Chưa biết gì, cửa sổ mở hoàn toàn)</em>. Duyệt con B trước, rồi C.</div>
+        </div>
+
+        <div class="ab-step" style="padding-left:1.2rem;">
+            <div class="ab-node ab-min">B (MIN)</div>
+            <div class="ab-desc">Vào: α=−∞, β=+∞ <em>(kế thừa từ A)</em>. Duyệt con D rồi E.</div>
+        </div>
+
+        <div class="ab-step" style="padding-left:2.4rem;">
+            <div class="ab-node ab-max">D (MAX)</div>
+            <div class="ab-desc">
+                Vào: α=−∞, β=+∞.<br>
+                • Xét lá <strong>6</strong>: v = max(−∞, 6) = 6 → <strong>α = 6</strong>.<br>
+                • Xét lá <strong>4</strong>: v = max(6, 4) = 6. Không thay đổi.<br>
+                → <strong>D = 6</strong>. Trả về B.
+            </div>
+        </div>
+
+        <div class="ab-step" style="padding-left:2.4rem;">
+            <div class="ab-node ab-min" style="background:#fce7f3;">⤺ B nhận D=6</div>
+            <div class="ab-desc">
+                B là MIN: v = min(+∞, 6) = 6 → <strong>β = 6</strong>.<br>
+                <em>Ý nghĩa: B biết rằng kết quả tốt nhất mà B có thể "ép" MAX xuống là ≤ 6.</em>
+            </div>
+        </div>
+
+        <div class="ab-step" style="padding-left:2.4rem;">
+            <div class="ab-node ab-max">E (MAX)</div>
+            <div class="ab-desc">
+                Vào: α=−∞, <strong>β=6</strong> <em>(kế thừa β=6 từ B)</em>.<br>
+                • Xét lá <strong>7</strong>: v = max(−∞, 7) = 7, α = 7.<br>
+                • Kiểm tra: <strong>v=7 ≥ β=6</strong> → <span style="color:var(--cut-text);font-weight:700;">CẮT!</span><br>
+                <em>Lý do: E (MAX) đã đạt 7. Nhưng B (MIN cha) đã có lựa chọn D=6 nhỏ hơn. B sẽ không bao giờ chọn E (vì E ≥ 7 > 6). Vậy không cần xét lá 2 nữa.</em><br>
+                → <strong>E = 7</strong> (nhưng B không dùng). <strong>Lá 2 bị cắt.</strong>
+            </div>
+        </div>
+
+        <div class="ab-step" style="padding-left:1.2rem;">
+            <div class="ab-node ab-min" style="background:#fce7f3;">⤺ B kết thúc</div>
+            <div class="ab-desc">v = min(6, 7) = 6. <strong>B = 6</strong>. Trả về A.</div>
+        </div>
+
+        <div class="ab-step">
+            <div class="ab-node ab-max" style="background:#dbeafe;">⤺ A nhận B=6</div>
+            <div class="ab-desc">A là MAX: v = max(−∞, 6) = 6 → <strong>α = 6</strong>.<br>
+            <em>Ý nghĩa: A biết rằng mình đã có ít nhất 6 (từ nhánh B). Nhánh C phải ≥ 6 mới đáng xét.</em></div>
+        </div>
+
+        <div class="ab-step" style="padding-left:1.2rem;">
+            <div class="ab-node ab-min">C (MIN)</div>
+            <div class="ab-desc">Vào: <strong>α=6</strong>, β=+∞ <em>(kế thừa α=6 từ A)</em>. Duyệt con F.</div>
+        </div>
+
+        <div class="ab-step" style="padding-left:2.4rem;">
+            <div class="ab-node ab-max">F (MAX)</div>
+            <div class="ab-desc">
+                Vào: α=6, β=+∞.<br>
+                • Xét lá <strong>5</strong>: v = max(−∞, 5) = 5. α giữ 6 (vì 5 < 6).<br>
+                • Xét lá <strong>1</strong>: v = max(5, 1) = 5. Không đổi.<br>
+                → <strong>F = 5</strong>. Trả về C.
+            </div>
+        </div>
+
+        <div class="ab-step" style="padding-left:2.4rem;">
+            <div class="ab-node ab-min" style="background:#fce7f3;">⤺ C nhận F=5</div>
+            <div class="ab-desc">
+                C là MIN: v = min(+∞, 5) = 5.<br>
+                • Kiểm tra: <strong>v=5 ≤ α=6</strong> → <span style="color:var(--cut-text);font-weight:700;">CẮT!</span><br>
+                <em>Lý do: C (MIN) đã tìm được 5. Nhưng A (MAX cha) đã có B=6 > 5. A sẽ không chọn C. Vậy không cần xét G (lá 8, 4) nữa.</em><br>
+                → <strong>C = 5</strong>. <strong>Cả nút G (lá 8, 4) bị cắt.</strong>
+            </div>
+        </div>
+
+        <div class="ab-step">
+            <div class="ab-node ab-max" style="background:#bbf7d0;border-color:#22c55e;">A = 6 ✓</div>
+            <div class="ab-desc">v = max(6, 5) = 6. <strong>Gốc A = 6.</strong> MAX chọn nhánh trái (B).</div>
+        </div>
+    </div>
+
+    <div class="cut-box">
+        <div class="cut-label">✂ Lá bị cắt (3 lá)</div>
+        <strong>2</strong> (con phải của E) · <strong>8</strong> và <strong>4</strong> (cả nút G). &nbsp;→ Chỉ xét <strong>5/8 lá</strong> (tiết kiệm 37.5%).
+    </div>
+
+    <div class="img-wrap">
+        <img src="lab_images/p1_treeA_solution.png" alt="Câu 1a — lời giải" class="graph-img" style="max-width:560px;">
+        <div class="img-cap">Cây lời giải Câu 1a — các nhánh cắt được đánh dấu ✂</div>
+    </div>
+</div>
+
+<!-- ──── 1b ──── -->
+<div class="ex-card">
+    <div class="ex-eyebrow">Đáp án Câu 1b</div>
+    <div class="ex-title">Cây 4 tầng (có số âm) — Gốc = 7, MAX chọn nhánh trái (N1)</div>
+
+    <div class="ans-box">
+        <div class="ans-label">Phần 1: Minimax (bottom-up)</div>
+        <p><strong>Cây 4 tầng</strong> có cấu trúc: Gốc R (MAX) → N1, N2 (MIN) → P, Q, S, T (MAX) → p1, p2, q1, q2, s1, s2, t1, t2 (MIN) → 16 lá.</p>
+
+        <div class="step-box">
+            <div class="step-label">Tầng 4 → 3 (MIN lấy min)</div>
+            <ul class="content-ul">
+                <li>p1 = min(8, 7) = <strong>7</strong></li>
+                <li>p2 = min(3, −1) = <strong>−1</strong></li>
+                <li>q1 = min(9, 8) = <strong>8</strong></li>
+                <li>q2 = min(−2, 4) = <strong>−2</strong></li>
+                <li>s1 = min(5, −3) = <strong>−3</strong></li>
+                <li>s2 = min(6, 2) = <strong>2</strong></li>
+                <li>t1 = min(−4, 1) = <strong>−4</strong></li>
+                <li>t2 = min(2, −5) = <strong>−5</strong></li>
+            </ul>
+        </div>
+        <div class="step-box">
+            <div class="step-label">Tầng 3 → 2 (MAX lấy max)</div>
+            <ul class="content-ul">
+                <li>P = max(7, −1) = <strong>7</strong></li>
+                <li>Q = max(8, −2) = <strong>8</strong></li>
+                <li>S = max(−3, 2) = <strong>2</strong></li>
+                <li>T = max(−4, −5) = <strong>−4</strong></li>
+            </ul>
+        </div>
+        <div class="step-box">
+            <div class="step-label">Tầng 2 → 1 (MIN lấy min)</div>
+            <ul class="content-ul">
+                <li>N1 = min(7, 8) = <strong>7</strong></li>
+                <li>N2 = min(2, −4) = <strong>−4</strong></li>
+            </ul>
+        </div>
+        <div class="step-box">
+            <div class="step-label">Gốc (MAX)</div>
+            <ul class="content-ul">
+                <li><strong>R = max(7, −4) = 7</strong> → chọn nhánh trái <strong>N1</strong>.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="ans-box" style="margin-top:1rem;">
+        <div class="ans-label">Phần 2: Alpha-Beta chi tiết</div>
+
+        <div class="ab-step">
+            <div class="ab-node ab-max">R (MAX)</div>
+            <div class="ab-desc">α=−∞, β=+∞. Duyệt N1 rồi N2.</div>
+        </div>
+
+        <div class="ab-step" style="padding-left:1rem;">
+            <div class="ab-node ab-min">N1 (MIN)</div>
+            <div class="ab-desc">α=−∞, β=+∞. Duyệt P rồi Q.</div>
+        </div>
+
+        <div class="ab-step" style="padding-left:2rem;">
+            <div class="ab-node ab-max">P (MAX)</div>
+            <div class="ab-desc">α=−∞, β=+∞. Duyệt p1, p2.</div>
+        </div>
+
+        <div class="ab-step" style="padding-left:3rem;">
+            <div class="ab-node ab-min">p1 (MIN)</div>
+            <div class="ab-desc">α=−∞, β=+∞. Lá 8 → v=8, β=8. Lá 7 → v=7, β=7. <strong>p1 = 7.</strong></div>
+        </div>
+
+        <div class="ab-step" style="padding-left:3rem;">
+            <div class="ab-node ab-max" style="background:#dbeafe;">P nhận p1=7</div>
+            <div class="ab-desc">v = max(−∞, 7) = 7. <strong>α = 7.</strong></div>
+        </div>
+
+        <div class="ab-step" style="padding-left:3rem;">
+            <div class="ab-node ab-min">p2 (MIN)</div>
+            <div class="ab-desc">
+                α=<strong>7</strong>, β=+∞ <em>(kế thừa α=7 từ P)</em>.<br>
+                Lá 3 → v = 3. Kiểm tra: <strong>v=3 ≤ α=7</strong> → <span style="color:var(--cut-text);font-weight:700;">CẮT lá −1!</span><br>
+                <em>Lý do: p2 (MIN) đã xuống 3, mà P (MAX) đã có p1=7. P sẽ chọn p1, nên p2 không cần xét thêm.</em><br>
+                <strong>p2 = 3.</strong>
+            </div>
+        </div>
+
+        <div class="ab-step" style="padding-left:2rem;">
+            <div class="ab-node ab-max" style="background:#dbeafe;">P kết thúc</div>
+            <div class="ab-desc">v = max(7, 3) = 7. <strong>P = 7.</strong></div>
+        </div>
+
+        <div class="ab-step" style="padding-left:2rem;">
+            <div class="ab-node ab-min" style="background:#fce7f3;">N1 nhận P=7</div>
+            <div class="ab-desc">v = min(+∞, 7) = 7. <strong>β = 7.</strong></div>
+        </div>
+
+        <div class="ab-step" style="padding-left:2rem;">
+            <div class="ab-node ab-max">Q (MAX)</div>
+            <div class="ab-desc">α=−∞, <strong>β=7</strong> <em>(kế thừa β=7 từ N1)</em>. Duyệt q1.</div>
+        </div>
+
+        <div class="ab-step" style="padding-left:3rem;">
+            <div class="ab-node ab-min">q1 (MIN)</div>
+            <div class="ab-desc">α=−∞, β=7. Lá 9 → v=9. Lá 8 → v=8. <strong>q1 = 8.</strong></div>
+        </div>
+
+        <div class="ab-step" style="padding-left:3rem;">
+            <div class="ab-node ab-max" style="background:#dbeafe;">Q nhận q1=8</div>
+            <div class="ab-desc">
+                v = max(−∞, 8) = 8. Kiểm tra: <strong>v=8 ≥ β=7</strong> → <span style="color:var(--cut-text);font-weight:700;">CẮT cả nút q2 (lá −2, 4)!</span><br>
+                <em>Lý do: Q (MAX) đã đạt 8. Nhưng N1 (MIN) có P=7, sẽ không chọn Q (vì Q ≥ 8 > 7). Nên bỏ qua q2.</em><br>
+                <strong>Q = 8.</strong>
+            </div>
+        </div>
+
+        <div class="ab-step" style="padding-left:1rem;">
+            <div class="ab-node ab-min" style="background:#fce7f3;">N1 kết thúc</div>
+            <div class="ab-desc">v = min(7, 8) = 7. <strong>N1 = 7.</strong></div>
+        </div>
+
+        <div class="ab-step">
+            <div class="ab-node ab-max" style="background:#dbeafe;">R nhận N1=7</div>
+            <div class="ab-desc">v = max(−∞, 7) = 7. <strong>α = 7.</strong> <em>A đã biết ít nhất được 7.</em></div>
+        </div>
+
+        <div class="ab-step" style="padding-left:1rem;">
+            <div class="ab-node ab-min">N2 (MIN)</div>
+            <div class="ab-desc"><strong>α=7</strong>, β=+∞. Duyệt S.</div>
+        </div>
+
+        <div class="ab-step" style="padding-left:2rem;">
+            <div class="ab-node ab-max">S (MAX)</div>
+            <div class="ab-desc">α=7, β=+∞. Duyệt s1, s2.</div>
+        </div>
+
+        <div class="ab-step" style="padding-left:3rem;">
+            <div class="ab-node ab-min">s1 (MIN)</div>
+            <div class="ab-desc">
+                α=<strong>7</strong>, β=+∞. Lá 5 → v=5. Kiểm tra: <strong>v=5 ≤ α=7</strong> → <span style="color:var(--cut-text);font-weight:700;">CẮT lá −3!</span><br>
+                <em>s1 đã cho 5 ≤ 7 = α. S (MAX cha) đang kế thừa α=7 từ ông, nên S cần ≥ 7. Mà s1 chỉ cho 5 → S lấy max vẫn chưa đủ, nhưng s1 có thể còn giảm. MIN cắt là đúng.</em><br>
+                <strong>s1 = 5.</strong>
+            </div>
+        </div>
+
+        <div class="ab-step" style="padding-left:3rem;">
+            <div class="ab-node ab-max" style="background:#dbeafe;">S nhận s1=5</div>
+            <div class="ab-desc">v = max(−∞, 5) = 5. α giữ 7 (vì 5 < 7).</div>
+        </div>
+
+        <div class="ab-step" style="padding-left:3rem;">
+            <div class="ab-node ab-min">s2 (MIN)</div>
+            <div class="ab-desc">
+                α=<strong>7</strong>, β=+∞. Lá 6 → v=6. Kiểm tra: <strong>v=6 ≤ α=7</strong> → <span style="color:var(--cut-text);font-weight:700;">CẮT lá 2!</span><br>
+                <strong>s2 = 6.</strong>
+            </div>
+        </div>
+
+        <div class="ab-step" style="padding-left:2rem;">
+            <div class="ab-node ab-max" style="background:#dbeafe;">S kết thúc</div>
+            <div class="ab-desc">v = max(5, 6) = 6. <strong>S = 6.</strong></div>
+        </div>
+
+        <div class="ab-step" style="padding-left:2rem;">
+            <div class="ab-node ab-min" style="background:#fce7f3;">N2 nhận S=6</div>
+            <div class="ab-desc">
+                v = min(+∞, 6) = 6. Kiểm tra: <strong>v=6 ≤ α=7</strong> → <span style="color:var(--cut-text);font-weight:700;">CẮT cả nút T (4 lá: −4, 1, 2, −5)!</span><br>
+                <em>N2 (MIN) đã có 6, mà R (MAX) có N1=7 > 6. R sẽ không chọn N2. Bỏ toàn bộ T.</em><br>
+                <strong>N2 = 6</strong> (chỉ là cận, thực tế ≤ 6).
+            </div>
+        </div>
+
+        <div class="ab-step">
+            <div class="ab-node ab-max" style="background:#bbf7d0;border-color:#22c55e;">R = 7 ✓</div>
+            <div class="ab-desc">v = max(7, 6) = 7. <strong>Gốc R = 7.</strong> MAX chọn N1.</div>
+        </div>
+    </div>
+
+    <div class="cut-box">
+        <div class="cut-label">✂ Lá bị cắt (9 lá)</div>
+        <strong>−1</strong> (p2) · <strong>−2, 4</strong> (cả q2) · <strong>−3</strong> (s1) · <strong>2</strong> (s2) · <strong>−4, 1, 2, −5</strong> (cả nút T).<br>
+        → Chỉ xét <strong>7/16 lá</strong> (tiết kiệm hơn 56%!).
+    </div>
+
+    <div class="img-wrap">
+        <img src="lab_images/p1_treeB_solution.png" alt="Câu 1b — lời giải" class="graph-img" style="max-width:640px;">
+        <div class="img-cap">Cây lời giải Câu 1b — 4 tầng, 9 lá bị cắt</div>
+    </div>
+</div>
+
+<!-- ──── 1c ──── -->
+<div class="ex-card">
+    <div class="ex-eyebrow">Đáp án Câu 1c</div>
+    <div class="ex-title">Cây không đều — Gốc = 11, MAX chọn nhánh trái (L)</div>
+
+    <div class="warn-box">
+        <strong>Đặc biệt:</strong> Cây này <em>không đều</em> — các nhánh có chiều sâu và số con khác nhau. Một số lá nằm ngay tại tầng MIN (ví dụ 16, 12). Khi tính, <strong>loại nút theo tầng, lá là giá trị cuối</strong> bất kể ở tầng nào.
+    </div>
+
+    <div class="ans-box">
+        <div class="ans-label">Phần 1: Minimax (bottom-up)</div>
+
+        <div class="step-box">
+            <div class="step-label">Nhánh trái — L (MIN)</div>
+            <ul class="content-ul">
+                <li>L1 = max(4, 13) = <strong>13</strong></li>
+                <li>L2a = min(5, 10) = 5 → L2 = max(5, 11) = <strong>11</strong></li>
+                <li>Lá trực tiếp = <strong>16</strong></li>
+                <li><strong>L = min(13, 11, 16) = 11</strong></li>
+            </ul>
+        </div>
+        <div class="step-box">
+            <div class="step-label">Nhánh giữa — M (MIN)</div>
+            <ul class="content-ul">
+                <li>M1a = min(1, 8) = 1; M1b = min(6, 12) = 6 → M1 = max(1, 9, 6) = <strong>9</strong></li>
+                <li>Lá trực tiếp = <strong>12</strong></li>
+                <li><strong>M = min(9, 12) = 9</strong></li>
+            </ul>
+        </div>
+        <div class="step-box">
+            <div class="step-label">Nhánh phải — R (MIN)</div>
+            <ul class="content-ul">
+                <li>R1c = min(2, 5, 7) = 2 → R1 = max(10, 8, 2) = <strong>10</strong></li>
+                <li>R2 = max(7, 4) = <strong>7</strong></li>
+                <li><strong>R = min(10, 7) = 7</strong></li>
+            </ul>
+        </div>
+        <div class="step-box">
+            <div class="step-label">Gốc (MAX)</div>
+            <p><strong>Gốc = max(L=11, M=9, R=7) = 11</strong> → chọn <strong>nhánh trái (L)</strong>.</p>
+        </div>
+    </div>
+
+    <div class="ans-box" style="margin-top:1rem;">
+        <div class="ans-label">Phần 2: Alpha-Beta (tóm tắt theo nhánh chính)</div>
+        <p>Nhánh trái cho α=11 rất sớm → cắt mạnh ở nhánh giữa và phải.</p>
+
+        <div class="step-box">
+            <div class="step-label">Nhánh L (MIN)</div>
+            <p>L1=max(4,13)=13 → β=13. L2: L2a=min(5,10)=5 → L2=max(5,11)=11 → β=11. Lá 16 → v=min(11,16)=11. <strong>L=11.</strong> → gốc <strong>α=11</strong>.</p>
+        </div>
+
+        <div class="step-box">
+            <div class="step-label">Nhánh M (MIN) — α=11 kế thừa</div>
+            <p>M1: M1a xét lá 1 → v=1 ≤ α=11 → <span style="color:var(--cut-text);font-weight:700;">CẮT lá 8</span>. Xét lá 9. M1b xét lá 6 ≤ α=11 → <span style="color:var(--cut-text);font-weight:700;">CẮT lá 12</span>. M1=max(1,9,6)=9.</p>
+            <p>Về M: v=9 ≤ α=11 → <span style="color:var(--cut-text);font-weight:700;">CẮT lá 12</span> (con thứ hai của M). <strong>M=9.</strong></p>
+        </div>
+
+        <div class="step-box">
+            <div class="step-label">Nhánh R (MIN) — α=11 kế thừa</div>
+            <p>R1: lá 10, lá 8, R1c xét lá 2 ≤ α=11 → <span style="color:var(--cut-text);font-weight:700;">CẮT lá 5, 7</span>. R1=max(10,8,2)=10.</p>
+            <p>Về R: v=10 ≤ α=11 → <span style="color:var(--cut-text);font-weight:700;">CẮT cả nút R2 (lá 7, 4)</span>. <strong>R=10.</strong></p>
+        </div>
+
+        <p><strong>Gốc = max(11, 9, 10) = 11.</strong></p>
+    </div>
+
+    <div class="cut-box">
+        <div class="cut-label">✂ Lá bị cắt (7 lá)</div>
+        <strong>8</strong> (M1a) · <strong>12</strong> (M1b) · <strong>12</strong> (con M) · <strong>5, 7</strong> (R1c) · <strong>7, 4</strong> (R2).<br>
+        → Chỉ xét <strong>12/19 lá</strong>.
+    </div>
+
+    <div class="tip-box">
+        <div class="tip-label">💡 Nhận xét quan trọng</div>
+        <p>Nhờ nhánh trái cho ngay giá trị cao (α=11) sớm, toàn bộ nhánh giữa và phải bị cắt rất mạnh. Đây chính là minh họa <strong>lợi ích của việc gặp nước tốt sớm</strong> — move ordering càng tốt, alpha-beta càng hiệu quả.</p>
+    </div>
+
+    <div class="img-wrap">
+        <img src="lab_images/p1c_irregular_solution.png" alt="Câu 1c — lời giải" class="graph-img" style="max-width:700px;">
+        <div class="img-cap">Cây lời giải Câu 1c — cây không đều, 7 lá bị cắt</div>
+    </div>
+</div>
+
+<!-- ──── 1d ──── -->
+<div class="ex-card" style="border-left-color:#7c3aed;">
+    <div class="ex-eyebrow" style="color:#7c3aed;">★ Đáp án Câu 1d <span class="bonus-tag">THƯỞNG 5đ</span></div>
+    <div class="ex-title">Thứ tự duyệt ảnh hưởng đến hiệu quả cắt</div>
+
+    <div class="ans-box">
+        <div class="ans-label">Đáp án</div>
+        <ul class="content-ul">
+            <li><strong>Cắt nhiều nhất:</strong> Ở mỗi nút, xét <strong>nước tốt nhất trước</strong> — MIN xét con nhỏ trước; MAX xét con lớn trước. Điều này làm α/β chặt sớm → cắt nhiều → <strong>O(b<sup>d/2</sup>)</strong>. Ý nghĩa: nhìn xa <strong>gấp đôi</strong> so với cây không cắt, cùng chi phí!</li>
+            <li><strong>Cắt ít nhất:</strong> Xét <strong>nước tệ nhất trước</strong> → α/β mở rộng rất chậm → gần như không cắt → <strong>O(b<sup>d</sup>)</strong>, bằng Minimax thuần.</li>
+        </ul>
+    </div>
+
+    <div class="key-box">
+        <div class="key-label">🔑 Điểm then chốt</div>
+        <p><strong>Giá trị gốc không đổi</strong> bất kể thứ tự duyệt — Alpha-Beta cho cùng kết quả với Minimax. Thứ tự chỉ ảnh hưởng <em>tốc độ</em>, không ảnh hưởng <em>đáp số</em>. Đây là lý do các engine cờ đầu tư lớn vào <strong>move ordering</strong> (killer heuristic, history heuristic, transposition table).</p>
+    </div>
+</div>
+
+<hr class="sec-div">
+
+
+<!-- ═══════════════════════════════ CÂU 2 ═══════════════════════════════ -->
+<div class="part-heading">Câu 2 — Mô hình hóa game thật (25đ)</div>
+
+<!-- ──── 2a ──── -->
+<div class="ex-card">
+    <div class="ex-eyebrow">Đáp án Câu 2a</div>
+    <div class="ex-title">Coin-row [3, 9, 1, 2] — Gốc net = +7, nước đầu: lấy xu PHẢI (2)</div>
+
+    <div class="ans-box">
+        <div class="ans-label">Ý (1): 6 thành phần mô hình hóa</div>
+        <div class="tbl-wrap">
+            <table>
+                <thead><tr><th style="width:30%;">Thành phần</th><th>Mô tả</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>S₀</strong> (trạng thái đầu)</td><td>Dãy [3, 9, 1, 2], lượt MAX, tổng hai bên = 0.</td></tr>
+                    <tr><td><strong>PLAYER(s)</strong></td><td>MAX và MIN luân phiên. MAX đi trước.</td></tr>
+                    <tr><td><strong>ACTIONS(s)</strong></td><td>{lấy trái, lấy phải} — 2 lựa chọn mỗi lượt (miễn dãy chưa rỗng).</td></tr>
+                    <tr><td><strong>RESULT(s, a)</strong></td><td>Bỏ xu ở đầu tương ứng; cộng mệnh giá vào tổng người vừa đi; đổi lượt.</td></tr>
+                    <tr><td><strong>TERMINAL-TEST(s)</strong></td><td>True khi dãy rỗng (hết xu).</td></tr>
+                    <tr><td><strong>UTILITY(s)</strong></td><td>(tổng MAX) − (tổng MIN). Dương = MAX thắng.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="ans-box" style="margin-top:1rem;">
+        <div class="ans-label">Ý (2): Minimax — cây và giá trị gốc</div>
+
+        <p>Từ [3, 9, 1, 2], MAX có 2 nước: lấy trái (3) hoặc phải (2). Vẽ toàn bộ cây đến lá, tính UTILITY = (tổng MAX) − (tổng MIN), rồi lan ngược từ dưới lên.</p>
+
+        <div class="step-box">
+            <div class="step-label">Kết quả Minimax</div>
+            <ul class="content-ul">
+                <li><strong>Lấy phải (xu 2):</strong> → dãy [3,9,1] → đối phương bắt buộc phải xử lý [3,9,1]. Phân tích đến cuối → net = <strong>+7</strong> (MAX: 2+9 = 11, MIN: 3+1 = 4).</li>
+                <li><strong>Lấy trái (xu 3):</strong> → dãy [9,1,2] → net = <strong>−5</strong> (MAX thua).</li>
+            </ul>
+            <p><strong>Gốc = max(+7, −5) = +7.</strong> Nước đầu tối ưu: <strong>lấy xu PHẢI (giá 2)</strong>.</p>
+        </div>
+    </div>
+
+    <div class="ans-box" style="margin-top:1rem;">
+        <div class="ans-label">Ý (3): Vì sao tham lam sai?</div>
+
+        <div class="step-box">
+            <div class="step-label">Phân tích chiến lược tham lam</div>
+            <p>Tham lam so sánh hai đầu: 3 và 2. Vì 3 > 2, tham lam chọn <strong>lấy trái (3)</strong>.</p>
+            <p>Kết quả: net = <strong>−5</strong> → MAX thua thảm!</p>
+        </div>
+
+        <div class="key-box" style="margin-top:.6rem;">
+            <div class="key-label">🔑 Vì sao?</div>
+            <p>Tham lam chỉ nhìn <strong>1 bước</strong> — "lấy xu lớn hơn ngay bây giờ." Nhưng Minimax nhìn <strong>đến cuối ván</strong> và phát hiện: nếu lấy xu nhỏ (2) ở bước đầu, MAX "ép" đối thủ vào thế xấu, từ đó MAX luôn vớt được <strong>xu 9</strong> (xu có giá trị lớn nhất). Chiến lược tối ưu đôi khi phải <strong>"hy sinh ngắn hạn để thắng dài hạn."</strong></p>
+        </div>
+    </div>
+
+    <div class="img-wrap">
+        <img src="lab_images/p2_coinrow_solution.png" alt="Câu 2a — cây coin-row" class="graph-img" style="max-width:600px;">
+        <div class="img-cap">Cây minimax Coin-row [3, 9, 1, 2]</div>
+    </div>
+</div>
+
+<!-- ──── 2b ──── -->
+<div class="ex-card">
+    <div class="ex-eyebrow">Đáp án Câu 2b</div>
+    <div class="ex-title">Nim (5 viên) — Gốc = +1, MAX thắng — Nước đầu: lấy 2 viên</div>
+
+    <div class="ans-box">
+        <div class="ans-label">Ý (1): 6 thành phần</div>
+        <div class="tbl-wrap">
+            <table>
+                <thead><tr><th style="width:30%;">Thành phần</th><th>Mô tả</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>S₀</strong></td><td>5 viên sỏi, lượt MAX.</td></tr>
+                    <tr><td><strong>PLAYER(s)</strong></td><td>MAX / MIN luân phiên.</td></tr>
+                    <tr><td><strong>ACTIONS(s)</strong></td><td>{lấy 1, lấy 2} (nếu đủ viên).</td></tr>
+                    <tr><td><strong>RESULT(s, a)</strong></td><td>Trừ số viên; đổi lượt.</td></tr>
+                    <tr><td><strong>TERMINAL-TEST(s)</strong></td><td>Còn 0 viên.</td></tr>
+                    <tr><td><strong>UTILITY</strong></td><td>+1 nếu người vừa lấy viên cuối là MAX. −1 nếu là MIN.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="ans-box" style="margin-top:1rem;">
+        <div class="ans-label">Ý (2) &amp; (3): Minimax — MAX thắng</div>
+        <p><strong>Gốc = +1</strong> → người đi trước (MAX) <strong>THẮNG</strong> nếu chơi tối ưu.</p>
+
+        <div class="step-box">
+            <div class="step-label">Nước đầu tối ưu: lấy 2 viên (để lại 3)</div>
+            <p>Chiến lược tối ưu dựa trên quy tắc: <strong>"vị trí bội của 3 = thế thua cho người sắp đi."</strong></p>
+            <ul class="content-ul">
+                <li>MAX lấy <strong>2 viên</strong> → còn <strong>3 viên</strong> (bội của 3 — thế thua cho MIN!)</li>
+                <li>Nếu MIN lấy 1 → còn 2 → MAX lấy 2 → <strong>MAX thắng ✓</strong></li>
+                <li>Nếu MIN lấy 2 → còn 1 → MAX lấy 1 → <strong>MAX thắng ✓</strong></li>
+            </ul>
+            <p>Dù MIN đi gì, MAX luôn thắng!</p>
+        </div>
+
+        <div class="tip-box" style="margin-top:.6rem;">
+            <div class="tip-label">💡 Tại sao lấy 1 viên (để lại 4) lại thua?</div>
+            <p>Nếu MAX lấy 1 → còn 4 → MIN lấy 1 → còn <strong>3</strong> (bội của 3 — thế thua cho MAX!). Bây giờ MAX ở thế thua: lấy 1 (còn 2, MIN lấy 2 thắng) hoặc lấy 2 (còn 1, MIN lấy 1 thắng). Kết quả: MAX thua (−1).</p>
+        </div>
+    </div>
+
+    <div class="img-wrap">
+        <img src="lab_images/p2b_nim_solution.png" alt="Câu 2b — cây Nim" class="graph-img" style="max-width:600px;">
+        <div class="img-cap">Cây minimax Nim (5 viên)</div>
+    </div>
+
+    <div class="key-box">
+        <div class="key-label">🔑 Quy tắc Nim (lấy 1–2, ai lấy cuối thắng)</div>
+        <p><strong>Bội của 3 = thua.</strong> Chiến lược: luôn để lại cho đối thủ một <strong>bội số của 3</strong>. Từ 5 viên: 5 − 2 = 3 ✓. Từ 3, đối thủ để lại 2 hoặc 1, ta lấy hết. Tổng quát hơn, với Nim "lấy 1 đến k": bội của (k+1) = thế thua.</p>
+    </div>
+</div>
+
+<hr class="sec-div">
+
+
+<!-- ═══════════════════════════════ CÂU 3 ═══════════════════════════════ -->
+<div class="part-heading">Câu 3 — Heuristic Alpha-Beta trên cờ vua (25đ)</div>
+
+<div class="ex-card">
+    <div class="ex-eyebrow">Đáp án Câu 3</div>
+    <div class="ex-title">Gốc = +1 — Trắng chọn Nxd5 (ăn Tốt sạch)</div>
+
+    <div class="note">
+        <strong>Nhắc lại:</strong> EVAL = chênh lệch chất. Tốt=1, Mã=Tượng=3, Xe=5, Hậu=9. Thế cờ ban đầu cân bằng (EVAL=0). Các con số dưới là <em>thay đổi</em> EVAL sau 2 nước.
+    </div>
+
+    <div class="img-wrap">
+        <img src="lab_images/p3c_chess_position.png" alt="Thế cờ ban đầu" class="graph-img" style="max-width:380px;">
+        <div class="img-cap">Thế cờ ban đầu — cân bằng chất (EVAL = 0)</div>
+    </div>
+
+    <!-- Minimax -->
+    <div class="ans-box">
+        <div class="ans-label">Ý (1): Minimax — cây 2 tầng</div>
+
+        <p>Cây: Gốc (MAX / Trắng) → 3 nước (A, B, C) → mỗi nước có 2 đáp trả của Đen (MIN) → 6 lá EVAL.</p>
+
+        <div class="step-box">
+            <div class="step-label">Giá trị mỗi nước (MIN lấy min)</div>
+            <ul class="content-ul">
+                <li><strong>A (Nxd5)</strong> = min(+1, +2) = <strong>+1</strong> &nbsp;← Đen chọn kịch bản xấu nhất cho Trắng (EVAL=+1)</li>
+                <li><strong>B (Rxe7)</strong> = min(−2, +3) = <strong>−2</strong> &nbsp;← Đen ăn lại → Trắng mất chất</li>
+                <li><strong>C (Bxc6)</strong> = min(0, +3) = <strong>0</strong> &nbsp;← Đen ăn lại → đổi ngang</li>
+            </ul>
+        </div>
+        <div class="step-box">
+            <div class="step-label">Gốc (MAX lấy max)</div>
+            <p><strong>Gốc = max(+1, −2, 0) = +1</strong> → Trắng đi <strong>Nxd5</strong>.</p>
+        </div>
+    </div>
+
+    <!-- Alpha-Beta -->
+    <div class="ans-box" style="margin-top:1rem;">
+        <div class="ans-label">Ý (2): Alpha-Beta chi tiết</div>
+
+        <div class="ab-step">
+            <div class="ab-node ab-max">Gốc (MAX)</div>
+            <div class="ab-desc">α=−∞, β=+∞. Duyệt A → B → C.</div>
+        </div>
+
+        <div class="ab-step" style="padding-left:1.2rem;">
+            <div class="ab-node ab-min">A = Nxd5 (MIN)</div>
+            <div class="ab-desc">
+                α=−∞, β=+∞.<br>
+                • Lá +1 → v = min(+∞, 1) = 1, <strong>β = 1</strong>.<br>
+                • Lá +2 → v = min(1, 2) = 1. Không đổi.<br>
+                → <strong>A = +1.</strong>
+            </div>
+        </div>
+
+        <div class="ab-step">
+            <div class="ab-node ab-max" style="background:#dbeafe;">Gốc nhận A=+1</div>
+            <div class="ab-desc">v = 1, <strong>α = 1</strong>. <em>"Trắng đã chắc chắn được ít nhất +1."</em></div>
+        </div>
+
+        <div class="ab-step" style="padding-left:1.2rem;">
+            <div class="ab-node ab-min">B = Rxe7 (MIN)</div>
+            <div class="ab-desc">
+                <strong>α = 1</strong>, β=+∞.<br>
+                • Lá −2 → v = min(+∞, −2) = −2. Kiểm tra: <strong>v=−2 ≤ α=1</strong> → <span style="color:var(--cut-text);font-weight:700;">CẮT lá +3!</span><br>
+                <em>B (MIN) đã xuống −2. Gốc (MAX) đã có A=+1 > −2, nên không bao giờ chọn B. Bỏ lá +3.</em><br>
+                → <strong>B = −2.</strong>
+            </div>
+        </div>
+
+        <div class="ab-step" style="padding-left:1.2rem;">
+            <div class="ab-node ab-min">C = Bxc6 (MIN)</div>
+            <div class="ab-desc">
+                <strong>α = 1</strong>, β=+∞.<br>
+                • Lá 0 → v = min(+∞, 0) = 0. Kiểm tra: <strong>v=0 ≤ α=1</strong> → <span style="color:var(--cut-text);font-weight:700;">CẮT lá +3!</span><br>
+                <em>Tương tự: C cho 0, gốc đã có 1. Không chọn C.</em><br>
+                → <strong>C = 0.</strong>
+            </div>
+        </div>
+
+        <div class="ab-step">
+            <div class="ab-node ab-max" style="background:#bbf7d0;border-color:#22c55e;">Gốc = +1 ✓</div>
+            <div class="ab-desc">v = max(1, −2, 0) = 1. <strong>Nước tốt nhất: Nxd5.</strong></div>
+        </div>
+    </div>
+
+    <div class="cut-box">
+        <div class="cut-label">✂ Lá bị cắt (2 lá)</div>
+        Lá <strong>+3</strong> dưới B (Rxe7) và lá <strong>+3</strong> dưới C (Bxc6). → Xét <strong>4/6 lá</strong>.
+    </div>
+
+    <div class="img-wrap">
+        <img src="lab_images/p3c_chess_solution.png" alt="Câu 3 — cây lời giải" class="graph-img" style="max-width:600px;">
+        <div class="img-cap">Cây heuristic Alpha-Beta cho thế cờ</div>
+    </div>
+
+    <!-- Ý (3) — giải thích cờ vua -->
+    <div class="ans-box" style="margin-top:1rem;">
+        <div class="ans-label">Ý (3): Giải thích bằng ngôn ngữ cờ vua</div>
+
+        <div class="tbl-wrap">
+            <table>
+                <thead><tr><th>Nước</th><th>Diễn biến</th><th>Kết quả</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Nxd5</strong> (tối ưu)</td>
+                        <td>Mã ăn Tốt d5. Mã <strong>an toàn</strong> — Đen không thể ăn lại.</td>
+                        <td style="color:var(--ans-text);font-weight:700;">Thắng Tốt sạch (+1). Lợi chất rõ ràng, không rủi ro.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Rxe7</strong></td>
+                        <td>Xe ăn Tượng e7. Nhưng Đen có <strong>Xe đáp lại</strong> (…Rxe7).</td>
+                        <td style="color:var(--cut-text);font-weight:700;">Đổi Xe (5) lấy Tượng (3) = mất chất (−2). Thiệt thòi!</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Bxc6</strong></td>
+                        <td>Tượng ăn Mã c6. Nhưng Đen có <strong>Tốt ăn lại</strong> (…bxc6).</td>
+                        <td>Đổi Tượng (3) lấy Mã (3) = đổi ngang (0). Không lợi.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="key-box" style="margin-top:.6rem;">
+            <div class="key-label">🔑 Bản chất</div>
+            <p>Đây chính là cách hàm EVAL (đếm chất) giúp máy chọn nước: so sánh <strong>material balance</strong> (chênh lệch chất) sau mỗi chuỗi ăn/ăn-lại. Nxd5 "ăn sạch" (đối phương không đáp trả được), trong khi Rxe7 và Bxc6 đều bị ăn lại với kết quả bất lợi hoặc huề.</p>
+        </div>
+    </div>
+
+    <!-- Ý (4) — cutoff + EVAL -->
+    <div class="ans-box" style="margin-top:1rem;">
+        <div class="ans-label">Ý (4): Vì sao dùng cutoff + EVAL? Tính tối ưu?</div>
+
+        <div class="step-box">
+            <div class="step-label">Vì sao không duyệt tới hết ván?</div>
+            <p>Cây cờ vua có <strong>~35 nước hợp lệ mỗi lượt</strong>, ván trung bình ~80 nước (40 mỗi bên) → cây có ~ 35<sup>80</sup> ≈ 10<sup>123</sup> nút — lớn hơn số nguyên tử trong vũ trụ! <strong>Không thể duyệt hết.</strong></p>
+            <p>Giải pháp: <strong>dừng ở độ sâu giới hạn</strong> (cutoff) rồi dùng <strong>hàm đánh giá EVAL</strong> thay cho UTILITY.</p>
+        </div>
+
+        <div class="step-box">
+            <div class="step-label">EVAL (đếm chất) là ước lượng thô</div>
+            <ul class="content-ul">
+                <li>EVAL chỉ đếm <strong>chênh lệch chất lượng quân</strong> — không thấy yếu tố thế trận (vua bị lộ, kiểm soát trung tâm, cấu trúc tốt, v.v.).</li>
+                <li>Vì vậy nước chọn <strong>không đảm bảo tối ưu tuyệt đối</strong>. Chất lượng phụ thuộc: EVAL tốt tới đâu + tìm sâu tới đâu.</li>
+                <li>Trong thực tế, engine mạnh dùng EVAL = <strong>tổ hợp tuyến tính có trọng số</strong> của nhiều đặc trưng (chất, thế, vua safety, hoạt tính quân…), không chỉ đếm chất (xem slide 19).</li>
+            </ul>
+        </div>
+
+        <div class="key-box" style="margin-top:.6rem;">
+            <div class="key-label">🔑 Ràng buộc quan trọng</div>
+            <p><strong>UTILITY(thua) ≤ EVAL(s) ≤ UTILITY(thắng)</strong></p>
+            <p>Ý nghĩa: EVAL phải nằm trong khoảng [−∞ (thua), +∞ (thắng)] sao cho <strong>trạng thái chiếu bí thật</strong> luôn có giá trị cực trị hơn mọi ước lượng material. Nhờ vậy, nếu thuật toán tìm được đường chiếu bí, nó sẽ luôn <strong>ưu tiên chiếu bí</strong> hơn bất kỳ lợi thế chất nào.</p>
+        </div>
+    </div>
+</div>
+
+<hr class="sec-div">
+
+
+<!-- ═══════════════════════════════ CÂU 4 ═══════════════════════════════ -->
+<div class="part-heading">Câu 4 — Monte-Carlo Tree Search (20đ)</div>
+
+<div class="ex-card">
+    <div class="ex-eyebrow">Đáp án Câu 4</div>
+    <div class="ex-title">MCTS — 3 vòng Selection → Simulation → Back-propagation</div>
+
+    <div class="note">
+        <strong>Dữ kiện ban đầu:</strong> A = 3/5, B = 2/4, C = 2/3, N = 12 (tổng lượt gốc). C = √2 ≈ 1.414.<br>
+        <strong>Công thức:</strong> UCB(nút) = w/n + √2 · √(ln N / n).<br>
+        <strong>Hằng số:</strong> ln 12 ≈ 2.485, ln 13 ≈ 2.565, ln 14 ≈ 2.639.
+    </div>
+
+    <div class="img-wrap">
+        <img src="lab_images/p4_mcts_init.png" alt="Cây MCTS ban đầu" class="graph-img" style="max-width:380px;">
+        <div class="img-cap">Cây MCTS ban đầu — A: 3/5, B: 2/4, C: 2/3</div>
+    </div>
+
+    <div class="ans-box">
+        <div class="ans-label">Ý (1): 3 vòng lặp (playout đều THẮNG)</div>
+
+        <!-- Vòng 1 -->
+        <div class="step-box">
+            <div class="step-label">Vòng 1 (N = 12)</div>
+            <p><strong>Selection — tính UCB:</strong></p>
+            <div class="tbl-wrap">
+                <table>
+                    <thead><tr><th>Nút</th><th>w/n</th><th>Exploration √2·√(ln 12 / n)</th><th>UCB</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>A</strong></td><td>3/5 = 0.600</td><td>√2 · √(2.485/5) = 1.414 · 0.705 = <strong>0.997</strong></td><td><strong>1.597</strong></td></tr>
+                        <tr><td><strong>B</strong></td><td>2/4 = 0.500</td><td>√2 · √(2.485/4) = 1.414 · 0.788 = <strong>1.115</strong></td><td><strong>1.615</strong></td></tr>
+                        <tr><td><strong>C</strong></td><td>2/3 = 0.667</td><td>√2 · √(2.485/3) = 1.414 · 0.910 = <strong>1.287</strong></td><td style="color:var(--ans-text);font-weight:700;">1.954 ← MAX</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p><strong>Chọn C</strong> (UCB cao nhất). Simulation → THẮNG.</p>
+            <p><strong>Back-propagation:</strong> C: 2/3 → <strong>3/4</strong>. Gốc: N = 12 → <strong>13</strong>.</p>
+            <div class="tip-box" style="margin-top:.4rem;">
+                <div class="tip-label">💡 Tại sao C được chọn?</div>
+                <p>C có <strong>tỉ lệ thắng cao nhất</strong> (0.667) VÀ <strong>ít lượt nhất</strong> (n=3), nên cả phần exploitation lẫn exploration đều ưu ái C. Công thức UCB tự động cân bằng hai yếu tố này.</p>
+            </div>
+        </div>
+
+        <!-- Vòng 2 -->
+        <div class="step-box" style="margin-top:.8rem;">
+            <div class="step-label">Vòng 2 (N = 13)</div>
+            <p><strong>Selection — tính UCB:</strong></p>
+            <div class="tbl-wrap">
+                <table>
+                    <thead><tr><th>Nút</th><th>w/n</th><th>Exploration</th><th>UCB</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>A</strong></td><td>3/5 = 0.600</td><td>√2 · √(2.565/5) = 1.014</td><td><strong>1.613</strong></td></tr>
+                        <tr><td><strong>B</strong></td><td>2/4 = 0.500</td><td>√2 · √(2.565/4) = 1.133</td><td><strong>1.632</strong></td></tr>
+                        <tr><td><strong>C</strong></td><td>3/4 = 0.750</td><td>√2 · √(2.565/4) = 1.133</td><td style="color:var(--ans-text);font-weight:700;">1.882 ← MAX</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p><strong>Chọn C</strong> lần nữa. Simulation → THẮNG.</p>
+            <p><strong>Back-propagation:</strong> C: 3/4 → <strong>4/5</strong>. N = 13 → <strong>14</strong>.</p>
+        </div>
+
+        <!-- Vòng 3 -->
+        <div class="step-box" style="margin-top:.8rem;">
+            <div class="step-label">Vòng 3 (N = 14)</div>
+            <p><strong>Selection — tính UCB:</strong></p>
+            <div class="tbl-wrap">
+                <table>
+                    <thead><tr><th>Nút</th><th>w/n</th><th>Exploration</th><th>UCB</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>A</strong></td><td>3/5 = 0.600</td><td>√2 · √(2.639/5) = 1.028</td><td><strong>1.627</strong></td></tr>
+                        <tr><td><strong>B</strong></td><td>2/4 = 0.500</td><td>√2 · √(2.639/4) = 1.149</td><td><strong>1.649</strong></td></tr>
+                        <tr><td><strong>C</strong></td><td>4/5 = 0.800</td><td>√2 · √(2.639/5) = 1.028</td><td style="color:var(--ans-text);font-weight:700;">1.827 ← MAX</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p><strong>Chọn C</strong>. Simulation → THẮNG.</p>
+            <p><strong>Back-propagation:</strong> C: 4/5 → <strong>5/6</strong>. N = 14 → <strong>15</strong>.</p>
+        </div>
+
+        <div class="ans-box" style="margin-top:.6rem;background:var(--ans-bg);border:2px solid var(--ans-bd);">
+            <div class="ans-label">Tổng kết sau 3 vòng</div>
+            <p style="font-size:1rem;"><strong>A = 3/5 &nbsp;·&nbsp; B = 2/4 &nbsp;·&nbsp; C = 5/6</strong></p>
+        </div>
+    </div>
+
+    <div class="img-wrap" style="margin-top:.5rem;">
+        <img src="lab_images/p4_mcts_final.png" alt="MCTS sau 3 vòng" class="graph-img" style="max-width:380px;">
+        <div class="img-cap">Cây MCTS sau 3 vòng — C được chọn cả 3 lần</div>
+    </div>
+
+    <!-- Ý (2) -->
+    <div class="ans-box" style="margin-top:1rem;">
+        <div class="ans-label">Ý (2): Nước đi được chọn?</div>
+        <p>Chọn nút <strong>nhiều lượt nhất</strong> (most visited) → <strong>C (6 lượt)</strong>.</p>
+
+        <div class="key-box" style="margin-top:.4rem;">
+            <div class="key-label">🔑 Tại sao dùng số lượt, không dùng tỉ lệ thắng?</div>
+            <p>Nút có nhiều lượt nhất là nút được <strong>kiểm chứng kỹ nhất</strong> — giá trị của nó <strong>đáng tin nhất</strong>. Tỉ lệ thắng có thể cao do chỉ được thử 1–2 lần (may mắn), nhưng số lượt phản ánh mức độ <strong>tin tưởng thống kê</strong>. Trong thực tế, AlphaGo và các engine MCTS hiện đại đều dùng tiêu chí "most visited."</p>
+        </div>
+    </div>
+
+    <!-- Ý (3) -->
+    <div class="ans-box" style="margin-top:1rem;">
+        <div class="ans-label">Ý (3): Giả định vòng 1 C THUA — vòng 2 chọn ai?</div>
+
+        <p>Nếu vòng 1 C thua: C → <strong>2/4</strong> (thay vì 3/4), N = <strong>13</strong>.</p>
+
+        <div class="step-box">
+            <div class="step-label">Tính UCB vòng 2 (N = 13)</div>
+            <div class="tbl-wrap">
+                <table>
+                    <thead><tr><th>Nút</th><th>w/n</th><th>Exploration</th><th>UCB</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>A</strong></td><td>3/5 = 0.600</td><td>√2 · √(2.565/5) = 1.014</td><td><strong>1.613</strong></td></tr>
+                        <tr><td><strong>B</strong></td><td>2/4 = 0.500</td><td>√2 · √(2.565/4) = 1.133</td><td style="color:var(--ans-text);font-weight:700;">1.632</td></tr>
+                        <tr><td><strong>C</strong></td><td>2/4 = 0.500</td><td>√2 · √(2.565/4) = 1.133</td><td style="color:var(--ans-text);font-weight:700;">1.632</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>B và C đều = <strong>1.632</strong> > A (1.613). Phá hòa bằng thứ tự chữ cái → <strong>chọn B</strong>.</p>
+        </div>
+
+        <div class="key-box" style="margin-top:.6rem;">
+            <div class="key-label">🔑 Minh họa tính Exploration (thăm dò)</div>
+            <p>Sau khi C thất bại, tỉ lệ thắng của C giảm xuống bằng B (cả hai = 0.5). Thuật toán <strong>không bám mãi C</strong> mà chuyển sang <strong>thử nút khác</strong> (B) — đây chính là cơ chế <strong>exploration</strong> (khám phá) của UCB. Nếu chỉ dùng exploitation (w/n), ta sẽ bám C mãi dù C bắt đầu thua.</p>
+        </div>
+    </div>
+
+    <!-- Ý (4) -->
+    <div class="ans-box" style="margin-top:1rem;">
+        <div class="ans-label">Ý (4): Ý nghĩa hai số hạng trong UCB</div>
+
+        <div class="tbl-wrap">
+            <table>
+                <thead><tr><th style="width:22%;">Số hạng</th><th style="width:25%;">Công thức</th><th>Vai trò</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Khai thác</strong><br>(Exploitation)</td>
+                        <td><code>w/n</code></td>
+                        <td><strong>Tỉ lệ thắng</strong> — ưu tiên nút đang cho kết quả tốt. Giống như bạn tiếp tục ăn ở nhà hàng mà bạn đã thích.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Khám phá</strong><br>(Exploration)</td>
+                        <td><code>C·√(ln N / n)</code></td>
+                        <td><strong>Thưởng cho nút ít được thử</strong> (n nhỏ → exploration lớn). Giống như bạn thử nhà hàng mới vì "biết đâu ngon hơn."</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="key-box" style="margin-top:.6rem;">
+            <div class="key-label">🔑 Cân bằng Exploitation–Exploration</div>
+            <p>Đây chính là <strong>bài toán cổ điển multi-armed bandit</strong>. UCB tự động cân bằng:</p>
+            <ul class="content-ul">
+                <li>Nút đang thắng nhiều (w/n cao) → được chọn nhiều hơn → <strong>khai thác</strong> kết quả tốt.</li>
+                <li>Nút ít được thử (n nhỏ) → exploration bonus lớn → đảm bảo <strong>không bỏ sót nút tiềm năng</strong>.</li>
+                <li>Hằng số <strong>C</strong> điều chỉnh mức thiên về khám phá. C lớn → khám phá nhiều hơn; C nhỏ → khai thác nhiều hơn.</li>
+            </ul>
+            <p>Kết hợp cả hai giúp MCTS tập trung vào nút tốt nhưng vẫn thỉnh thoảng thử hướng mới — giống cách con người ra quyết định trong điều kiện không chắc chắn.</p>
+        </div>
+    </div>
+</div>
+
+<hr class="sec-div">
+
+
+<!-- ═══ BẢNG TÓM TẮT ═══ -->
+<div class="part-heading">Bảng tóm tắt đáp án</div>
+
+<div class="tbl-wrap">
+    <table class="summary-tbl">
+        <thead>
+            <tr><th>Câu</th><th>Kết quả chính</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>1a</td><td>Gốc = <strong>6</strong>; MAX chọn nhánh trái (B); cắt 3 lá (2, 8, 4) → xét 5/8 lá.</td></tr>
+            <tr><td>1b</td><td>Gốc = <strong>7</strong>; MAX chọn nhánh trái (N1); cắt 9/16 lá → xét 7/16 lá.</td></tr>
+            <tr><td>1c</td><td>Gốc = <strong>11</strong>; MAX chọn nhánh trái (L); cắt 7/19 lá → xét 12/19 lá.</td></tr>
+            <tr><td>1d ★</td><td>Tốt nhất trước → O(b<sup>d/2</sup>); tệ nhất trước → O(b<sup>d</sup>). Giá trị gốc <strong>không đổi</strong>.</td></tr>
+            <tr><td>2a</td><td>net = <strong>+7</strong>; lấy xu <strong>phải (2)</strong>. Tham lam (lấy 3) → −5, thua.</td></tr>
+            <tr><td>2b</td><td>Gốc = <strong>+1</strong>; MAX thắng bằng <strong>lấy 2 viên</strong> (để lại 3 — bội của 3 = thua cho đối thủ).</td></tr>
+            <tr><td>3</td><td>Gốc = <strong>+1</strong>; Trắng đi <strong>Nxd5</strong> (ăn Tốt sạch); cắt 2 lá. Rxe7 mất chất (−2), Bxc6 đổi ngang (0).</td></tr>
+            <tr><td>4</td><td>Chọn <strong>C</strong> cả 3 vòng → C = 5/6; nước đi = <strong>C</strong> (most visited). Nếu C thua vòng 1 → vòng 2 chọn <strong>B</strong> (exploration).</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="tip-box" style="margin-top:1rem;">
+    <div class="tip-label">💡 Tóm tắt phương pháp giải</div>
+    <ul class="content-ul">
+        <li><strong>Minimax:</strong> Tính từ lá lên gốc. MAX lấy max, MIN lấy min. Đơn giản nhưng duyệt toàn bộ cây.</li>
+        <li><strong>Alpha-Beta:</strong> Duyệt trái→phải, duy trì cửa sổ [α, β]. MAX nuôi α (cận dưới), MIN nuôi β (cận trên). Cắt khi α ≥ β. Kết quả giống Minimax nhưng nhanh hơn.</li>
+        <li><strong>Heuristic Alpha-Beta:</strong> Dừng sớm (cutoff), dùng EVAL thay UTILITY. Ước lượng — không đảm bảo tối ưu tuyệt đối.</li>
+        <li><strong>MCTS:</strong> Không cần EVAL. Dùng UCB (exploitation + exploration) để chọn nút, chạy playout ngẫu nhiên, cập nhật thống kê. Chọn nước "most visited" cuối cùng.</li>
+    </ul>
+</div>
+
+</main>
+</body>
+</html>
