@@ -145,6 +145,7 @@ lectures:
       - "Inference Rules (Modus Ponens, Resolution)"
     slides:
       - { "Propositional Logic": "slides/5. PROPOSITIONAL LOGIC1_new.pdf" }
+      - { "Propositional Logic (web)": "slides/5. PROPOSITIONAL LOGIC1_new.html" }
     materials:
       - "Chapter 7, AIMA (Russell & Norvig, 2020)"
       - { "Main Textbook (AIMA, PDF)": "http://lib.ysu.am/disciplines_bk/efdd4d1d4c2087fe1cbe03d9ced67f34.pdf" }
