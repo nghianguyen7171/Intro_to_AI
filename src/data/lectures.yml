@@ -152,6 +152,7 @@ lectures:
       - "Printable Worksheet (blank)"
       - "Reasoning examples and exercises"
       - "CNF conversion practice problems"
+      - { "Bài tập Propositional Logic": "quizz/propositional_logic_exercises.html" }
 
   - week: 10
     date: "2024-11-05"

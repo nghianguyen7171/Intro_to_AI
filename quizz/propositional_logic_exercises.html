@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bài tập — Propositional Logic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root {
+    --bg:        #f1f5f9;
+    --surface:   #ffffff;
+    --surface-2: #f8fafc;
+    --border:    #e2e8f0;
+    --text:      #0f172a;
+    --text-2:    #475569;
+    --text-3:    #94a3b8;
+    --accent:    #6366f1;
+    --accent-lt: #eef2ff;
+    --accent-bd: #c7d2fe;
+    --def-bg:    #f0fdf4;
+    --def-bd:    #86efac;
+    --task-bg:   #eff6ff;
+    --task-bd:   #93c5fd;
+    --warn-bg:   #fff7ed;
+    --warn-bd:   #fdba74;
+    --q-bg:      #fefce8;
+    --q-bd:      #fde047;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --bg:#0f172a;--surface:#1e293b;--surface-2:#162032;--border:#334155;
+        --text:#f1f5f9;--text-2:#94a3b8;--text-3:#64748b;
+        --accent:#818cf8;--accent-lt:#1e1b4b;--accent-bd:#3730a3;
+        --def-bg:#052e16;--def-bd:#166534;
+        --task-bg:#0c1a2e;--task-bd:#1e3a5f;
+        --warn-bg:#1c0e02;--warn-bd:#92400e;
+        --q-bg:#2d2508;--q-bd:#713f12;
+    }
+}
+:root[data-theme="dark"] {
+    --bg:#0f172a;--surface:#1e293b;--surface-2:#162032;--border:#334155;
+    --text:#f1f5f9;--text-2:#94a3b8;--text-3:#64748b;
+    --accent:#818cf8;--accent-lt:#1e1b4b;--accent-bd:#3730a3;
+    --def-bg:#052e16;--def-bd:#166534;
+    --task-bg:#0c1a2e;--task-bd:#1e3a5f;
+    --warn-bg:#1c0e02;--warn-bd:#92400e;
+    --q-bg:#2d2508;--q-bd:#713f12;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{font-family:'Inter','Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.7;margin:0}
+p{margin:0 0 .7rem}p:last-child{margin-bottom:0}
+strong{font-weight:700}
+code,.mono{font-family:'JetBrains Mono','Courier New',monospace;font-size:.9em;background:var(--surface-2);border:1px solid var(--border);border-radius:3px;padding:.1em .35em}
+
+#site-header{background:#0f172a;position:sticky;top:0;z-index:50;border-bottom:1px solid #1e293b}
+.header-inner{max-width:960px;margin:0 auto;padding:0 1.5rem}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:.9rem 0 .55rem}
+.header-eyebrow{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#818cf8;margin-bottom:.15rem}
+.header-title{font-size:1.05rem;font-weight:800;color:#fff;line-height:1.25}
+.header-sub{font-size:.75rem;color:#94a3b8;margin-top:.1rem}
+.badge-pill{background:#1e293b;border:1px solid #334155;color:#94a3b8;font-size:.68rem;font-weight:600;letter-spacing:.06em;padding:.2rem .65rem;border-radius:4px}
+
+main{max-width:960px;margin:0 auto;padding:1.75rem 1.5rem 5rem}
+
+.part-heading{font-size:1.1rem;font-weight:800;color:var(--accent);margin:2rem 0 .6rem;padding-bottom:.35rem;border-bottom:2px solid var(--accent-bd)}
+.slide-ref{font-size:.78rem;font-weight:600;color:var(--text-3);margin-top:-.3rem;margin-bottom:.8rem}
+
+.ex-card{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;padding:1.4rem 1.5rem;margin-bottom:1.25rem}
+
+.def-box{background:var(--def-bg);border:1px solid var(--def-bd);border-radius:6px;padding:.85rem 1.1rem;margin:.85rem 0}
+.def-label{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#15803d;margin-bottom:.4rem}
+
+.note{background:var(--surface-2);border:1px solid var(--border);border-radius:6px;padding:.6rem 1rem;font-size:.845rem;color:var(--text-2);margin:.65rem 0}
+
+.q-list{margin:.3rem 0 0;padding-left:0;list-style:none}
+.q-item{display:flex;gap:.65rem;margin-bottom:1rem;align-items:flex-start}
+.q-num{flex-shrink:0;font-weight:800;color:var(--accent);min-width:1.8rem;font-size:.9rem;padding-top:.05rem}
+.q-body{flex:1;font-size:.9rem;line-height:1.65}
+
+.ans-space{background:var(--surface-2);border:1px dashed var(--border);border-radius:6px;padding:.55rem .9rem;margin-top:.5rem;min-height:2.8rem;font-size:.82rem;color:var(--text-3);font-style:italic}
+
+.tbl-wrap{overflow-x:auto;margin:.5rem 0}
+table{width:100%;border-collapse:collapse;font-size:.845rem}
+th{background:var(--surface-2);padding:.45rem .65rem;text-align:center;font-weight:600;font-size:.76rem;letter-spacing:.02em;color:var(--text-2);border-bottom:2px solid var(--border)}
+td{padding:.4rem .65rem;border-bottom:1px solid var(--border);text-align:center}
+tr:last-child td{border-bottom:none}
+
+.formula{background:var(--accent-lt);border:1px solid var(--accent-bd);border-radius:6px;padding:.5rem 1rem;margin:.5rem 0;font-family:'JetBrains Mono',monospace;font-size:.88rem;text-align:center;color:var(--accent);font-weight:600}
+
+.content-ul{padding-left:1.3rem;list-style:disc;margin:.4rem 0}
+.content-ul li{margin-bottom:.3rem;font-size:.875rem}
+
+.sec-div{border:none;border-top:1px solid var(--border);margin:1.5rem 0}
+
+@media print{
+    #site-header{background:#1e293b!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .ex-card{break-inside:avoid}
+    .ans-space{min-height:4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header id="site-header">
+    <div class="header-inner">
+        <div class="header-top">
+            <div>
+                <div class="header-eyebrow">EP15/EP16.TOKT11121 · Introduction to AI</div>
+                <div class="header-title">Bài tập — Propositional Logic</div>
+                <div class="header-sub">Dịch câu · Bảng chân trị · Phân loại · Entailment · Luật suy diễn · Tương đương logic</div>
+            </div>
+            <div><span class="badge-pill">6 PHẦN — 25 CÂU</span></div>
+        </div>
+    </div>
+</header>
+
+<!-- ═══ MAIN ═══ -->
+<main>
+
+<!-- Conventions -->
+<div class="def-box" style="margin-bottom:1.2rem;">
+    <div class="def-label">Quy ước ký hiệu</div>
+    <ul class="content-ul" style="margin-top:.3rem;">
+        <li>Toán tử: <strong>¬</strong> (phủ định), <strong>∧</strong> (và), <strong>∨</strong> (hoặc), <strong>⇒</strong> (kéo theo), <strong>⇔</strong> (tương đương).</li>
+        <li>Thứ tự ưu tiên (mạnh → yếu): <strong>¬ &gt; ∧ &gt; ∨ &gt; ⇒ &gt; ⇔</strong>. Khi cần, dùng ngoặc.</li>
+        <li><strong>T</strong> = đúng (true, 1), <strong>F</strong> = sai (false, 0).</li>
+        <li><strong>Model</strong> m = một cách gán T/F cho mọi ký hiệu. Với n ký hiệu có <strong>2<sup>n</sup></strong> model.</li>
+        <li><strong>M(α)</strong> = tập model làm α đúng. <strong>KB ⊨ α</strong>: α đúng trong <em>mọi</em> model mà KB đúng (⇔ M(KB) ⊆ M(α)).</li>
+    </ul>
+</div>
+
+
+<!-- ═══════════════════════ PHẦN 1 ═══════════════════════ -->
+<div class="part-heading">Phần 1 — Dịch câu sang logic mệnh đề</div>
+<div class="slide-ref">📖 Slide 9–11</div>
+
+<p>Đặt ký hiệu mệnh đề thích hợp rồi viết công thức cho mỗi câu.</p>
+
+<div class="ex-card">
+    <ol class="q-list">
+        <li class="q-item">
+            <div class="q-num">1.</div>
+            <div class="q-body">
+                "Nếu trời mưa thì đường ướt."
+                <div class="ans-space">Ký hiệu: &nbsp;&nbsp;&nbsp;&nbsp; Công thức: </div>
+            </div>
+        </li>
+        <li class="q-item">
+            <div class="q-num">2.</div>
+            <div class="q-body">
+                "An đỗ môn Toán và môn Lý, nhưng trượt môn Hoá."
+                <div class="ans-space">Ký hiệu: &nbsp;&nbsp;&nbsp;&nbsp; Công thức: </div>
+            </div>
+        </li>
+        <li class="q-item">
+            <div class="q-num">3.</div>
+            <div class="q-body">
+                "Tôi đi học nếu và chỉ nếu tôi khoẻ."
+                <div class="ans-space">Ký hiệu: &nbsp;&nbsp;&nbsp;&nbsp; Công thức: </div>
+            </div>
+        </li>
+        <li class="q-item">
+            <div class="q-num">4.</div>
+            <div class="q-body">
+                "Muốn tốt nghiệp thì phải qua hết các môn." <em>(điều kiện cần)</em>
+                <div class="ans-space">Ký hiệu: &nbsp;&nbsp;&nbsp;&nbsp; Công thức: </div>
+            </div>
+        </li>
+        <li class="q-item">
+            <div class="q-num">5.</div>
+            <div class="q-body">
+                "Tối nay tôi đi xem phim hoặc ở nhà đọc sách, nhưng không làm cả hai." <em>(hoặc loại trừ)</em>
+                <div class="ans-space">Ký hiệu: &nbsp;&nbsp;&nbsp;&nbsp; Công thức: </div>
+            </div>
+        </li>
+        <li class="q-item">
+            <div class="q-num">6.</div>
+            <div class="q-body">
+                "Nếu trời không mưa và tôi rảnh thì tôi sẽ đi chơi."
+                <div class="ans-space">Ký hiệu: &nbsp;&nbsp;&nbsp;&nbsp; Công thức: </div>
+            </div>
+        </li>
+        <li class="q-item">
+            <div class="q-num">7.</div>
+            <div class="q-body">
+                <strong>(Suy luận)</strong> Với câu 1, đặt thêm "biết rằng <em>đường không ướt</em>". Hãy viết tất cả tiền đề dưới dạng công thức và cho biết kết luận logic rút ra được là gì; gọi tên luật.
+                <div class="ans-space">Tiền đề: &nbsp;&nbsp;&nbsp;&nbsp; Kết luận: &nbsp;&nbsp;&nbsp;&nbsp; Tên luật: </div>
+            </div>
+        </li>
+    </ol>
+</div>
+
+<hr class="sec-div">
+
+
+<!-- ═══════════════════════ PHẦN 2 ═══════════════════════ -->
+<div class="part-heading">Phần 2 — Bảng chân trị &amp; tập model M(α)</div>
+<div class="slide-ref">📖 Slide 13, 17, 18</div>
+
+<p>Lập bảng chân trị đầy đủ và liệt kê M(α).</p>
+
+<div class="ex-card">
+    <ol class="q-list">
+        <li class="q-item">
+            <div class="q-num">1.</div>
+            <div class="q-body">
+                <div class="formula">α = ¬(P ∧ Q)</div>
+                <p>Có 2 ký hiệu → 2² = 4 model. Lập bảng chân trị và liệt kê M(α).</p>
+                <div class="tbl-wrap">
+                    <table>
+                        <thead><tr><th>P</th><th>Q</th><th>P ∧ Q</th><th>α = ¬(P ∧ Q)</th></tr></thead>
+                        <tbody>
+                            <tr><td>F</td><td>F</td><td></td><td></td></tr>
+                            <tr><td>F</td><td>T</td><td></td><td></td></tr>
+                            <tr><td>T</td><td>F</td><td></td><td></td></tr>
+                            <tr><td>T</td><td>T</td><td></td><td></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="ans-space">M(α) = { &nbsp;&nbsp;&nbsp;&nbsp; } — gồm ___ model.</div>
+            </div>
+        </li>
+        <li class="q-item" style="margin-top:1.2rem;">
+            <div class="q-num">2.</div>
+            <div class="q-body">
+                <div class="formula">β = (P ⇒ Q) ∧ (Q ⇒ R)</div>
+                <p>Có 3 ký hiệu → 2³ = 8 model. Lập bảng chân trị, liệt kê M(β) và cho biết |M(β)| trên tổng số model.</p>
+                <div class="tbl-wrap">
+                    <table>
+                        <thead><tr><th>P</th><th>Q</th><th>R</th><th>P ⇒ Q</th><th>Q ⇒ R</th><th>β</th></tr></thead>
+                        <tbody>
+                            <tr><td>F</td><td>F</td><td>F</td><td></td><td></td><td></td></tr>
+                            <tr><td>F</td><td>F</td><td>T</td><td></td><td></td><td></td></tr>
+                            <tr><td>F</td><td>T</td><td>F</td><td></td><td></td><td></td></tr>
+                            <tr><td>F</td><td>T</td><td>T</td><td></td><td></td><td></td></tr>
+                            <tr><td>T</td><td>F</td><td>F</td><td></td><td></td><td></td></tr>
+                            <tr><td>T</td><td>F</td><td>T</td><td></td><td></td><td></td></tr>
+                            <tr><td>T</td><td>T</td><td>F</td><td></td><td></td><td></td></tr>
+                            <tr><td>T</td><td>T</td><td>T</td><td></td><td></td><td></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="ans-space">M(β) = { &nbsp;&nbsp;&nbsp;&nbsp; } — gồm ___ / 8 model.</div>
+            </div>
+        </li>
+    </ol>
+</div>
+
+<hr class="sec-div">
+
+
+<!-- ═══════════════════════ PHẦN 3 ═══════════════════════ -->
+<div class="part-heading">Phần 3 — Phân loại công thức: hằng đúng / thoả được / mâu thuẫn</div>
+<div class="slide-ref">📖 Slide 17–19</div>
+
+<p>Với mỗi công thức, lập bảng và phân loại: <strong>valid</strong> (hằng đúng — đúng ở <em>mọi</em> model), <strong>unsatisfiable</strong> (mâu thuẫn — sai ở <em>mọi</em> model), hay <strong>satisfiable nhưng không valid</strong> (contingent — đúng ở một số model).</p>
+
+<div class="ex-card">
+    <ol class="q-list">
+        <li class="q-item">
+            <div class="q-num">1.</div>
+            <div class="q-body">
+                <div class="formula">P ∨ ¬P</div>
+                <div class="ans-space">Phân loại: &nbsp;&nbsp;&nbsp;&nbsp; Lý do: </div>
+            </div>
+        </li>
+        <li class="q-item">
+            <div class="q-num">2.</div>
+            <div class="q-body">
+                <div class="formula">P ∧ ¬P</div>
+                <div class="ans-space">Phân loại: &nbsp;&nbsp;&nbsp;&nbsp; Lý do: </div>
+            </div>
+        </li>
+        <li class="q-item">
+            <div class="q-num">3.</div>
+            <div class="q-body">
+                <div class="formula">(P ⇒ Q) ⇒ (¬Q ⇒ ¬P)</div>
+                <div class="ans-space">Phân loại: &nbsp;&nbsp;&nbsp;&nbsp; Bảng chân trị (nếu cần): </div>
+            </div>
+        </li>
+        <li class="q-item">
+            <div class="q-num">4.</div>
+            <div class="q-body">
+                <div class="formula">P ⇒ (Q ⇒ P)</div>
+                <div class="ans-space">Phân loại: &nbsp;&nbsp;&nbsp;&nbsp; Lý do: </div>
+            </div>
+        </li>
+        <li class="q-item">
+            <div class="q-num">5.</div>
+            <div class="q-body">
+                <div class="formula">(P ⇒ Q) ∧ (P ∧ ¬Q)</div>
+                <div class="ans-space">Phân loại: &nbsp;&nbsp;&nbsp;&nbsp; Lý do: </div>
+            </div>
+        </li>
+        <li class="q-item">
+            <div class="q-num">6.</div>
+            <div class="q-body">
+                <div class="formula">(P ∨ Q) ⇒ (P ∧ Q)</div>
+                <div class="ans-space">Phân loại: &nbsp;&nbsp;&nbsp;&nbsp; Bảng chân trị: </div>
+            </div>
+        </li>
+    </ol>
+</div>
+
+<hr class="sec-div">
+
+
+<!-- ═══════════════════════ PHẦN 4 ═══════════════════════ -->
+<div class="part-heading">Phần 4 — Kiểm tra entailment (KB ⊨ α?)</div>
+<div class="slide-ref">📖 Slide 19–20</div>
+
+<p>Dùng <strong>model checking</strong>: chỉ xét các model làm KB đúng; nếu <em>tất cả</em> đều làm α đúng → KB ⊨ α; nếu có <em>một</em> model KB đúng mà α sai → đó là <strong>phản ví dụ</strong>, KB ⊭ α.</p>
+
+<div class="ex-card">
+    <ol class="q-list">
+        <li class="q-item">
+            <div class="q-num">1.</div>
+            <div class="q-body">
+                <div class="formula">KB = (P ⇒ Q) ∧ P &nbsp;&nbsp;⊨&nbsp;&nbsp; Q ?</div>
+                <div class="ans-space">Kết luận (⊨ hay ⊭): &nbsp;&nbsp;&nbsp;&nbsp; Giải thích / phản ví dụ: </div>
+            </div>
+        </li>
+        <li class="q-item">
+            <div class="q-num">2.</div>
+            <div class="q-body">
+                <div class="formula">KB = (P ∨ Q) ∧ (P ⇒ R) ∧ (Q ⇒ R) &nbsp;&nbsp;⊨&nbsp;&nbsp; R ?</div>
+                <div class="ans-space">Kết luận (⊨ hay ⊭): &nbsp;&nbsp;&nbsp;&nbsp; Liệt kê model KB đúng: </div>
+            </div>
+        </li>
+        <li class="q-item">
+            <div class="q-num">3.</div>
+            <div class="q-body">
+                <div class="formula">KB = (P ⇒ Q) &nbsp;&nbsp;⊨&nbsp;&nbsp; (¬P ⇒ ¬Q) ?</div>
+                <div class="ans-space">Kết luận (⊨ hay ⊭): &nbsp;&nbsp;&nbsp;&nbsp; Phản ví dụ (nếu ⊭): </div>
+            </div>
+        </li>
+        <li class="q-item">
+            <div class="q-num">4.</div>
+            <div class="q-body">
+                <div class="formula">KB = (P ⇒ Q) ∧ ¬P &nbsp;&nbsp;⊨&nbsp;&nbsp; ¬Q ?</div>
+                <div class="ans-space">Kết luận (⊨ hay ⊭): &nbsp;&nbsp;&nbsp;&nbsp; Phản ví dụ (nếu ⊭): </div>
+            </div>
+        </li>
+    </ol>
+</div>
+
+<hr class="sec-div">
+
+
+<!-- ═══════════════════════ PHẦN 5 ═══════════════════════ -->
+<div class="part-heading">Phần 5 — Luật suy diễn có đúng đắn (sound) không?</div>
+<div class="slide-ref">📖 Slide 21–23</div>
+
+<p>Một luật dạng {tiền đề} ⊨ kết luận là <strong>sound</strong> khi mọi model thoả tất cả tiền đề đều thoả kết luận. Với mỗi luật dưới đây, dùng bảng chân trị xác định nó sound hay không; nếu không, chỉ ra phản ví dụ.</p>
+
+<div class="ex-card">
+    <ol class="q-list">
+        <li class="q-item">
+            <div class="q-num">1.</div>
+            <div class="q-body">
+                <strong>Modus Tollens:</strong>
+                <div class="formula">{P ⇒ Q, &nbsp;¬Q} &nbsp;⊨&nbsp; ¬P</div>
+                <div class="ans-space">Sound hay không? &nbsp;&nbsp;&nbsp;&nbsp; Giải thích / phản ví dụ: </div>
+            </div>
+        </li>
+        <li class="q-item">
+            <div class="q-num">2.</div>
+            <div class="q-body">
+                <strong>Phủ định tiền đề:</strong>
+                <div class="formula">{P ⇒ Q, &nbsp;¬P} &nbsp;⊨&nbsp; ¬Q</div>
+                <div class="ans-space">Sound hay không? &nbsp;&nbsp;&nbsp;&nbsp; Giải thích / phản ví dụ: </div>
+            </div>
+        </li>
+        <li class="q-item">
+            <div class="q-num">3.</div>
+            <div class="q-body">
+                <strong>Tam đoạn luận tuyển:</strong>
+                <div class="formula">{P ∨ Q, &nbsp;¬P} &nbsp;⊨&nbsp; Q</div>
+                <div class="ans-space">Sound hay không? &nbsp;&nbsp;&nbsp;&nbsp; Giải thích / phản ví dụ: </div>
+            </div>
+        </li>
+        <li class="q-item">
+            <div class="q-num">4.</div>
+            <div class="q-body">
+                <strong>Tam đoạn luận bắc cầu:</strong>
+                <div class="formula">{P ⇒ Q, &nbsp;Q ⇒ R} &nbsp;⊨&nbsp; (P ⇒ R)</div>
+                <div class="ans-space">Sound hay không? &nbsp;&nbsp;&nbsp;&nbsp; Giải thích / phản ví dụ: </div>
+            </div>
+        </li>
+        <li class="q-item">
+            <div class="q-num">5.</div>
+            <div class="q-body">
+                <strong>Khẳng định hậu kiện:</strong>
+                <div class="formula">{P ⇒ Q, &nbsp;Q} &nbsp;⊨&nbsp; P</div>
+                <div class="ans-space">Sound hay không? &nbsp;&nbsp;&nbsp;&nbsp; Giải thích / phản ví dụ: </div>
+            </div>
+        </li>
+    </ol>
+</div>
+
+<hr class="sec-div">
+
+
+<!-- ═══════════════════════ PHẦN 6 ═══════════════════════ -->
+<div class="part-heading">Phần 6 — Chứng minh tương đương logic</div>
+<div class="slide-ref">📖 Slide 26</div>
+
+<p>Chứng minh các tương đương sau. Có thể dùng <strong>bảng chân trị</strong> (hai cột cuối trùng nhau ở mọi dòng) hoặc <strong>biến đổi bằng luật tương đương</strong>.</p>
+
+<div class="ex-card">
+    <ol class="q-list">
+        <li class="q-item">
+            <div class="q-num">1.</div>
+            <div class="q-body">
+                <div class="formula">P ⇒ Q &nbsp;≡&nbsp; ¬P ∨ Q</div>
+                <p style="font-size:.82rem;color:var(--text-3);"><em>(khử kéo theo)</em></p>
+                <div class="ans-space">Chứng minh: </div>
+            </div>
+        </li>
+        <li class="q-item">
+            <div class="q-num">2.</div>
+            <div class="q-body">
+                <div class="formula">¬(P ⇒ Q) &nbsp;≡&nbsp; P ∧ ¬Q</div>
+                <div class="ans-space">Chứng minh: </div>
+            </div>
+        </li>
+        <li class="q-item">
+            <div class="q-num">3.</div>
+            <div class="q-body">
+                <div class="formula">P ⇔ Q &nbsp;≡&nbsp; (P ∧ Q) ∨ (¬P ∧ ¬Q)</div>
+                <div class="ans-space">Chứng minh: </div>
+            </div>
+        </li>
+        <li class="q-item">
+            <div class="q-num">4.</div>
+            <div class="q-body">
+                <div class="formula">¬(P ∨ Q) &nbsp;≡&nbsp; ¬P ∧ ¬Q</div>
+                <p style="font-size:.82rem;color:var(--text-3);"><em>(De Morgan)</em></p>
+                <div class="ans-space">Chứng minh: </div>
+            </div>
+        </li>
+        <li class="q-item">
+            <div class="q-num">5.</div>
+            <div class="q-body">
+                <div class="formula">P ∨ (P ∧ Q) &nbsp;≡&nbsp; P</div>
+                <p style="font-size:.82rem;color:var(--text-3);"><em>(luật hấp thụ)</em></p>
+                <div class="ans-space">Chứng minh: </div>
+            </div>
+        </li>
+    </ol>
+</div>
+
+<hr class="sec-div">
+
+<!-- Footer -->
+<div class="note" style="margin-top:1rem;">
+    <strong>Tổng cộng:</strong> 25 câu — 6 phần theo trình tự kiến thức slide. Ghi rõ từng bước lập luận để nhận trọn điểm.
+</div>
+
+</main>
+</body>
+</html>
