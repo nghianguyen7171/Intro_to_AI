@@ -164,7 +164,7 @@ lectures:
       - "Resolution, Inference rules"
       - "Logic problem sets"
     slides:
-      - { "Propositional Logic (continued)": "slides/6. (Cont) Propositional logic.pdf" }
+      - { "Propositional Logic (continued)": "slides/6. PROPOSITIONAL LOGIC (Cont.).pdf" }
     materials:
       - "Logic problem sets"
       - "Python-based logic solvers"
