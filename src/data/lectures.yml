@@ -168,6 +168,7 @@ lectures:
     materials:
       - "Logic problem sets"
       - "Python-based logic solvers"
+      - { "Bài tập Deduction": "quizz/deduction_exercises.html" }
 
   - week: 11
     date: "2024-11-12"

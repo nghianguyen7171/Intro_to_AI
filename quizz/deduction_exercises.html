@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bài tập — Deduction in Propositional Logic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root {
+    --bg:        #f1f5f9;
+    --surface:   #ffffff;
+    --surface-2: #f8fafc;
+    --border:    #e2e8f0;
+    --text:      #0f172a;
+    --text-2:    #475569;
+    --text-3:    #94a3b8;
+    --accent:    #6366f1;
+    --accent-lt: #eef2ff;
+    --accent-bd: #c7d2fe;
+    --def-bg:    #f0fdf4;
+    --def-bd:    #86efac;
+    --task-bg:   #eff6ff;
+    --task-bd:   #93c5fd;
+    --warn-bg:   #fff7ed;
+    --warn-bd:   #fdba74;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --bg:#0f172a;--surface:#1e293b;--surface-2:#162032;--border:#334155;
+        --text:#f1f5f9;--text-2:#94a3b8;--text-3:#64748b;
+        --accent:#818cf8;--accent-lt:#1e1b4b;--accent-bd:#3730a3;
+        --def-bg:#052e16;--def-bd:#166534;
+        --task-bg:#0c1a2e;--task-bd:#1e3a5f;
+        --warn-bg:#1c0e02;--warn-bd:#92400e;
+    }
+}
+:root[data-theme="dark"] {
+    --bg:#0f172a;--surface:#1e293b;--surface-2:#162032;--border:#334155;
+    --text:#f1f5f9;--text-2:#94a3b8;--text-3:#64748b;
+    --accent:#818cf8;--accent-lt:#1e1b4b;--accent-bd:#3730a3;
+    --def-bg:#052e16;--def-bd:#166534;
+    --task-bg:#0c1a2e;--task-bd:#1e3a5f;
+    --warn-bg:#1c0e02;--warn-bd:#92400e;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{font-family:'Inter','Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.7;margin:0}
+p{margin:0 0 .7rem}p:last-child{margin-bottom:0}
+strong{font-weight:700}
+code,.mono{font-family:'JetBrains Mono','Courier New',monospace;font-size:.9em;background:var(--surface-2);border:1px solid var(--border);border-radius:3px;padding:.1em .35em}
+
+#site-header{background:#0f172a;position:sticky;top:0;z-index:50;border-bottom:1px solid #1e293b}
+.header-inner{max-width:960px;margin:0 auto;padding:0 1.5rem}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:.9rem 0 .55rem}
+.header-eyebrow{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#818cf8;margin-bottom:.15rem}
+.header-title{font-size:1.05rem;font-weight:800;color:#fff;line-height:1.25}
+.header-sub{font-size:.75rem;color:#94a3b8;margin-top:.1rem}
+.badge-pill{background:#1e293b;border:1px solid #334155;color:#94a3b8;font-size:.68rem;font-weight:600;letter-spacing:.06em;padding:.2rem .65rem;border-radius:4px}
+
+main{max-width:960px;margin:0 auto;padding:1.75rem 1.5rem 5rem}
+
+.part-heading{font-size:1.1rem;font-weight:800;color:var(--accent);margin:2rem 0 .6rem;padding-bottom:.35rem;border-bottom:2px solid var(--accent-bd)}
+
+.ex-card{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;padding:1.4rem 1.5rem;margin-bottom:1.5rem}
+.ex-eyebrow{font-size:.68rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);margin-bottom:.2rem}
+.ex-title{font-size:1.05rem;font-weight:800;color:var(--text);margin-bottom:.9rem}
+
+.def-box{background:var(--def-bg);border:1px solid var(--def-bd);border-radius:6px;padding:.85rem 1.1rem;margin:.85rem 0}
+.def-label{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#15803d;margin-bottom:.4rem}
+
+.task-box{background:var(--task-bg);border-left:3px solid #60a5fa;border-radius:0 6px 6px 0;padding:.9rem 1.2rem;margin:.85rem 0}
+.task-label{font-size:.68rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#1d4ed8;margin-bottom:.45rem}
+
+.note{background:var(--surface-2);border:1px solid var(--border);border-radius:6px;padding:.6rem 1rem;font-size:.845rem;color:var(--text-2);margin:.65rem 0}
+
+.premise-block{background:var(--surface-2);border:1px solid var(--border);border-radius:6px;padding:.7rem 1.1rem;margin:.7rem 0;font-family:'JetBrains Mono',monospace;font-size:.88rem;line-height:1.9}
+.premise-line{display:flex;gap:.6rem;align-items:baseline}
+.premise-num{color:var(--text-3);min-width:1.6rem;text-align:right;font-size:.8rem}
+.premise-expr{color:var(--accent);font-weight:600}
+
+.tbl-wrap{overflow-x:auto;margin:.7rem 0}
+table{width:100%;border-collapse:collapse;font-size:.845rem}
+th{background:var(--surface-2);padding:.45rem .65rem;text-align:left;font-weight:600;font-size:.76rem;letter-spacing:.02em;color:var(--text-2);border-bottom:2px solid var(--border)}
+td{padding:.4rem .65rem;border-bottom:1px solid var(--border);vertical-align:top}
+tr:last-child td{border-bottom:none}
+
+.ans-space{background:var(--surface-2);border:1px dashed var(--border);border-radius:6px;padding:.55rem .9rem;margin-top:.5rem;min-height:2.8rem;font-size:.82rem;color:var(--text-3);font-style:italic}
+.ans-space-lg{min-height:6rem}
+
+.content-ul{padding-left:1.3rem;list-style:disc;margin:.4rem 0}
+.content-ul li{margin-bottom:.3rem;font-size:.875rem}
+.content-ol{padding-left:1.3rem;list-style:decimal;margin:.4rem 0}
+.content-ol li{margin-bottom:.45rem;font-size:.875rem}
+
+.sec-div{border:none;border-top:1px solid var(--border);margin:1.5rem 0}
+
+.hint-box{background:var(--warn-bg);border:1px solid var(--warn-bd);border-radius:6px;padding:.55rem .9rem;font-size:.82rem;color:var(--text-2);margin:.6rem 0}
+
+@media print{
+    #site-header{background:#1e293b!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .ex-card{break-inside:avoid}
+    .ans-space{min-height:4rem}
+    .ans-space-lg{min-height:8rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header id="site-header">
+    <div class="header-inner">
+        <div class="header-top">
+            <div>
+                <div class="header-eyebrow">EP15/EP16.TOKT11121 · Introduction to AI</div>
+                <div class="header-title">Bài tập — Deduction in Propositional Logic</div>
+                <div class="header-sub">Resolution (Robinson) · Forward Chaining · Backward Chaining</div>
+            </div>
+            <div><span class="badge-pill">2 PHẦN — 4 BÀI</span></div>
+        </div>
+    </div>
+</header>
+
+<!-- ═══ MAIN ═══ -->
+<main>
+
+<!-- Notation -->
+<div class="def-box" style="margin-bottom:1.2rem;">
+    <div class="def-label">Notation</div>
+    <ul class="content-ul" style="margin-top:.3rem;">
+        <li><strong>¬</strong> not · <strong>∧</strong> and · <strong>∨</strong> or · <strong>⇒</strong> implies.</li>
+        <li><strong>Resolution (Robinson):</strong> to prove a goal, <strong>add its negation</strong>, convert everything to <strong>CNF</strong>, split into clauses, then resolve until the <strong>empty clause ⊥</strong> appears.</li>
+        <li><strong>Chaining</strong> works on <strong>Horn</strong> rules (IF–THEN) + facts.</li>
+    </ul>
+</div>
+
+
+<!-- ═══════════════════ PART 1 ═══════════════════ -->
+<div class="part-heading">Part 1 — Resolution (Robinson's method)</div>
+
+<!-- Exercise 1 -->
+<div class="ex-card">
+    <div class="ex-eyebrow">Exercise 1</div>
+    <div class="ex-title">Chain + case split on disjunction</div>
+
+    <p>Given that the following premises are true:</p>
+
+    <div class="premise-block">
+        <div class="premise-line"><span class="premise-num">1.</span> <span class="premise-expr">u</span></div>
+        <div class="premise-line"><span class="premise-num">2.</span> <span class="premise-expr">v</span></div>
+        <div class="premise-line"><span class="premise-num">3.</span> <span class="premise-expr">u ⇒ p</span></div>
+        <div class="premise-line"><span class="premise-num">4.</span> <span class="premise-expr">v ⇒ q</span></div>
+        <div class="premise-line"><span class="premise-num">5.</span> <span class="premise-expr">(p ∧ q) ⇒ r</span></div>
+        <div class="premise-line"><span class="premise-num">6.</span> <span class="premise-expr">r ⇒ (s ∨ t)</span></div>
+        <div class="premise-line"><span class="premise-num">7.</span> <span class="premise-expr">s ⇒ w</span></div>
+        <div class="premise-line"><span class="premise-num">8.</span> <span class="premise-expr">t ⇒ w</span></div>
+    </div>
+
+    <p>Prove that <strong>w</strong> is true by Robinson's method.</p>
+
+    <div class="hint-box">
+        <strong>Note:</strong> this mixes a <strong>chain</strong> <code>u, v → p, q → r</code> with a <strong>case split</strong> on the disjunction <code>s ∨ t</code>.
+    </div>
+
+    <div class="task-box">
+        <div class="task-label">Show your work</div>
+        <ol class="content-ol">
+            <li><strong>Step 0</strong> — Negate goal: add ¬w</li>
+            <li><strong>Step 1</strong> — Convert all premises + negated goal to CNF</li>
+            <li><strong>Step 2</strong> — List the clause set</li>
+            <li><strong>Step 3</strong> — Resolution: resolve pairs until ⊥ (empty clause)</li>
+        </ol>
+    </div>
+
+    <div class="ans-space ans-space-lg">Step 0 (negate goal):</div>
+    <div class="ans-space ans-space-lg">Step 1 (CNF):</div>
+    <div class="ans-space ans-space-lg">Step 2 (clause set):</div>
+    <div class="ans-space ans-space-lg">Step 3 (resolution chain → ⊥):</div>
+</div>
+
+<!-- Exercise 2 -->
+<div class="ex-card">
+    <div class="ex-eyebrow">Exercise 2</div>
+    <div class="ex-title">Proof by cases on p ∨ q</div>
+
+    <p>Given that the following premises are true:</p>
+
+    <div class="premise-block">
+        <div class="premise-line"><span class="premise-num">1.</span> <span class="premise-expr">p ∨ q</span></div>
+        <div class="premise-line"><span class="premise-num">2.</span> <span class="premise-expr">p ⇒ (r ∧ s)</span></div>
+        <div class="premise-line"><span class="premise-num">3.</span> <span class="premise-expr">q ⇒ (r ∧ t)</span></div>
+        <div class="premise-line"><span class="premise-num">4.</span> <span class="premise-expr">(r ∧ s) ⇒ u</span></div>
+        <div class="premise-line"><span class="premise-num">5.</span> <span class="premise-expr">(r ∧ t) ⇒ u</span></div>
+        <div class="premise-line"><span class="premise-num">6.</span> <span class="premise-expr">u ⇒ v</span></div>
+    </div>
+
+    <p><strong>(a)</strong> Prove that <strong>v</strong> is true by Robinson's method.</p>
+    <p><strong>(b)</strong> Then prove <strong>u</strong> as well.</p>
+
+    <div class="hint-box">
+        <strong>Hint:</strong> a <em>proof by cases</em> on <code>p ∨ q</code>; note each conjunctive conclusion <code>r ∧ s</code>, <code>r ∧ t</code> splits into two clauses in CNF.
+    </div>
+
+    <div class="task-box">
+        <div class="task-label">Show your work (for each proof)</div>
+        <ol class="content-ol">
+            <li><strong>Step 0</strong> — Negate goal</li>
+            <li><strong>Step 1</strong> — Convert to CNF</li>
+            <li><strong>Step 2</strong> — Clause set</li>
+            <li><strong>Step 3</strong> — Resolution chain → ⊥</li>
+        </ol>
+    </div>
+
+    <p style="font-weight:700;margin-top:1rem;">(a) Prove v:</p>
+    <div class="ans-space ans-space-lg">Step 0–3:</div>
+
+    <p style="font-weight:700;margin-top:1rem;">(b) Prove u:</p>
+    <div class="ans-space ans-space-lg">Step 0–3:</div>
+</div>
+
+<hr class="sec-div">
+
+
+<!-- ═══════════════════ PART 2 ═══════════════════ -->
+<div class="part-heading">Part 2 — Forward &amp; Backward Chaining</div>
+
+<!-- Exercise 3 -->
+<div class="ex-card">
+    <div class="ex-eyebrow">Exercise 3</div>
+    <div class="ex-title">Tet Holiday — Prove G ("visit Grandma")</div>
+
+    <p><strong>Symbols:</strong></p>
+
+    <div class="tbl-wrap">
+        <table>
+            <thead><tr><th>Symbol</th><th>Meaning</th><th></th><th>Symbol</th><th>Meaning</th></tr></thead>
+            <tbody>
+                <tr><td><strong>T</strong></td><td>Tet is coming</td><td></td><td><strong>V</strong></td><td>Visit new, beautiful places</td></tr>
+                <tr><td><strong>B</strong></td><td>There is a bonus</td><td></td><td><strong>M</strong></td><td>Visit My Dinh</td></tr>
+                <tr><td><strong>F</strong></td><td>Have fun</td><td></td><td><strong>G</strong></td><td>Visit Grandma</td></tr>
+                <tr><td><strong>P</strong></td><td>Go out / play</td><td></td><td></td><td></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p><strong>Rules (Horn):</strong></p>
+    <div class="premise-block">
+        <div class="premise-line"><span class="premise-num">R1:</span> <span class="premise-expr">T ∧ B ⇒ F</span></div>
+        <div class="premise-line"><span class="premise-num">R2:</span> <span class="premise-expr">F ⇒ P</span></div>
+        <div class="premise-line"><span class="premise-num">R3:</span> <span class="premise-expr">P ⇒ V</span></div>
+        <div class="premise-line"><span class="premise-num">R4:</span> <span class="premise-expr">V ⇒ M</span></div>
+        <div class="premise-line"><span class="premise-num">R5:</span> <span class="premise-expr">M ⇒ G</span></div>
+    </div>
+
+    <p><strong>Facts:</strong> T, B. &nbsp;&nbsp;<strong>Query:</strong> prove <strong>G</strong>.</p>
+
+    <div class="task-box">
+        <div class="task-label">Tasks</div>
+        <ol class="content-ol">
+            <li>Solve by <strong>forward chaining</strong>: list the firing order of the rules and the propositions derived at each step.</li>
+            <li>Solve by <strong>backward chaining</strong>: draw the goal–subgoal decomposition tree.</li>
+            <li><strong>(Extension)</strong> Add rule <strong>R6: B ⇒ Shopping</strong>. What does forward chaining additionally derive? Does backward chaining (goal G) ever use R6? State your observation.</li>
+        </ol>
+    </div>
+
+    <p style="font-weight:700;margin-top:.8rem;">1. Forward chaining:</p>
+    <div class="ans-space ans-space-lg">Firing order and derived propositions:</div>
+
+    <p style="font-weight:700;margin-top:.8rem;">2. Backward chaining:</p>
+    <div class="ans-space ans-space-lg">Goal–subgoal tree:</div>
+
+    <p style="font-weight:700;margin-top:.8rem;">3. Extension (R6: B ⇒ Shopping):</p>
+    <div class="ans-space">Forward chaining additionally derives: &nbsp;&nbsp;&nbsp;&nbsp; Backward chaining uses R6?  &nbsp;&nbsp;&nbsp;&nbsp; Observation:</div>
+</div>
+
+<!-- Exercise 4 -->
+<div class="ex-card">
+    <div class="ex-eyebrow">Exercise 4</div>
+    <div class="ex-title">Driving in Rain — Prove Danger</div>
+
+    <p><strong>Symbols:</strong></p>
+    <ul class="content-ul">
+        <li><strong>Rain</strong> = it is raining</li>
+        <li><strong>Wet</strong> = the road is wet</li>
+        <li><strong>Slippery</strong> = the road is slippery</li>
+        <li><strong>Driving</strong> = you are driving</li>
+        <li><strong>Danger</strong> = danger</li>
+    </ul>
+
+    <p><strong>Rules (Horn):</strong></p>
+    <div class="premise-block">
+        <div class="premise-line"><span class="premise-num">R1:</span> <span class="premise-expr">Rain ⇒ Wet</span></div>
+        <div class="premise-line"><span class="premise-num">R2:</span> <span class="premise-expr">Wet ⇒ Slippery</span></div>
+        <div class="premise-line"><span class="premise-num">R3:</span> <span class="premise-expr">Slippery ∧ Driving ⇒ Danger</span></div>
+    </div>
+
+    <p><strong>Facts:</strong> Rain, Driving. &nbsp;&nbsp;<strong>Query:</strong> prove <strong>Danger</strong>.</p>
+
+    <div class="task-box">
+        <div class="task-label">Tasks</div>
+        <p>Solve by <strong>forward chaining</strong> and by <strong>backward chaining</strong>; point out where the AND-rule (R3) is used.</p>
+    </div>
+
+    <p style="font-weight:700;margin-top:.8rem;">Forward chaining:</p>
+    <div class="ans-space ans-space-lg">Firing order and derived propositions:</div>
+
+    <p style="font-weight:700;margin-top:.8rem;">Backward chaining:</p>
+    <div class="ans-space ans-space-lg">Goal–subgoal tree (note where AND-rule R3 appears):</div>
+</div>
+
+<hr class="sec-div">
+
+<!-- Footer -->
+<div class="note" style="margin-top:1rem;">
+    <strong>Total:</strong> 4 exercises — 2 parts following the slide sequence. Show all steps clearly to receive full marks.
+</div>
+
+</main>
+</body>
+</html>
