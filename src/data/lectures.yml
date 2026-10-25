@@ -178,7 +178,7 @@ lectures:
       - "First-Order Logic – Representation and Inference"
       - "Ontology examples"
     slides:
-      - { "First-Order Logic": "slides/7. First-Order logic.pdf" }
+      - { "First-Order Logic": "slides/7.FirstOrderLogic.pdf" }
     materials:
       - "Chapter 8–9, lecture notes"
       - "Ontology examples"
