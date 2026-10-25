@@ -172,6 +172,14 @@ lectures:
 
   - week: 11
     date: "2024-11-12"
+    type: "Exam"
+    title: "Midterm Exam (Text-Based)"
+    topics:
+      - "Midterm Exam — Written / Text-Based"
+      - "Covers Weeks 1–10: Search, Adversarial Search, Propositional Logic"
+
+  - week: 12
+    date: "2024-11-19"
     type: "Lecture"
     title: "First-Order Logic — Representation and Inference"
     topics:
@@ -183,8 +191,16 @@ lectures:
       - "Chapter 8–9, lecture notes"
       - "Ontology examples"
 
-  - week: 12
-    date: "2024-11-19"
+  - week: 13
+    date: "2024-11-26"
+    type: "Exam"
+    title: "Midterm 2 — Group Project Presentation"
+    topics:
+      - "Midterm 2 — Group Project Presentation"
+      - "Each group presents their AI project to the class"
+
+  - week: 14
+    date: "2024-12-03"
     type: "Practice"
     title: "First-Order Logic — Reasoning and Implementation"
     topics:
@@ -192,36 +208,20 @@ lectures:
       - "Exercises using FOL solvers or Prolog"
     materials:
       - "Exercises using FOL solvers or Prolog"
-
-  - week: 13
-    date: "2024-11-26"
-    type: "Lecture"
-    title: "From Search and Logic to Learning Systems"
-    topics:
-      - "From Search Algorithms and Logic to Learning Systems"
-    slides:
-      - { "Intro to ML & DL": "slides/8.Intro_ML_DL.pdf" }
-    materials:
       - "First-Order Logic — Worked Solutions"
-
-  - week: 14
-    date: "2024-12-03"
-    type: "Lecture"
-    title: "From Search and Logic to Learning Systems (continued)"
-    topics:
-      - "From Search Algorithms and Logic to Learning Systems (continued)"
-    slides:
-      - { "Intro to ML & DL": "slides/8.Intro_ML_DL.pdf" }
 
   - week: 15
     date: "2024-12-10"
     type: "Lecture"
-    title: "Supplementary Topics and the AI Project Pipeline"
+    title: "From Search and Logic to Learning Systems"
     topics:
+      - "From Search Algorithms and Logic to Learning Systems"
       - "Supplementary Topics"
       - "Computer Vision, NLP, Clustering, Regression, Classification"
       - "GPU Computing and MLOps"
       - "Overview of the AI Project Pipeline"
+    slides:
+      - { "Intro to ML & DL": "slides/8.Intro_ML_DL.pdf" }
     materials:
       - "Overview slides"
       - "Project templates"
