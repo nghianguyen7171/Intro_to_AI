@@ -209,6 +209,7 @@ lectures:
     materials:
       - "Exercises using FOL solvers or Prolog"
       - "First-Order Logic — Worked Solutions"
+      - { "Bài tập First-Order Logic": "quizz/BaiTap_FOL.pdf" }
 
   - week: 15
     date: "2024-12-10"
